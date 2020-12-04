@@ -8,7 +8,7 @@ const rawInput = getInput(__dirname);
 /** Maps each row into [min, max, targetChar, password] tuple. */
 const passwords = rawInput
     .split('\n')
-    .map(line => line.match(/(\d+)\-(\d+) (\w{1}): (.+)/).slice(1));
+    .map(line => line.match(/(\d+)\-(\d+) (\w): (.+)/).slice(1));
 
 /**
  * Each line gives the password policy and then the password.
@@ -18,8 +18,10 @@ const passwords = rawInput
  * most 3 times.
  */
 exports.partOne = numMatches(passwords, ([min, max, targetChar, password]) => {
-    const matchingChars = [...password].filter(char => char === targetChar)
-        .length;
+    const matchingChars = numMatches(
+        [...password],
+        char => char === targetChar
+    );
     return inRange(min, max)(matchingChars);
 });
 

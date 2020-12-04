@@ -13,6 +13,7 @@ exports.assert = (actual, expected) => {
     }
 };
 
-exports.getInput = dirname => fs.readFileSync(`${dirname}/input.txt`, 'utf8');
+exports.getInput = dirname =>
+    fs.readFileSync(`${dirname}/input.txt`, 'utf8').replace(/\n$/, '');
 
 exports.numMatches = (list, predicate) => list.filter(predicate).length;
