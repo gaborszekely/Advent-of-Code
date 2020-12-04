@@ -17,7 +17,7 @@ const toPassword = row =>
                 ...acc,
                 [k]: v,
             }),
-            {},
+            {}
         );
 
 /** Full list of deserialized passwords. */
@@ -27,7 +27,7 @@ const passwords = input.split(/\n\n/).map(toPassword);
 
 /** Rows that contain all required fields. */
 const validPasswords = passwords.filter(password =>
-    requiredFields.every(field => field in password),
+    requiredFields.every(field => field in password)
 );
 
 // PART TWO
@@ -80,7 +80,7 @@ const strictFieldTests = {
  * strict field checks.
  */
 const validStrictPasswords = validPasswords.filter(password =>
-    Object.values(strictFieldTests).every(test => test(password)),
+    Object.values(strictFieldTests).every(test => test(password))
 );
 
 exports.partOne = validPasswords.length;

@@ -1,7 +1,13 @@
+const { assert } = require('console');
 const fs = require('fs');
 
 exports.range = (i, j, inclusive = true) =>
-    Array.from({ length: j - i + +inclusive }, (_, idx) => i + idx);
+    i <= j
+        ? Array.from({ length: j - i + +inclusive }, (_, idx) => i + idx)
+        : Array.from({ length: i - j + +inclusive }, (_, idx) => i - idx);
+
+assert(exports.range(1, 3).join('') === '123', 'range(1, 3) incorrect');
+assert(exports.range(3, 1).join('') === '321', 'range(3, 1) incorrect');
 
 exports.inRange = (min, max) => v => v >= min && v <= max;
 
