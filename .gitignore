@@ -1,1 +1,5 @@
 input.txt
+.history
+.history/**/*
+.gitignore_*
+node_modules
