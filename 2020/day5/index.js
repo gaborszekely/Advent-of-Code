@@ -1,0 +1,70 @@
+// https://adventofcode.com/2020/day/5
+
+const { getInput, serializeCoords } = require('../../utils');
+
+const input = getInput(__dirname);
+
+const seatInstructions = input
+    .split('\n')
+    .map(row => row.match(/^([FB]+)([LR]+)$/).slice(1));
+
+const ROWS = 128;
+const COLS = 8;
+
+// PART ONE
+
+const getSeatId = ([row, col]) => row * 8 + col;
+
+const binarySearch = (instructions, i, j, firstIdentifier) => {
+    for (let instruction of instructions) {
+        const midpoint = Math.floor((i + j) / 2);
+
+        if (instruction === firstIdentifier) {
+            j = midpoint;
+        } else {
+            i = midpoint + 1;
+        }
+    }
+
+    return i;
+};
+
+const seatCoords = seatInstructions.map(
+    ([rowInstructions, colInstructions]) => {
+        const row = binarySearch(rowInstructions, 0, ROWS - 1, 'F');
+        const col = binarySearch(colInstructions, 0, COLS - 1, 'L');
+
+        return [row, col];
+    }
+);
+
+const seatCoordsSet = new Set(
+    seatCoords.map(([row, col]) => serializeCoords(row, col))
+);
+
+const descendingSeatIds = seatCoords.map(getSeatId).sort((a, b) => b - a);
+
+exports.partOne = descendingSeatIds[0];
+
+// PART TWO
+
+const findMySeatId = () => {
+    for (let i = 0; i < 127; ++i) {
+        for (let j = 0; j < 7; ++j) {
+            const seatId = getSeatId([i, j]);
+
+            const seatIsOpen = !seatCoordsSet.has(serializeCoords(i, j));
+
+            const neighborsAreOccupied = [
+                seatId + 1,
+                seatId - 1,
+            ].every(neighbor => descendingSeatIds.includes(neighbor));
+
+            if (seatIsOpen && neighborsAreOccupied) {
+                return seatId;
+            }
+        }
+    }
+};
+
+exports.partTwo = findMySeatId();

@@ -9,6 +9,7 @@ commander
     .parse(process.argv);
 
 const logResult = (partOne, partTwo, day) => {
+    // console.clear();
     console.log(`------------ DAY ${day} ------------`);
     console.log('Part one: ');
     console.log(partOne);

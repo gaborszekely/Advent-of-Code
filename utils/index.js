@@ -23,3 +23,6 @@ exports.getInput = dirname =>
     fs.readFileSync(`${dirname}/input.txt`, 'utf8').replace(/\n$/, '');
 
 exports.numMatches = (list, predicate) => list.filter(predicate).length;
+
+/** Serialize a set of coordinates as a string. */
+exports.serializeCoords = (i, j) => `${i}:${j}`;
