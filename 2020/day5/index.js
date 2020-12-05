@@ -49,8 +49,8 @@ exports.partOne = descendingSeatIds[0];
 // PART TWO
 
 const findMySeatId = () => {
-    for (let i = 0; i < 127; ++i) {
-        for (let j = 0; j < 7; ++j) {
+    for (let i = 0; i < ROWS; ++i) {
+        for (let j = 0; j < COLS; ++j) {
             const seatId = getSeatId([i, j]);
 
             const seatIsOpen = !seatCoordsSet.has(serializeCoords(i, j));
