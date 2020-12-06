@@ -6,29 +6,31 @@ const input = getInput(__dirname);
 
 const groups = input
     .split('\n\n')
-    .map(group => group.split('\n').map(questionIds => questionIds.split('')));
+    .map(group =>
+        group.split('\n').map(memberAnswers => memberAnswers.split(''))
+    );
 
 const findTotalMatches = matcher => sumArray(groups.map(matcher));
 
 // PART ONE
 
-const matchAtLeastOneMember = group => {
+const questionsWithAtLeastOneAnswer = group => {
     // Affirmatively answered question IDs.
-    const affirmatives = new Set();
+    const answered = new Set();
 
-    for (const member of group) {
-        for (const questionId of member) {
-            affirmatives.add(questionId);
+    for (const memberAnswers of group) {
+        for (const questionId of memberAnswers) {
+            answered.add(questionId);
         }
     }
 
-    return affirmatives.size;
+    return answered.size;
 };
 
-exports.partOne = findTotalMatches(matchAtLeastOneMember);
+exports.partOne = findTotalMatches(questionsWithAtLeastOneAnswer);
 
 // PART TWO
 
-const matchAllGroupMembers = group => findOverlappingValues(...group).length;
+const questionsWithAllAnswers = group => findOverlappingValues(...group).length;
 
-exports.partTwo = findTotalMatches(matchAllGroupMembers);
+exports.partTwo = findTotalMatches(questionsWithAllAnswers);
