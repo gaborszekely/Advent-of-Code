@@ -39,3 +39,16 @@ exports.sumArray = ary => {
 
     return ary.reduce((acc, val) => acc + val, 0);
 };
+
+/**
+ * Find the overlapping values between two or more arrays.
+ *
+ * i.e., for [1,2,3] and [2,3,4,5], the values [2,3] are present in both arrays.
+ */
+exports.findOverlappingValues = (...arys) => {
+    return arys.reduce((acc, ary) => {
+        const aryVals = new Set(ary);
+
+        return acc.filter(val => aryVals.has(val));
+    });
+};
