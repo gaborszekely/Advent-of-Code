@@ -1,10 +1,12 @@
 // https://adventofcode.com/2020/day/6
 
-const { getInput, sumArray } = require('../../utils');
+const { getInput, sumArray, findOverlappingValues } = require('../../utils');
 
 const input = getInput(__dirname);
 
-const groups = input.split('\n\n').map(group => group.split('\n'));
+const groups = input
+    .split('\n\n')
+    .map(group => group.split('\n').map(questionIds => questionIds.split('')));
 
 const findTotalMatches = matcher => sumArray(groups.map(matcher));
 
@@ -27,23 +29,6 @@ exports.partOne = findTotalMatches(matchAtLeastOneMember);
 
 // PART TWO
 
-const matchAllGroupMembers = group => {
-    const affirmativeCounts = {};
-    let totalMatches = 0;
-
-    for (const member of group) {
-        for (const questionId of member) {
-            affirmativeCounts[questionId] =
-                (affirmativeCounts[questionId] || 0) + 1;
-
-            // All members answered question affirmatively.
-            if (affirmativeCounts[questionId] === group.length) {
-                totalMatches++;
-            }
-        }
-    }
-
-    return totalMatches;
-};
+const matchAllGroupMembers = group => findOverlappingValues(...group).length;
 
 exports.partTwo = findTotalMatches(matchAllGroupMembers);
