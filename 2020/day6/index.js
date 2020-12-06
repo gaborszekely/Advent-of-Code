@@ -10,7 +10,7 @@ const groups = input
         group.split('\n').map(memberAnswers => memberAnswers.split(''))
     );
 
-const findTotalMatches = matcher => sumArray(groups.map(matcher));
+const findTotalMatches = mapper => sumArray(groups.map(mapper));
 
 // PART ONE
 
