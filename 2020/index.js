@@ -35,12 +35,12 @@ if (daysToRun === 'all') {
 }
 
 if (daysToRun === 'latest') {
-    const resultIndex = range(25, 1).find(i =>
+    const latestDay = range(25, 1).find(i =>
         fs.existsSync(`${__dirname}/day${i}/index.js`)
     );
 
-    if (resultIndex >= 0) {
-        const { partOne, partTwo } = require(`./day${resultIndex}`);
-        logResult(partOne, partTwo, resultIndex);
+    if (latestDay >= 0) {
+        const { partOne, partTwo } = require(`./day${latestDay}`);
+        logResult(partOne, partTwo, latestDay);
     }
 }
