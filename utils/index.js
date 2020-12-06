@@ -9,7 +9,12 @@ exports.range = (i, j, inclusive = true) =>
 assert(exports.range(1, 3).join('') === '123', 'range(1, 3) incorrect');
 assert(exports.range(3, 1).join('') === '321', 'range(3, 1) incorrect');
 
+/** Checks whether a value is included in a range (inclusive). */
 exports.inRange = (min, max) => v => v >= min && v <= max;
+
+/** Checks whether a value is a valid grid coordinate. */
+exports.inGridRange = (grid, i, j) =>
+    i >= 0 && i < grid.length && j >= 0 && j < grid[i].length;
 
 exports.assert = (actual, expected) => {
     if (actual !== expected) {
@@ -22,7 +27,15 @@ exports.assert = (actual, expected) => {
 exports.getInput = dirname =>
     fs.readFileSync(`${dirname}/input.txt`, 'utf8').replace(/\n$/, '');
 
+/** Number of array elements matching a predicate function. */
 exports.numMatches = (list, predicate) => list.filter(predicate).length;
 
 /** Serialize a set of coordinates as a string. */
 exports.serializeCoords = (i, j) => `${i}:${j}`;
+
+/** Sum the values in an array. */
+exports.sumArray = ary => {
+    assert(Array.isArray(ary), 'Please pass a valid array to sumArray()');
+
+    return ary.reduce((acc, val) => acc + val, 0);
+};
