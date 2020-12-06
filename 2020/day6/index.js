@@ -10,28 +10,40 @@ const findTotalMatches = matcher => sumArray(groups.map(matcher));
 
 // PART ONE
 
-const matchAtLeastOneMember = group =>
-    group.reduce((acc, member) => {
-        for (const questionId of member) {
-            acc.add(questionId);
-        }
+const matchAtLeastOneMember = group => {
+    // Affirmatively answered question IDs.
+    const affirmatives = new Set();
 
-        return acc;
-    }, new Set()).size;
+    for (const member of group) {
+        for (const questionId of member) {
+            affirmatives.add(questionId);
+        }
+    }
+
+    return affirmatives.size;
+};
 
 exports.partOne = findTotalMatches(matchAtLeastOneMember);
 
 // PART TWO
 
-const matchAllGroupMembers = group =>
-    Object.values(
-        group.reduce((acc, member) => {
-            for (const questionId of member) {
-                acc[questionId] = (acc[questionId] || 0) + 1;
-            }
+const matchAllGroupMembers = group => {
+    const affirmativeCounts = {};
+    let totalMatches = 0;
 
-            return acc;
-        }, {})
-    ).filter(occurrences => occurrences === group.length).length;
+    for (const member of group) {
+        for (const questionId of member) {
+            affirmativeCounts[questionId] =
+                (affirmativeCounts[questionId] || 0) + 1;
+
+            // All members answered question affirmatively.
+            if (affirmativeCounts[questionId] === group.length) {
+                totalMatches++;
+            }
+        }
+    }
+
+    return totalMatches;
+};
 
 exports.partTwo = findTotalMatches(matchAllGroupMembers);
