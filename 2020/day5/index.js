@@ -44,7 +44,7 @@ const seatCoordsSet = new Set(
 
 const descendingSeatIds = seatCoords.map(getSeatId).sort((a, b) => b - a);
 
-exports.partOne = descendingSeatIds[0];
+exports.partOne = () => descendingSeatIds[0];
 
 // PART TWO
 
@@ -67,4 +67,4 @@ const findMySeatId = () => {
     }
 };
 
-exports.partTwo = findMySeatId();
+exports.partTwo = findMySeatId;

@@ -22,10 +22,10 @@ const findTotalMatches = mapper => sumArray(groups.map(mapper));
 const questionsWithAtLeastOneAnswer = group =>
     findUniqueValues(...group).length;
 
-exports.partOne = findTotalMatches(questionsWithAtLeastOneAnswer);
+exports.partOne = () => findTotalMatches(questionsWithAtLeastOneAnswer);
 
 // PART TWO
 
 const questionsWithAllAnswers = group => findIntersection(...group).length;
 
-exports.partTwo = findTotalMatches(questionsWithAllAnswers);
+exports.partTwo = () => findTotalMatches(questionsWithAllAnswers);
