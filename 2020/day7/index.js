@@ -18,8 +18,8 @@ const bags = input
                     : contents
                           .split(',')
                           .map(bag => bag.match(/(\d+) (\w+ \w+)/))
-                          .reduce((acc, [, n, bag]) => {
-                              acc[bag] = Number(n);
+                          .reduce((acc, [, count, bag]) => {
+                              acc[bag] = Number(count);
 
                               return acc;
                           }, {}),
