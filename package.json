@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm run latest",
-    "all": "nodemon 2020/index.js --day all",
-    "latest": "nodemon 2020/index.js --day latest"
+    "start": "nodemon runner/runner.js",
+    "latest": "npm start -- --day latest",
+    "loadInput": "node helpers/loadInput.js"
   },
   "repository": {
     "type": "git",
