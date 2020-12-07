@@ -1,6 +1,11 @@
 // https://adventofcode.com/2020/day/6
 
-const { getInput, sumArray, findOverlappingValues } = require('../../utils');
+const {
+    getInput,
+    sumArray,
+    findIntersection,
+    findUniqueValues,
+} = require('../../utils');
 
 const input = getInput(__dirname);
 
@@ -14,23 +19,13 @@ const findTotalMatches = mapper => sumArray(groups.map(mapper));
 
 // PART ONE
 
-const questionsWithAtLeastOneAnswer = group => {
-    // Affirmatively answered question IDs.
-    const answered = new Set();
-
-    for (const memberAnswers of group) {
-        for (const questionId of memberAnswers) {
-            answered.add(questionId);
-        }
-    }
-
-    return answered.size;
-};
+const questionsWithAtLeastOneAnswer = group =>
+    findUniqueValues(...group).length;
 
 exports.partOne = findTotalMatches(questionsWithAtLeastOneAnswer);
 
 // PART TWO
 
-const questionsWithAllAnswers = group => findOverlappingValues(...group).length;
+const questionsWithAllAnswers = group => findIntersection(...group).length;
 
 exports.partTwo = findTotalMatches(questionsWithAllAnswers);
