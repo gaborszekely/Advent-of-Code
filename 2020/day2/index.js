@@ -1,6 +1,5 @@
 // https://adventofcode.com/2020/day/2
 
-const fs = require('fs');
 const { getInput, inRange, numMatches } = require('../../utils');
 
 const rawInput = getInput(__dirname);
@@ -17,7 +16,7 @@ const passwords = rawInput
  * 1-3 a means that the password must contain a at least 1 time and at
  * most 3 times.
  */
-exports.partOne = numMatches(passwords, ([min, max, targetChar, password]) => {
+exports.partOne = () => numMatches(passwords, ([min, max, targetChar, password]) => {
     const matchingChars = numMatches(
         [...password],
         char => char === targetChar
@@ -33,7 +32,7 @@ exports.partOne = numMatches(passwords, ([min, max, targetChar, password]) => {
  * Other occurrences of the letter are irrelevant for the purposes of
  * policy enforcement.
  */
-exports.partTwo = numMatches(passwords, ([min, max, targetChar, password]) => {
+exports.partTwo = () => numMatches(passwords, ([min, max, targetChar, password]) => {
     const [firstChar, secondChar] = [password[min - 1], password[max - 1]];
     return (
         [firstChar, secondChar].filter(char => char === targetChar).length === 1

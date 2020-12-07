@@ -82,13 +82,26 @@ const run = () => {
         return;
     }
 
-    const { partOne, partTwo } = require(`../${yearToRun}/day${dayToRun}`);
+    const startTime = Date.now();
+
+    const solutions = require(`../${yearToRun}/day${dayToRun}`);
+    const afterSolutions = Date.now();
+
+    const partOne = solutions.partOne();
+    const afterPartOne = Date.now();
+
+    const partTwo = solutions.partTwo();
+    const afterPartTwo = Date.now();
+
+    const partOneExecution = afterPartOne - startTime;
+    const partTwoExecution =
+        afterPartTwo - startTime - (afterPartOne - afterSolutions);
 
     console.log(`------------ DAY ${dayToRun} (${yearToRun}) ------------`);
-    console.log('Part one: ');
+    console.log(`Part one: ${partOneExecution}ms`);
     console.log(partOne);
     console.log('\n');
-    console.log('Part two: ');
+    console.log(`Part two: ${partTwoExecution}ms`);
     console.log(partTwo);
     console.log('\n\n');
 };

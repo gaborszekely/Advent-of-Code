@@ -1,42 +1,48 @@
-const fs = require('fs');
-const {getInput} = require('../..//utils');
+// https://adventofcode.com/2020/day/1
 
-const rawInput = getInput(__dirname);
+const { getInput } = require('../../utils');
 
-const parsedInput = rawInput.split('\n').map(Number);
+const input = getInput(__dirname);
 
-parsedInput.sort((a,b) => a - b);
+const entries = input.split('\n').map(Number);
+
+entries.sort((a, b) => a - b);
 
 const TARGET = 2020;
 
+// PART 1
+
 const twoSum = (nums, target = TARGET, i = 0, j = nums.length - 1) => {
-  while(i < j) {
-    let [left, right] = [nums[i], nums[j]];
-    const sum = left + right;
+    while (i < j) {
+        let [left, right] = [nums[i], nums[j]];
+        const sum = left + right;
 
-    if (sum === target) {
-      return left * right;
-    }
+        if (sum === target) {
+            return left * right;
+        }
 
-    if (sum < target) {
-      i++;
-    } else {
-      j--;
+        if (sum < target) {
+            i++;
+        } else {
+            j--;
+        }
     }
-  }
 };
 
-const threeSum = (nums, target = TARGET) => {
-  for (let i = 0; i < nums.length - 3; ++i) {
-    const current = nums[i];
-    const localTarget = target - current;
-    const match = twoSum(nums, localTarget, i + 1, nums.length);
+exports.partOne = () => twoSum(entries);
 
-    if (match) {
-      return  current * match;
+// PART 2
+
+const threeSum = nums => {
+    for (let i = 0; i < nums.length - 3; ++i) {
+        const current = nums[i];
+        const localTarget = TARGET - current;
+        const match = twoSum(nums, localTarget, i + 1, nums.length);
+
+        if (match) {
+            return current * match;
+        }
     }
-  }
-}
+};
 
-exports.partOne = twoSum(parsedInput);
-exports.partTwo = threeSum(parsedInput);
+exports.partTwo = () => threeSum(entries);
