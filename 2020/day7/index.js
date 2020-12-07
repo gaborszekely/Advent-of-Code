@@ -31,13 +31,13 @@ const bags = input
 exports.partOne = () => {
     const visited = new Set();
 
-    const canReachTarget = ({ color, children }) => {
+    const canReachTargetBag = ({ color, children }) => {
         if (color === TARGET_BAG || visited.has(color)) {
             return true;
         }
 
         for (const child in children) {
-            const reached = canReachTarget(bags[child]);
+            const reached = canReachTargetBag(bags[child]);
 
             if (reached) {
                 visited.add(color);
@@ -52,7 +52,7 @@ exports.partOne = () => {
     let count = 0;
 
     for (const bag in bags) {
-        if (bag !== TARGET_BAG && canReachTarget(bags[bag])) {
+        if (bag !== TARGET_BAG && canReachTargetBag(bags[bag])) {
             count++;
         }
     }
@@ -61,16 +61,16 @@ exports.partOne = () => {
 };
 
 exports.partTwo = () => {
-    const inner = node => {
+    const countBagContents = node => {
         let total = 1;
 
         for (const child in node.children) {
-            const totalChildCounts = inner(bags[child]);
+            const totalChildCounts = countBagContents(bags[child]);
             total += totalChildCounts * node.children[child];
         }
 
         return total;
     };
 
-    return inner(bags[TARGET_BAG]) - 1;
+    return countBagContents(bags[TARGET_BAG]) - 1;
 };
