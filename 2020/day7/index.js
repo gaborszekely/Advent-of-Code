@@ -37,9 +37,9 @@ exports.partOne = () => {
         }
 
         for (const child in children) {
-            const canReachGold = canReachTarget(bags[child]);
+            const reached = canReachTarget(bags[child]);
 
-            if (canReachGold) {
+            if (reached) {
                 visited.add(color);
 
                 return true;
