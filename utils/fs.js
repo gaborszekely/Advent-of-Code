@@ -3,5 +3,5 @@ const path = require('path');
 
 exports.__basedir = path.join(__dirname, '..');
 
-exports.getInput = dirname =>
-    fs.readFileSync(`${dirname}/input.txt`, 'utf8').replace(/\n$/, '');
+exports.getInput = (dirname, file = 'input.txt') =>
+    fs.readFileSync(`${dirname}/${file}`, 'utf8').replace(/\n$/, '');
