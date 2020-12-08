@@ -3,6 +3,7 @@ const fsUtils = require('./fs');
 const gridUtils = require('./grid');
 const otherUtils = require('./utils');
 const validatorUtils = require('./validators');
+const setUtils = require('./validators');
 
 module.exports = {
     ...arrayUtils,
@@ -10,4 +11,5 @@ module.exports = {
     ...gridUtils,
     ...otherUtils,
     ...validatorUtils,
+    ...setUtils,
 };
