@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "commander": "^6.2.0",
+    "heap": "^0.2.6",
     "node-fetch": "^2.6.1"
   }
 }
