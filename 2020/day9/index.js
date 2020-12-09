@@ -15,8 +15,10 @@ const nums = input.split('\n').map(Number);
 
 const findInvalidNumber = (numbers, preamble) => {
     for (let i = preamble; i < numbers.length; ++i) {
-        if (!twoSum(numbers, numbers[i], i - preamble, i)) {
-            return numbers[i];
+        const current = numbers[i];
+
+        if (!twoSum(numbers, current, i - preamble, i)) {
+            return current;
         }
     }
 };
