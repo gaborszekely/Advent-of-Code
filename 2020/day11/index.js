@@ -30,13 +30,13 @@ const getOccupiedSeatsAfterSeatChanges = (
     let previous = grid;
 
     while (true) {
-        const newSeats = moveSeats(previous, occupiedLimit, countNeighbors);
+        const newGrid = moveSeats(previous, occupiedLimit, countNeighbors);
 
-        if (newSeats.serialize() === previous.serialize()) {
-            return newSeats.countElements('#');
+        if (newGrid.serialize() === previous.serialize()) {
+            return newGrid.countElements('#');
         }
 
-        previous = newSeats;
+        previous = newGrid;
     }
 };
 
