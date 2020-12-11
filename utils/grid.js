@@ -44,12 +44,12 @@ class Grid {
         );
     }
 
-    /** Generate a Grid instance from a string representation. */
+    /** Generates a Grid instance from a string representation. */
     static fromSerialized(input) {
         return new Grid(input);
     }
 
-    /** Generate a Grid instance from a grid[][] representation. */
+    /** Generates a Grid instance from a grid[][] representation. */
     static fromDeserialized(grid) {
         const serialized = Grid.serialize(grid);
         return new Grid(serialized);
@@ -62,50 +62,40 @@ class Grid {
         );
     }
 
-    /** Gets the grid row. */
-    getRow(row) {
-        if (!this.inRange(row, 0)) {
-            throw new Error('Row is out of bounds.');
-        }
-        return this._grid[row];
+    /** Get neighbor cuurdinate offsets. */
+    static getNeighborOffsets() {
+        return [
+            [1, 0],
+            [-1, 0],
+            [0, 1],
+            [0, -1],
+        ];
     }
 
-    /** Gets the grid coordinates. */
-    get(row, col) {
-        if (!this.inRange(row, col)) {
-            throw new Error(`Coordinates [${row}, ${col}] are out of bounds.`);
-        }
-        return this._grid[row][col];
+    /** Get all neighbor cooridnate offsets, including diagonal ones. */
+    static getAllNeighborOffsets() {
+        return [
+            ...Grid.getNeighborOffsets(),
+            [1, 1],
+            [-1, -1],
+            [1, -1],
+            [-1, 1],
+        ];
     }
 
-    /** Sets the grid coordinates to a given value. */
-    set(row, col, val) {
-        if (!this.inRange(row, col)) {
-            throw new Error(`Coordinates [${row}, ${col}] are out of bounds.`);
-        }
-        this._grid[row][col] = val;
+    /** Gets the coordinates that are up, down, left, and right of the current. */
+    static getNeighborCoords(i, j) {
+        return Grid.getNeighborOffsets().map(([dI, dJ]) => [i + dI, j + dJ]);
     }
 
-    /** Checks whether a value is a valid grid coordinate. */
-    inRange(row, col) {
-        return Grid.inRange(this._grid, row, col);
+    /** Gets all the neighbors of a coordinate set, including diagonal ones. */
+    static getAllNeighborCoords(i, j) {
+        return Grid.getAllNeighborOffsets().map(([dI, dJ]) => [i + dI, j + dJ]);
     }
 
-    /** Iterates over each cell in the grid. */
-    forEach(cb) {
-        for (let i = 0; i < this._grid.length; ++i) {
-            for (let j = 0; j < this._grid[0].length; ++j) {
-                cb(this.get(i, j), i, j, this);
-            }
-        }
-    }
-
-    /** Prints the grid in the console. */
-    print() {
-        for (const row of this._grid) {
-            console.log(row.join(''));
-        }
-        console.log('\n');
+    /** Clones the Grid instance. */
+    clone() {
+        return new Grid(this.serialize());
     }
 
     /** Counts the number of elements in the grid. */
@@ -119,14 +109,71 @@ class Grid {
         return total;
     }
 
+    /** Iterates over each cell in the grid. */
+    forEach(cb) {
+        for (let i = 0; i < this._grid.length; ++i) {
+            for (let j = 0; j < this._grid[0].length; ++j) {
+                cb(this.get(i, j), i, j, this);
+            }
+        }
+    }
+
+    /** Gets the grid coordinates. */
+    get(row, col) {
+        if (!this.inRange(row, col)) {
+            throw new Error(`Coordinates [${row}, ${col}] are out of bounds.`);
+        }
+        return this._grid[row][col];
+    }
+
+    /** Gets all the neighbors of a current cell, including diagonal ones. */
+    getAllNeighbors(i, j) {
+        return this._mapCoordsToNeighbors(Grid.getAllNeighborCoords(i, j));
+    }
+
+    /** Gets the neighbors of a current cell. */
+    getNeighbors(i, j) {
+        return this._mapCoordsToNeighbors(Grid.getNeighborCoords(i, j));
+    }
+
+    /** Gets the grid row. */
+    getRow(row) {
+        if (!this.inRange(row, 0)) {
+            throw new Error('Row is out of bounds.');
+        }
+        return this._grid[row];
+    }
+
+    /** Checks whether a value is a valid grid coordinate. */
+    inRange(row, col) {
+        return Grid.inRange(this._grid, row, col);
+    }
+
+    /** Prints the grid in the console. */
+    print() {
+        for (const row of this._grid) {
+            console.log(row.join(''));
+        }
+        console.log('\n');
+    }
+
     /** Serializes the grid into a string representation. */
     serialize() {
         return Grid.serialize(this._grid);
     }
 
-    /** Clones the Grid instance. */
-    clone() {
-        return new Grid(this.serialize());
+    /** Sets the grid coordinates to a given value. */
+    set(row, col, val) {
+        if (!this.inRange(row, col)) {
+            throw new Error(`Coordinates [${row}, ${col}] are out of bounds.`);
+        }
+        this._grid[row][col] = val;
+    }
+
+    _mapCoordsToNeighbors(coords) {
+        return coords
+            .filter(([nI, nJ]) => this.inRange(nI, nJ))
+            .map(([nI, nJ]) => this.get(nI, nJ));
     }
 }
 
