@@ -4,11 +4,11 @@ const { getInput, Grid } = require('../../utils');
 
 const input = getInput(__dirname);
 
-const moveSeats = (seats, countNeighbors, occupiedLimit) => {
-    const clone = seats.clone();
+const moveSeats = (grid, countNeighbors, occupiedLimit) => {
+    const clone = grid.clone();
 
-    seats.forEach((seat, row, col) => {
-        const numOccupied = countNeighbors(seats, row, col);
+    grid.forEach((seat, row, col) => {
+        const numOccupied = countNeighbors(grid, row, col);
 
         if (seat === 'L' && numOccupied === 0) {
             clone.set(row, col, '#');
@@ -23,11 +23,11 @@ const moveSeats = (seats, countNeighbors, occupiedLimit) => {
 };
 
 const getOccupiedSeatsAfterSeatChanges = (
-    seats,
+    grid,
     occupiedLimit,
     countNeighbors
 ) => {
-    let previous = seats;
+    let previous = grid;
 
     while (true) {
         const newSeats = moveSeats(previous, occupiedLimit, countNeighbors);
@@ -41,12 +41,12 @@ const getOccupiedSeatsAfterSeatChanges = (
 };
 
 exports.partOne = () => {
-    const calculateNeighbors = (seats, startRow, startCol) => {
-        return seats
+    const calculateNeighbors = (grid, startRow, startCol) => {
+        return grid
             .getAllNeighbors(startRow, startCol)
             .reduce(
                 (acc, [neighborRow, neighborCol]) =>
-                    seats.get(neighborRow, neighborCol) === '#' ? acc + 1 : acc,
+                    grid.get(neighborRow, neighborCol) === '#' ? acc + 1 : acc,
                 0
             );
     };
@@ -55,7 +55,7 @@ exports.partOne = () => {
 };
 
 exports.partTwo = () => {
-    const calculateNeighbors = (seats, startRow, startCol) => {
+    const calculateNeighbors = (grid, startRow, startCol) => {
         const change = delta => i => i + delta;
 
         const getDirectionTotal = ({ row = 0, col = 0 }) => {
@@ -63,8 +63,8 @@ exports.partTwo = () => {
 
             let [i, j] = [iDeltaFn(startRow), jDeltaFn(startCol)];
 
-            while (seats.inRange(i, j)) {
-                const curr = seats.get(i, j);
+            while (grid.inRange(i, j)) {
+                const curr = grid.get(i, j);
 
                 if (curr === 'L' || curr === '#') {
                     return curr === '#' ? 1 : 0;
