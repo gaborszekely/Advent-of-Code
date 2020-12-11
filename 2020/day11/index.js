@@ -4,17 +4,17 @@ const { getInput, Grid } = require('../../utils');
 
 const input = getInput(__dirname);
 
-const moveSeats = (grid, countNeighbors, occupiedLimit) => {
-    const clone = grid.clone();
+const moveSeats = (seats, countNeighbors, occupiedLimit) => {
+    const clone = seats.clone();
 
-    grid.forEach((el, row, col) => {
-        const numOccupied = countNeighbors(grid, row, col);
+    seats.forEach((seat, row, col) => {
+        const numOccupied = countNeighbors(seats, row, col);
 
-        if (el === 'L' && numOccupied === 0) {
+        if (seat === 'L' && numOccupied === 0) {
             clone.set(row, col, '#');
         }
 
-        if (el === '#' && numOccupied >= occupiedLimit) {
+        if (seat === '#' && numOccupied >= occupiedLimit) {
             clone.set(row, col, 'L');
         }
     });
@@ -41,12 +41,12 @@ const getOccupiedSeatsAfterSeatChanges = (
 };
 
 exports.partOne = () => {
-    const calculateNeighbors = (grid, startRow, startCol) => {
-        return grid
+    const calculateNeighbors = (seats, startRow, startCol) => {
+        return seats
             .getAllNeighbors(startRow, startCol)
             .reduce(
                 (acc, [neighborRow, neighborCol]) =>
-                    grid.get(neighborRow, neighborCol) === '#' ? acc + 1 : acc,
+                    seats.get(neighborRow, neighborCol) === '#' ? acc + 1 : acc,
                 0
             );
     };
@@ -55,7 +55,7 @@ exports.partOne = () => {
 };
 
 exports.partTwo = () => {
-    const calculateNeighbors = (grid, startRow, startCol) => {
+    const calculateNeighbors = (seats, startRow, startCol) => {
         const change = delta => i => i + delta;
 
         const getDirectionTotal = ({ row = 0, col = 0 }) => {
@@ -63,8 +63,8 @@ exports.partTwo = () => {
 
             let [i, j] = [iDeltaFn(startRow), jDeltaFn(startCol)];
 
-            while (grid.inRange(i, j)) {
-                const curr = grid.get(i, j);
+            while (seats.inRange(i, j)) {
+                const curr = seats.get(i, j);
 
                 if (curr === 'L' || curr === '#') {
                     return curr === '#' ? 1 : 0;
