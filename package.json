@@ -24,8 +24,12 @@
     "prettier": "^2.2.1"
   },
   "dependencies": {
+    "bignum": "^0.13.1",
     "commander": "^6.2.0",
     "heap": "^0.2.6",
-    "node-fetch": "^2.6.1"
+    "install": "^0.13.0",
+    "node-fetch": "^2.6.1",
+    "nodejs-chinese-remainder": "^0.0.6",
+    "npm": "^6.14.9"
   }
 }
