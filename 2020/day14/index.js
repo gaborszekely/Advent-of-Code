@@ -6,51 +6,40 @@ const i = getInput(__dirname);
 const _i = getTestInput(__dirname);
 
 const parseInput = input => {
-    const operations = [];
-
-    const instructions = input.split('\n');
-
-    for (let i = 0; i < instructions.length; ++i) {
-        const current = instructions[i];
-
-        if (current.startsWith('mask')) {
-            operations.push({
-                mask: current.replace(/mask = /, ''),
+    return input.split('\n').reduce((acc, instruction) => {
+        if (instruction.startsWith('mask')) {
+            acc.push({
+                mask: instruction.replace(/mask = /, ''),
                 changes: [],
             });
         } else {
-            const [, address, update] = current.match(
+            const [, address, update] = instruction.match(
                 /mem\[(\d+)\] = ([\d\w]+)/
             );
-            operations[operations.length - 1].changes.push([
-                Number(address),
-                Number(update),
-            ]);
+            acc[acc.length - 1].changes.push([Number(address), Number(update)]);
         }
-    }
 
-    return operations;
+        return acc;
+    }, []);
 };
 
-const findFloatingCombos = (floating, result, idx = 0) => {
-    const index = floating[idx];
-
-    let newStr1 = result.slice(0, index) + '0' + result.slice(index + 1);
-    let newStr2 = result.slice(0, index) + '1' + result.slice(index + 1);
-
-    if (idx === floating.length) {
-        return [result];
+const findFloatingCombos = (value, idx = 0) => {
+    while (value[idx] && value[idx] !== 'X') {
+        idx++;
     }
 
-    if (idx < floating.length) {
-        return [
-            ...findFloatingCombos(floating, newStr1, idx + 1),
-            ...findFloatingCombos(floating, newStr2, idx + 1),
-        ];
-    }
+    if (idx === value.length) return [value];
+
+    let newStr1 = value.slice(0, idx) + '0' + value.slice(idx + 1);
+    let newStr2 = value.slice(0, idx) + '1' + value.slice(idx + 1);
+
+    return [
+        ...findFloatingCombos(newStr1, idx + 1),
+        ...findFloatingCombos(newStr2, idx + 1),
+    ];
 };
 
-const applyMask = (mask, value, updaterFn, floating = false) => {
+const applyMask = (mask, value, updaterFn) => {
     let binary = value.toString(2);
 
     binary = binary.padStart(36, '0');
@@ -64,11 +53,8 @@ const applyMask = (mask, value, updaterFn, floating = false) => {
         result += updaterFn(maskChar, valChar);
     }
 
-    return floating ? findFloatingCombos(result) : result;
+    return result;
 };
-
-const applyFloatingMask = (mask, value, updaterFn) =>
-    applyMask(mask, value, updaterFn, true);
 
 const sumMemoryValues = (input, buildMemory) => {
     const operations = parseInput(input);
@@ -78,42 +64,36 @@ const sumMemoryValues = (input, buildMemory) => {
 };
 
 exports.partOne = () => {
-    const buildMemory = operations => {
+    const populateMemoryFn = operations => {
         const memory = {};
+
+        const bitUpdaterFn = (maskChar, valChar) =>
+            maskChar === 'X' ? valChar : maskChar;
 
         for (const { mask, changes } of operations) {
             for (const [address, update] of changes) {
-                const result = applyMask(mask, update, (maskChar, valChar) => {
-                    if (maskChar === 'X') return valChar;
-                    return maskChar;
-                });
-
-                memory[address] = parseInt(result[0], 2);
+                const masked = applyMask(mask, update, bitUpdaterFn);
+                memory[address] = parseInt(masked, 2);
             }
         }
 
         return memory;
     };
 
-    return sumMemoryValues(i, buildMemory);
+    return sumMemoryValues(i, populateMemoryFn);
 };
 
 exports.partTwo = () => {
-    const buildMemory = operations => {
+    const populateMemoryFn = operations => {
         const memory = {};
+
+        const bitUpdaterFn = (maskChar, valChar) =>
+            maskChar === '0' ? valChar : maskChar === '1' ? maskChar : 'X';
 
         for (const { mask, changes } of operations) {
             for (const [address, update] of changes) {
-                const addresses = applyFloatingMask(
-                    mask,
-                    address,
-                    (maskChar, valChar) =>
-                        maskChar === '0'
-                            ? valChar
-                            : maskChar === '1'
-                            ? maskChar
-                            : 'X'
-                );
+                const masked = applyMask(mask, address, bitUpdaterFn);
+                const addresses = findFloatingCombos(masked);
 
                 for (const a of addresses) {
                     memory[a] = update;
@@ -124,5 +104,5 @@ exports.partTwo = () => {
         return memory;
     };
 
-    return sumMemoryValues(i, buildMemory);
+    return sumMemoryValues(i, populateMemoryFn);
 };
