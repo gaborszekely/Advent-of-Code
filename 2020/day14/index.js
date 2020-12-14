@@ -40,9 +40,7 @@ const findFloatingCombos = (value, idx = 0) => {
 };
 
 const applyMask = (mask, value, updaterFn) => {
-    let binary = value.toString(2);
-
-    binary = binary.padStart(36, '0');
+    const binary = value.toString(2).padStart(36, '0');
 
     let result = '';
 
