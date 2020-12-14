@@ -1,6 +1,6 @@
 // https://adventofcode.com/2020/day/14
 
-const { getInput, getTestInput } = require('../../utils');
+const { getInput, getTestInput, sumArray } = require('../../utils');
 
 const i = getInput(__dirname);
 const _i = getTestInput(__dirname);
@@ -60,7 +60,7 @@ const sumMemoryValues = (input, buildMemory) => {
     const operations = parseInput(input);
     const memory = buildMemory(operations);
 
-    return Object.values(memory).reduce((acc, i) => acc + i, 0);
+    return sumArray(Object.values(memory));
 };
 
 exports.partOne = () => {
