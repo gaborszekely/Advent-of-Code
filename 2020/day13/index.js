@@ -9,10 +9,10 @@ const i = getInput(__dirname);
 const _i = getTestInput(__dirname);
 
 const parseInput = input => {
-    const [departureStamp, busIds] = input.split('\n');
+    const [departure, busIds] = input.split('\n');
 
     return {
-        departureStamp: Number(departureStamp),
+        departure: Number(departure),
         busIds: busIds
             .split(',')
             .reduce(
@@ -23,7 +23,7 @@ const parseInput = input => {
 };
 
 exports.partOne = () => {
-    const { departureStamp, busIds } = parseInput(i);
+    const { departure, busIds } = parseInput(i);
 
     let closest = Infinity;
     let cId;
@@ -31,7 +31,7 @@ exports.partOne = () => {
     for (const [busId] of busIds) {
         let incr = busId;
 
-        while (incr < departureStamp) {
+        while (incr < departure) {
             incr += busId;
         }
 
@@ -41,11 +41,31 @@ exports.partOne = () => {
         }
     }
 
-    return (closest - departureStamp) * cId;
+    return (closest - departure) * cId;
 };
 
 exports.partTwo = () => {
-    const { busIds } = parseInput(i);
+    const { busIds } = parseInput(_i);
+
+    let incr = 1;
+    let timestamp = 0;
+
+    for (const [busId, offset] of busIds) {
+        while (true) {
+            timestamp += incr;
+
+            if ((timestamp + offset) % busId === 0) {
+                incr = incr * busId;
+                break;
+            }
+        }
+    }
+
+    return timestamp;
+};
+
+exports.partTwoSimplified = () => {
+    const { busIds } = parseInput(_i);
 
     return crt(
         ...busIds.reduce(
