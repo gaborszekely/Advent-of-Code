@@ -1,47 +1,25 @@
 /** Grid data structure, with common grid functionality. */
 class Grid {
     constructor(input) {
-        this._grid = Grid.deserialize(input);
+        this._grid = Grid.deserializeMatrix(input);
     }
 
-    /** Checks whether a set of grid coordinates are valid. */
-    static inRange(grid, row, col) {
-        return (
-            row >= 0 && row < grid.length && col >= 0 && col < grid[0].length
+    /** Clones a matrix representation of a grid. */
+    static cloneMatrix(grid) {
+        return Array.from({ length: grid.length }, (_, row) =>
+            Array.from({ length: grid[0].length }, (_, col) => grid[row][col])
         );
     }
 
-    /** Serializes a grid[][] into a string representation. */
-    static serialize(grid) {
-        let serialized = '';
-        for (let i = 0; i < grid.length; ++i) {
-            for (let j = 0; j < grid[0].length; ++j) {
-                serialized += grid[i][j];
-            }
-            serialized += '\n';
-        }
-        return serialized.slice(0, -1);
-    }
-
-    /** Deserializes a string representation of a grid into a grid[][]. */
-    static deserialize(input) {
+    /** Deserializes a string representation of a grid into a matrix. */
+    static deserializeMatrix(input) {
         return input.split('\n').map(r => r.split(''));
     }
 
-    /** Serializes grid coordinates as a 'row:col' string. */
-    static serializeCoords(row, col) {
-        return `${row}:${col}`;
-    }
-
-    /**
-     * Generates a grid[][] of a certain size, and populates it's cells with a default value.
-     */
-    static generate(rows, cols, defaultVal) {
-        return Array.from({ length: rows }, () =>
-            Array.from({ length: cols }, () =>
-                typeof defaultVal === 'function' ? defaultVal() : defaultVal
-            )
-        );
+    /** Generates a Grid instance from a matrix representation. */
+    static fromMatrix(matrix) {
+        const serialized = Grid.serializeMatrix(matrix);
+        return new Grid(serialized);
     }
 
     /** Generates a Grid instance from a string representation. */
@@ -49,27 +27,21 @@ class Grid {
         return new Grid(input);
     }
 
-    /** Generates a Grid instance from a grid[][] representation. */
-    static fromDeserialized(grid) {
-        const serialized = Grid.serialize(grid);
-        return new Grid(serialized);
-    }
-
-    /** Clones the grid[][]. */
-    static clone(grid) {
-        return Array.from({ length: grid.length }, (_, row) =>
-            Array.from({ length: grid[0].length }, (_, col) => grid[row][col])
+    /**
+     * Generates a matrix of a certain size, and populates it's cells with a
+     * default value.
+     */
+    static generateMatrix(rows, cols, defaultVal) {
+        return Array.from({ length: rows }, () =>
+            Array.from({ length: cols }, () =>
+                typeof defaultVal === 'function' ? defaultVal() : defaultVal
+            )
         );
     }
 
-    /** Get neighbor cuurdinate offsets. */
-    static getNeighborOffsets() {
-        return [
-            [1, 0],
-            [-1, 0],
-            [0, 1],
-            [0, -1],
-        ];
+    /** Gets all the neighbors of a coordinate set, including diagonal ones. */
+    static getAllNeighborCoords(i, j) {
+        return Grid.getAllNeighborOffsets().map(([dI, dJ]) => [i + dI, j + dJ]);
     }
 
     /** Get all neighbor cooridnate offsets, including diagonal ones. */
@@ -83,14 +55,65 @@ class Grid {
         ];
     }
 
+    /** Get the manhattan distance between two coordinates. */
+    static getManhattanDistance([cX, cY], [sX, sY] = [0, 0]) {
+        return Math.abs(cX - sX) + Math.abs(cY - sY);
+    }
+
     /** Gets the coordinates that are up, down, left, and right of the current. */
     static getNeighborCoords(i, j) {
         return Grid.getNeighborOffsets().map(([dI, dJ]) => [i + dI, j + dJ]);
     }
 
-    /** Gets all the neighbors of a coordinate set, including diagonal ones. */
-    static getAllNeighborCoords(i, j) {
-        return Grid.getAllNeighborOffsets().map(([dI, dJ]) => [i + dI, j + dJ]);
+    /** Get neighbor coordinate offsets. */
+    static getNeighborOffsets() {
+        return [
+            [1, 0],
+            [-1, 0],
+            [0, 1],
+            [0, -1],
+        ];
+    }
+
+    /** Checks whether a set of grid coordinates are valid. */
+    static inRange(matrix, row, col) {
+        return (
+            row >= 0 &&
+            row < matrix.length &&
+            col >= 0 &&
+            col < matrix[0].length
+        );
+    }
+
+    /**
+     * Rotate a set of coordinates aronud a central location by a given number
+     * of degrees.
+     */
+    static rotate([cx, cy], [x, y], angle = 90) {
+        const radians = (Math.PI / 180) * angle;
+        const cos = Math.cos(radians);
+        const sin = Math.sin(radians);
+        const nx = cos * (x - cx) + sin * (y - cy) + cx;
+        const ny = cos * (y - cy) - sin * (x - cx) + cy;
+
+        return [Math.round(nx), Math.round(ny)];
+    }
+
+    /** Serializes grid coordinates as a 'row:col' string. */
+    static serializeCoords(row, col) {
+        return `${row}:${col}`;
+    }
+
+    /** Serializes a matrix into a string representation. */
+    static serializeMatrix(matrix) {
+        let serialized = '';
+        for (let i = 0; i < matrix.length; ++i) {
+            for (let j = 0; j < matrix[0].length; ++j) {
+                serialized += matrix[i][j];
+            }
+            serialized += '\n';
+        }
+        return serialized.slice(0, -1);
     }
 
     /** Clones the Grid instance. */
@@ -159,7 +182,7 @@ class Grid {
 
     /** Serializes the grid into a string representation. */
     serialize() {
-        return Grid.serialize(this._grid);
+        return Grid.serializeMatrix(this._grid);
     }
 
     /** Sets the grid coordinates to a given value. */
