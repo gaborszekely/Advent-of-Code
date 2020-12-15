@@ -8,29 +8,28 @@ const _i = getTestInput(__dirname);
 const parseInput = input => input.split(',').map(Number);
 
 const playGame = (nums, iterations) => {
-    let currNum = nums[0];
+    let currNum;
 
     const seen = new Map();
 
-    for (let i = 1; i < iterations + 1; ++i) {
-        const prev = nums[i - 1];
+    for (let i = 0; i < iterations; ++i) {
+        const prev = nums[i];
 
         // Number exists in the starting array.
         if (prev !== undefined) {
-            seen.set(prev, i);
-            currNum = prev;
+            seen.set(prev, i + 1);
             continue;
         }
 
         // Calculate current based off last seen number.
         const prevIndex = seen.get(currNum);
 
-        seen.set(currNum, i - 1);
+        seen.set(currNum, i);
 
         if (!prevIndex) {
             currNum = 0;
         } else {
-            currNum = i - 1 - prevIndex;
+            currNum = i - prevIndex;
         }
     }
 
