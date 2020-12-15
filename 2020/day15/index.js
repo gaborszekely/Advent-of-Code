@@ -23,14 +23,8 @@ const playGame = (nums, iterations) => {
 
         // Calculate current based off last seen number.
         const prevIndex = seen.get(currNum);
-
         seen.set(currNum, i);
-
-        if (!prevIndex) {
-            currNum = 0;
-        } else {
-            currNum = i - prevIndex;
-        }
+        currNum = prevIndex ? i - prevIndex : 0;
     }
 
     return currNum;
