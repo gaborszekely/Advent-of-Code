@@ -1,6 +1,12 @@
 // https://adventofcode.com/2020/day/16
 
-const { getInput, getTestInput, sumArray, numMatches } = require('../../utils');
+const {
+    getInput,
+    getTestInput,
+    sumArray,
+    numMatches,
+    inRange,
+} = require('../../utils');
 
 const i = getInput(__dirname);
 const _i = getTestInput(__dirname);
@@ -41,7 +47,7 @@ const parseInput = input => {
 
 /** Checks if a number matches a set of ranges. */
 const matchesRange = (ranges, number) => {
-    return ranges.some(([min, max]) => number >= min && number <= max);
+    return ranges.some(([min, max]) => inRange(min, max)(number));
 };
 
 /** Checks if a number does not match any of the set of ranges. */
