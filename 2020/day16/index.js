@@ -50,15 +50,15 @@ const matchesRange = (ranges, number) => {
 };
 
 /** Checks if a number does not match any of the set of ranges. */
-const invalidNumber = (number, rules) =>
-    !Object.values(rules).some(ranges => matchesRange(ranges, number));
+const validNumber = (number, rules) =>
+    Object.values(rules).some(ranges => matchesRange(ranges, number));
 
 /**
  * Checks if a ticket is invalid, i.e. if one of it's numbers does not match
  * any of the ranges.
  */
 const invalidTicket = (ticket, rules) =>
-    ticket.some(number => invalidNumber(number, rules));
+    ticket.some(number => !validNumber(number, rules));
 
 exports.partOne = () => {
     const { nearbyTickets, rules } = parseInput(i);
@@ -69,7 +69,7 @@ exports.partOne = () => {
 
     return sumArray(
         invalidTickets.flatMap(ticket =>
-            ticket.filter(number => invalidNumber(number, rules))
+            ticket.filter(number => !validNumber(number, rules))
         )
     );
 };
