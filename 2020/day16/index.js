@@ -4,7 +4,6 @@ const {
     getInput,
     getTestInput,
     sumArray,
-    numMatches,
     inRange,
 } = require('../../utils');
 
