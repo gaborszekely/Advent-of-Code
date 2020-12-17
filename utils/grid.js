@@ -116,6 +116,41 @@ class Grid {
         return serialized.slice(0, -1);
     }
 
+    get rows() {
+        return this._grid.length;
+    }
+
+    get cols() {
+        return this._grid[0].length;
+    }
+
+    pushCol(val) {
+        this._grid.forEach(row => {
+            row.push(val);
+        });
+    }
+
+    unshiftCol(val) {
+        this._grid.forEach(row => {
+            row.unshift(val);
+        });
+    }
+
+    pushRow(val) {
+        this._grid.push(Array.from({ length: this.cols }, () => val));
+    }
+
+    unshiftRow(val) {
+        this._grid.unshift(Array.from({ length: this.cols }, () => val));
+    }
+
+    expandBoundaries(val) {
+        this.pushCol(val);
+        this.unshiftCol(val);
+        this.pushRow(val);
+        this.unshiftRow(val);
+    }
+
     /** Clones the Grid instance. */
     clone() {
         return new Grid(this.serialize());
