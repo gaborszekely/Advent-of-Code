@@ -7,7 +7,7 @@ const _i = getTestInput(__dirname);
 
 const parseInput = input => input.split('\n');
 
-const evaluate = (expression, processFn) => {
+const evaluate = (expression, evaluatorFn) => {
     const stack = [[]];
 
     for (const char of expression) {
@@ -27,16 +27,16 @@ const evaluate = (expression, processFn) => {
 
         if (char === ')') {
             const currentExpression = stack.pop();
-            const total = processFn(currentExpression);
-            stack[stack.length - 1].push(total);
+            const result = evaluatorFn(currentExpression);
+            stack[stack.length - 1].push(result);
         }
     }
 
-    return processFn(stack[0]);
+    return evaluatorFn(stack[0]);
 };
 
 exports.partOne = () => {
-    const processSimple = expression => {
+    const evaluator = expression => {
         let total = 0;
         let operator = '+';
 
@@ -55,13 +55,13 @@ exports.partOne = () => {
     const input = parseInput(i);
 
     return input.reduce(
-        (acc, expression) => acc + evaluate(expression, processSimple),
+        (acc, expression) => acc + evaluate(expression, evaluator),
         0
     );
 };
 
 exports.partTwo = () => {
-    const processAdvanced = expression => {
+    const advancedEvaluator = expression => {
         let expressionStr = expression.join('');
 
         // First, do all the additions.
@@ -86,7 +86,7 @@ exports.partTwo = () => {
     const input = parseInput(i);
 
     return input.reduce(
-        (acc, expression) => acc + evaluate(expression, processAdvanced),
+        (acc, expression) => acc + evaluate(expression, advancedEvaluator),
         0
     );
 };
