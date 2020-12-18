@@ -10,9 +10,7 @@ const parseInput = input => input.split('\n');
 const evaluate = (expression, processFn) => {
     const stack = [[]];
 
-    for (let i = 0; i < expression.length; ++i) {
-        const char = expression[i];
-
+    for (const char of expression) {
         if (char === ' ') continue;
 
         if (/\d+/.test(char)) {
@@ -40,26 +38,14 @@ const evaluate = (expression, processFn) => {
 exports.partOne = () => {
     const processSimple = expression => {
         let total = 0;
-
         let operator = '+';
 
-        for (let i = 0; i < expression.length; ++i) {
-            const current = expression[i];
-
-            if (typeof current === 'number') {
-                switch (operator) {
-                    case '*':
-                        total *= current;
-                        break;
-                    case '+':
-                        total += current;
-                        break;
-                    case '-':
-                        total -= current;
-                        break;
-                }
+        for (const value of expression) {
+            if (typeof value === 'number') {
+                if (operator === '*') total *= value;
+                if (operator === '+') total += value;
             } else {
-                operator = current;
+                operator = value;
             }
         }
 
