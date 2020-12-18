@@ -13,7 +13,7 @@ const evaluate = (expression, evaluatorFn) => {
     for (const char of expression) {
         if (char === ' ') continue;
 
-        if (/\d+/.test(char)) {
+        if (/\d/.test(char)) {
             stack[stack.length - 1].push(Number(char));
         }
 
