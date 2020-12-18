@@ -66,12 +66,12 @@ exports.partTwo = () => {
 
         // First, do all the additions.
         expressionStr = expressionStr.replace(/[\d\+]+/g, match => {
-            return match.split('+').reduce((acc, i) => acc + +i, 0);
+            return match.split('+').reduce((acc, i) => acc + Number(i), 0);
         });
 
         // Then, do all the multiplications.
         expressionStr = expressionStr.replace(/[\d\*]+/g, match => {
-            return match.split('*').reduce((acc, i) => acc * +i, 1);
+            return match.split('*').reduce((acc, i) => acc * Number(i), 1);
         });
 
         return Number(expressionStr);
