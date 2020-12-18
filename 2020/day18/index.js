@@ -7,18 +7,6 @@ const _i = getTestInput(__dirname);
 
 const parseInput = input => input.split('\n');
 
-// 1 + (2 * 3) + (4 * (5 + 6))
-// [[1, +]
-/*
-total = 1
-
-stack = [7, '+', [4, '*'], [5, '+', 6]];
-
-operator = '+'
-
-
-*/
-
 const evaluate = (expression, processFn) => {
     const stack = [[]];
 
