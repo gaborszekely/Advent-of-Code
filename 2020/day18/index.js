@@ -1,4 +1,4 @@
-// https://adventofcode.com/2020/day/N
+// https://adventofcode.com/2020/day/18
 
 const { getInput, getTestInput } = require('../../utils');
 
@@ -34,6 +34,9 @@ const evaluate = (expression, evaluatorFn) => {
     return evaluatorFn(stack[0]);
 };
 
+const sumEvaluations = (input, evaluator) =>
+    input.reduce((acc, expression) => acc + evaluate(expression, evaluator), 0);
+
 exports.partOne = () => {
     const evaluator = expression => {
         let total = 0;
@@ -54,10 +57,7 @@ exports.partOne = () => {
 
     const input = parseInput(i);
 
-    return input.reduce(
-        (acc, expression) => acc + evaluate(expression, evaluator),
-        0
-    );
+    return sumEvaluations(input, evaluator);
 };
 
 exports.partTwo = () => {
@@ -79,8 +79,5 @@ exports.partTwo = () => {
 
     const input = parseInput(i);
 
-    return input.reduce(
-        (acc, expression) => acc + evaluate(expression, advancedEvaluator),
-        0
-    );
+    return sumEvaluations(input, advancedEvaluator);
 };
