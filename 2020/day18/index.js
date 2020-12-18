@@ -17,7 +17,7 @@ const evaluate = (expression, evaluatorFn) => {
             stack[stack.length - 1].push(Number(char));
         }
 
-        if (['+', '-', '*'].includes(char)) {
+        if (['+', '*'].includes(char)) {
             stack[stack.length - 1].push(char);
         }
 
