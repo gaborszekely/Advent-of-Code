@@ -26,9 +26,8 @@ const evaluate = (expression, evaluatorFn) => {
         }
 
         if (char === ')') {
-            const currentExpression = stack.pop();
-            const result = evaluatorFn(currentExpression);
-            stack[stack.length - 1].push(result);
+            const latestEvaluation = evaluatorFn(stack.pop());
+            stack[stack.length - 1].push(latestEvaluation);
         }
     }
 
@@ -44,9 +43,10 @@ exports.partOne = () => {
             if (typeof value === 'number') {
                 if (operator === '*') total *= value;
                 if (operator === '+') total += value;
-            } else {
-                operator = value;
+                continue;
             }
+
+            operator = value;
         }
 
         return total;
@@ -66,18 +66,12 @@ exports.partTwo = () => {
 
         // First, do all the additions.
         expressionStr = expressionStr.replace(/[\d\+]+/g, match => {
-            return match
-                .trim()
-                .split('+')
-                .reduce((acc, i) => acc + Number(i), 0);
+            return match.split('+').reduce((acc, i) => acc + +i, 0);
         });
 
         // Then, do all the multiplications.
         expressionStr = expressionStr.replace(/[\d\*]+/g, match => {
-            return match
-                .trim()
-                .split('*')
-                .reduce((acc, i) => acc * Number(i), 1);
+            return match.split('*').reduce((acc, i) => acc * +i, 1);
         });
 
         return Number(expressionStr);
