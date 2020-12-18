@@ -22,21 +22,13 @@ operator = '+'
 const evaluate = (expression, processFn) => {
     const stack = [[]];
 
-    let currNum = '';
-
     for (let i = 0; i < expression.length; ++i) {
         const char = expression[i];
 
         if (char === ' ') continue;
 
         if (/\d+/.test(char)) {
-            currNum += char;
-            continue;
-        }
-
-        if (currNum) {
-            stack[stack.length - 1].push(Number(currNum));
-            currNum = '';
+            stack[stack.length - 1].push(Number(char));
         }
 
         if (['+', '-', '*'].includes(char)) {
@@ -54,7 +46,7 @@ const evaluate = (expression, processFn) => {
         }
     }
 
-    return processFn([...stack[0], currNum]);
+    return processFn(stack[0]);
 };
 
 exports.partOne = () => {
