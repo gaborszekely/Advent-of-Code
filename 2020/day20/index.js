@@ -1,34 +1,17 @@
 // https://adventofcode.com/2020/day/20
 
-const { getInput, getTestInput, Grid, range } = require('../../utils');
+const {
+    getInput,
+    getTestInput,
+    Grid,
+    range,
+    last,
+    first,
+    reverse,
+} = require('../../utils');
 
 const i = getInput(__dirname);
 const _i = getTestInput(__dirname);
-
-class Tile {
-    constructor(id) {
-        this.id = id;
-        this.edges = [];
-        this.matchedEdges = [];
-        this.unmatchedSides = 0;
-    }
-
-    addEdge(edge) {
-        this.edges.push(edge);
-        this.edges.push(edge.split('').reverse().join(''));
-        this.matchedEdges.push(false, false);
-    }
-
-    countUnmatched() {
-        let unmatched = 0;
-
-        for (let i = 0; i < this.matchedEdges.length; i += 2) {
-            if (!this.matchedEdges[i] && !this.matchedEdges[i + 1]) unmatched++;
-        }
-
-        this.unmatchedSides = unmatched;
-    }
-}
 
 const parseTiles = input => {
     const rawTiles = input.split('\n\n');
@@ -41,59 +24,68 @@ const parseTiles = input => {
 
         const grid = rawTile.split('\n').slice(1);
 
-        const tile = new Tile(tileId);
-        const edges = [];
+        const sides = [];
 
-        edges.push(grid[0]);
-        edges.push(grid[grid.length - 1]);
-        edges.push(grid.map(row => row[0]).join(''));
-        edges.push(grid.map(row => row[row.length - 1]).join(''));
+        sides.push(first(grid));
+        sides.push(last(grid));
+        sides.push(grid.map(first).join(''));
+        sides.push(grid.map(last).join(''));
 
-        edges.forEach(edge => {
-            tile.addEdge(edge);
-        });
-
-        acc[tileId] = tile;
+        acc[tileId] = sides;
 
         return acc;
     }, {});
 };
 
-const setUnmatchedCount = tiles => {
-    for (const tile of tiles) {
-        tile.edges.forEach((edge, edgeNumber) => {
-            for (const potentialMatch of tiles) {
-                if (tile.id === potentialMatch.id) continue;
+const getPieceTypes = tiles => {
+    const unmatched = {};
 
-                if (potentialMatch.edges.includes(edge)) {
-                    tile.matchedEdges[edgeNumber] = true;
-                    break;
+    for (const id in tiles) {
+        const sides = tiles[id];
+
+        let matchedSides = 0;
+
+        for (const side of sides) {
+            const reversed = reverse(side);
+
+            for (const neighborId in tiles) {
+                if (id === neighborId) continue;
+
+                const neighborSides = tiles[neighborId];
+
+                const reversedNeighborSides = neighborSides.map(reverse);
+
+                if (
+                    neighborSides.includes(side) ||
+                    neighborSides.includes(reversed) ||
+                    reversedNeighborSides.includes(side) ||
+                    reversedNeighborSides.includes(reversed)
+                ) {
+                    matchedSides++;
                 }
             }
-        });
+        }
 
-        tile.countUnmatched();
+        unmatched[id] = 4 - matchedSides;
     }
-};
-
-const getPieceTypes = tiles => {
-    setUnmatchedCount(tiles);
 
     const corners = [];
     const borders = [];
     const centers = [];
 
-    for (const tile of tiles) {
-        if (tile.unmatchedSides === 2) {
-            corners.push(tile.id);
+    for (const id in unmatched) {
+        const current = unmatched[id];
+
+        if (current === 2) {
+            corners.push(id);
         }
 
-        if (tile.unmatchedSides === 1) {
-            borders.push(tile.id);
+        if (current === 1) {
+            borders.push(id);
         }
 
-        if (tile.unmatchedSides === 0) {
-            centers.push(tile.id);
+        if (current === 0) {
+            centers.push(id);
         }
     }
 
@@ -101,7 +93,7 @@ const getPieceTypes = tiles => {
 };
 
 exports.partOne = () => {
-    const tiles = Object.values(parseTiles(i));
+    const tiles = parseTiles(_i);
     const [corners] = getPieceTypes(tiles);
 
     return corners.reduce((acc, corner) => acc * Number(corner), 1);
@@ -124,13 +116,7 @@ const parseGrids = input => {
     }, {});
 };
 
-const checkMatch = (row1, row2) => {
-    for (let i = 0; i < row1.length; ++i) {
-        if (row1[i] !== row2[i]) return false;
-    }
-
-    return true;
-};
+const checkMatch = (row1, row2) => row1.join('') === row2.join('');
 
 const isFull = (currArrangement, gridSize) => {
     return (
@@ -159,24 +145,19 @@ const checkLeft = (arrangement, addition, row, col) => {
     return checkMatch(firstCol, lastColOfLeftGrid);
 };
 
-// Adds a new grid to the arrangement.
-
 const canAddRow = (arrangement, row, col, addition) => {
     if (row === 0 && col === 0) {
         return true;
     }
 
-    // Check against the grid above
     if (col === 0) {
         return checkAbove(arrangement, addition, row, col);
     }
 
     if (row === 0) {
-        // Check against grid above, and to the left
         return checkLeft(arrangement, addition, row, col);
     }
 
-    // Check against grid above, and to the left
     return (
         checkAbove(arrangement, addition, row, col) &&
         checkLeft(arrangement, addition, row, col)
@@ -215,6 +196,13 @@ const isBorderPlacement = (nextRow, nextCol, gridSize) => {
     );
 };
 
+const isCenterPlacement = (nextRow, nextCol, gridSize) => {
+    return (
+        !isCornerPlacement(nextRow, nextCol, gridSize) &&
+        !isBorderPlacement(nextRow, nextCol, gridSize)
+    );
+};
+
 const getAllOrientations = grid => {
     const results = [];
     // Try all four arrangements - Regular grid, flipped horizontal,
@@ -222,21 +210,22 @@ const getAllOrientations = grid => {
     for (let i = 0; i < 4; ++i) {
         let flipped = grid;
 
-        // flip grid horizontally
+        // Flip grid horizontally.
         if (i === 1) {
             flipped = grid.flipHorizontal();
         }
 
-        // flip grid vertically
+        // Flip grid vertically.
         else if (i === 2) {
             flipped = grid.flipVertical();
         }
 
-        // flip grid both horizontally and vertically
+        // Flip grid both horizontally and vertically.
         else if (i === 3) {
             flipped = grid.flipVertical().flipHorizontal();
         }
 
+        // Rotate in all four opientations.
         for (let j = 0; j < 4; ++j) {
             flipped = flipped.rotateClockwise();
             results.push(flipped);
@@ -255,28 +244,31 @@ const buildArrangements = (
     usedIndexes = new Set(),
     currArrangement = getCurrArrangement(gridSize)
 ) => {
-    // Check if arrangement was made successfully. If so, return.
+    // Check if arrangement was arranged successfully. If so, return the
+    // arrangement.
     if (isFull(currArrangement, gridSize)) {
         return currArrangement;
     }
 
     const [nextRow, nextCol] = findNextPlacement(currArrangement, gridSize);
 
-    // For each available index
     for (let gridI = 0; gridI < input.length; ++gridI) {
         if (usedIndexes.has(gridI)) continue;
 
         const [tileId, grid] = input[gridI];
 
-        if (isCornerPlacement(nextRow, nextCol, gridSize)) {
-            if (!corners.includes(tileId)) {
-                continue;
-            }
-        } else if (isBorderPlacement(nextRow, nextCol, gridSize)) {
-            if (!borders.includes(tileId)) continue;
-        } else {
-            if (!centers.includes(tileId)) continue;
-        }
+        const [corner, border, center] = [
+            isCornerPlacement,
+            isBorderPlacement,
+            isCenterPlacement,
+        ].map(checker => checker(nextRow, nextCol, gridSize));
+
+        const canPlace =
+            (corner && corners.includes(tileId)) ||
+            (border && borders.includes(tileId)) ||
+            (center && centers.includes(tileId));
+
+        if (!canPlace) continue;
 
         const orientations = getAllOrientations(grid);
 
@@ -320,103 +312,26 @@ const buildArrangements = (
                 currArrangement[nextRow].splice(nextCol, 1);
             }
         }
-
-        // Try all four arrangements - Regular grid, flipped horizontal,
-        // flipped vertical, and flipped both horizontal and vertical.
-        // for (let i = 0; i < 4; ++i) {
-        //     let flipped = grid;
-
-        //     // flip grid horizontally
-        //     if (i === 1) {
-        //         flipped = grid.flipHorizontal();
-        //     }
-
-        //     // flip grid vertically
-        //     else if (i === 2) {
-        //         flipped = grid.flipVertical();
-        //     }
-
-        //     // flip grid both horizontally and vertically
-        //     else if (i === 3) {
-        //         flipped = grid.flipVertical().flipHorizontal();
-        //     }
-
-        //     for (let j = 0; j < 4; ++j) {
-        //         flipped = flipped.rotateClockwise();
-
-        //         const addition = {
-        //             tileId,
-        //             grid: flipped,
-        //         };
-
-        //         const canAdd = canAddRow(
-        //             currArrangement,
-        //             nextRow,
-        //             nextCol,
-        //             addition
-        //         );
-
-        //         if (canAdd) {
-        //             usedIndexes.add(gridI);
-
-        //             // Add to arrangement
-        //             currArrangement[nextRow][nextCol] = addition;
-
-        //             // Recruse
-        //             const result = buildArrangements(
-        //                 input,
-        //                 gridSize,
-        //                 corners,
-        //                 borders,
-        //                 centers,
-        //                 usedIndexes,
-        //                 currArrangement
-        //             );
-
-        //             if (result) {
-        //                 return result;
-        //             }
-
-        //             usedIndexes.delete(gridI);
-
-        //             // Remove from arrangement
-        //             currArrangement[nextRow].splice(nextCol, 1);
-        //         }
-        //     }
-        // }
     }
 };
 
-    // 18 to the right
-    // 1 down, 0 right
-    // 1 down, 5+6 right
-    // 1 down, 11+12 right
-    // 1 down, 17,18,19 right
-
-    // 2 down, 1 right
-    // 2 down, 4 right
-    // 2 down, 7 right
-    // 2 down, 10 right
-    // 2 down, 13 right
-    // 2 down, 16 right
-
 const hashCoords = [
-        [0, 18],
-        [1, 0],
-        [1, 5],
-        [1, 6],
-        [1, 11],
-        [1, 12],
-        [1, 17],
-        [1, 18],
-        [1, 19],
-        [2, 1],
-        [2, 4],
-        [2, 7],
-        [2, 10],
-        [2, 13],
-        [2, 16],
-    ];
+    [0, 18],
+    [1, 0],
+    [1, 5],
+    [1, 6],
+    [1, 11],
+    [1, 12],
+    [1, 17],
+    [1, 18],
+    [1, 19],
+    [2, 1],
+    [2, 4],
+    [2, 7],
+    [2, 10],
+    [2, 13],
+    [2, 16],
+];
 
 const hasSeaMonster = (grid, i, j) => {
     if (i > grid.rows - 3 || j > grid.cols - 20) {
@@ -435,7 +350,7 @@ const hasSeaMonster = (grid, i, j) => {
 const findSeaMonsters = grid => {
     let totalMonsters = 0;
 
-    grid.forEach((el, row, col) => {
+    grid.forEach((_, row, col) => {
         if (hasSeaMonster(grid, row, col)) totalMonsters++;
     });
 
@@ -460,24 +375,21 @@ const buildMonsterGrid = (result, gridSize) => {
     return monsterGrid;
 };
 
-const countRemainingHashes = (orientation) => {
-  orientation.forEach((_, row, col) => {
-    if (hasSeaMonster(orientation, row, col)) {
-      for (const [hI, hJ] of hashCoords) {
-       orientation.set(row + hI, col + hJ, 'O');
-    }
-    }
-  });
+const countRemainingHashes = orientation => {
+    orientation.forEach((_, row, col) => {
+        if (hasSeaMonster(orientation, row, col)) {
+            for (const [hI, hJ] of hashCoords) {
+                orientation.set(row + hI, col + hJ, 'O');
+            }
+        }
+    });
 
-  let totalHashes = 0;
-
-  return orientation.countElements('#');
+    return orientation.countElements('#');
 };
 
 exports.partTwo = () => {
-    const input = parseGrids(i);
-
-    const tiles = Object.values(parseTiles(i));
+    const input = parseGrids(_i);
+    const tiles = parseTiles(_i);
 
     const [corners, borders, centers] = getPieceTypes(tiles);
 
@@ -513,14 +425,12 @@ exports.partTwo = () => {
 
     for (const orientation of orientations) {
         const localSeaMonsters = findSeaMonsters(orientation);
-        // console.log(localSeaMonsters);
+
         if (localSeaMonsters > totalSeaMonsters) {
-          totalSeaMonsters = localSeaMonsters;
-          maxOrientation = orientation;
+            totalSeaMonsters = localSeaMonsters;
+            maxOrientation = orientation;
         }
     }
 
     return countRemainingHashes(maxOrientation);
-
-    return totalSeaMonsters;
 };
