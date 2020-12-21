@@ -167,6 +167,30 @@ class Grid {
         return total;
     }
 
+    rotateClockwise() {
+        const matrix = this._grid;
+
+        return Grid.fromMatrix(
+            matrix[0].map((val, index) =>
+                matrix.map(row => row[index]).reverse()
+            )
+        );
+    }
+
+    rotateCounterClockwise() {}
+
+    flipHorizontal() {
+        const newGrid = this._grid.map(row => row.slice().reverse());
+
+        return Grid.fromMatrix(newGrid);
+    }
+
+    flipVertical() {
+        const newGrid = this._grid.slice().reverse();
+
+        return Grid.fromMatrix(newGrid);
+    }
+
     /** Iterates over each cell in the grid. */
     forEach(cb) {
         for (let i = 0; i < this._grid.length; ++i) {
@@ -174,6 +198,16 @@ class Grid {
                 cb(this.get(i, j), i, j, this);
             }
         }
+    }
+
+    spliceRow(row) {
+        this._grid.splice(row, 1);
+    }
+
+    spliceCol(col) {
+        this._grid.forEach(row => {
+            row.splice(col, 1);
+        });
     }
 
     /** Gets the grid coordinates. */
