@@ -18,3 +18,5 @@ exports.assert = (actual, expected) => {
         console.log('Expected: ', expected);
     }
 };
+
+exports.reverse = str => str.split('').reverse().join('');

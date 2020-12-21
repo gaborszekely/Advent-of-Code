@@ -105,3 +105,7 @@ exports.findMinMax = (ary, start = 0, end = ary.length - 1) => {
 
     return [min, max];
 };
+
+exports.first = ary => ary[0];
+
+exports.last = ary => ary[ary.length - 1];
