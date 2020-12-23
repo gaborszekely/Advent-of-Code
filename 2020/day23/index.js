@@ -111,7 +111,7 @@ exports.partTwo = () => {
 
     playGame(head, vals, iterations, maxVal);
 
-    Const node = vals[1];
+    const node = vals[1];
 
     return node.next.value * node.next.next.value;
 };
