@@ -27,7 +27,7 @@ const getDestinationCup = (currentVal, list, maxVal) => {
 };
 
 const saveListReferences = (head, size) => {
-    const vals = new Array(size);
+    const vals = new Array(size + 1);
 
     vals[head.value] = head;
 
@@ -109,11 +109,9 @@ exports.partTwo = () => {
     const head = convertToCircularLinkedList(input);
     const vals = saveListReferences(head, maxVal);
 
-    let node = playGame(head, vals, iterations, maxVal);
+    playGame(head, vals, iterations, maxVal);
 
-    while (node.value !== 1) {
-        node = node.next;
-    }
+    Const node = vals[1];
 
     return node.next.value * node.next.next.value;
 };
