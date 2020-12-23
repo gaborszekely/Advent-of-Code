@@ -106,3 +106,4 @@ exports.partTwo = () => {
 
     return calculateResult(scores);
 };
+
