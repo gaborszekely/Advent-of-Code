@@ -74,7 +74,7 @@ const playGame = (head, vals, iterations, maxVal) => {
 };
 
 exports.partOne = () => {
-    let input = parseInput(i);
+    const input = parseInput(i);
 
     const maxVal = 9;
     const iterations = 100;
