@@ -5,9 +5,12 @@ class Grid {
     }
 
     /** Clones a matrix representation of a grid. */
-    static cloneMatrix(grid) {
-        return Array.from({ length: grid.length }, (_, row) =>
-            Array.from({ length: grid[0].length }, (_, col) => grid[row][col])
+    static cloneMatrix(matrix) {
+        return Array.from({ length: matrix.length }, (_, row) =>
+            Array.from(
+                { length: matrix[0].length },
+                (_, col) => matrix[row][col]
+            )
         );
     }
 
@@ -18,13 +21,35 @@ class Grid {
 
     /** Generates a Grid instance from a matrix representation. */
     static fromMatrix(matrix) {
-        const serialized = Grid.serializeMatrix(matrix);
-        return new Grid(serialized);
+        const grid = Grid.fromSerialized(Grid.serializeMatrix(matrix));
+
+        grid.forEach((_, r, c) => {
+            grid.set(r, c, matrix[r][c]);
+        });
+
+        return grid;
     }
 
     /** Generates a Grid instance from a string representation. */
     static fromSerialized(input) {
         return new Grid(input);
+    }
+
+    /**
+     * Generates a grid of a certain size, with a default value assigned to
+     * each cell.
+     */
+    static fromProportions(rows, cols, defaultVal) {
+        const matrix = Grid.generateMatrix(rows, cols, 0);
+        const grid = Grid.fromMatrix(matrix);
+        const val =
+            typeof defaultVal === 'function' ? defaultVal() : defaultVal;
+
+        grid.forEach((_, r, c) => {
+            grid.set(r, c, val);
+        });
+
+        return grid;
     }
 
     /**
@@ -106,9 +131,12 @@ class Grid {
 
     /** Serializes a matrix into a string representation. */
     static serializeMatrix(matrix) {
+      const rows = matrix.length;
+      const cols = matrix[0].length;
+
         let serialized = '';
-        for (let i = 0; i < matrix.length; ++i) {
-            for (let j = 0; j < matrix[0].length; ++j) {
+        for (let i = 0; i < rows; ++i) {
+            for (let j = 0; j < cols; ++j) {
                 serialized += matrix[i][j];
             }
             serialized += '\n';
@@ -167,18 +195,6 @@ class Grid {
         return total;
     }
 
-    rotateClockwise() {
-        const matrix = this._grid;
-
-        return Grid.fromMatrix(
-            matrix[0].map((val, index) =>
-                matrix.map(row => row[index]).reverse()
-            )
-        );
-    }
-
-    rotateCounterClockwise() {}
-
     flipHorizontal() {
         const newGrid = this._grid.map(row => row.slice().reverse());
 
@@ -198,16 +214,6 @@ class Grid {
                 cb(this.get(i, j), i, j, this);
             }
         }
-    }
-
-    spliceRow(row) {
-        this._grid.splice(row, 1);
-    }
-
-    spliceCol(col) {
-        this._grid.forEach(row => {
-            row.splice(col, 1);
-        });
     }
 
     /** Gets the grid coordinates. */
@@ -249,6 +255,16 @@ class Grid {
         console.log('\n');
     }
 
+    rotateClockwise() {
+        const matrix = this._grid;
+
+        return Grid.fromMatrix(
+            matrix[0].map((val, index) =>
+                matrix.map(row => row[index]).reverse()
+            )
+        );
+    }
+
     /** Serializes the grid into a string representation. */
     serialize() {
         return Grid.serializeMatrix(this._grid);
@@ -260,6 +276,16 @@ class Grid {
             throw new Error(`Coordinates [${row}, ${col}] are out of bounds.`);
         }
         this._grid[row][col] = val;
+    }
+
+    spliceCol(col) {
+        this._grid.forEach(row => {
+            row.splice(col, 1);
+        });
+    }
+
+    spliceRow(row) {
+        this._grid.splice(row, 1);
     }
 
     _mapCoordsToNeighbors(coords) {
