@@ -2,7 +2,7 @@
 
 const { getInput, Grid } = require('../../utils');
 
-const realInput = getInput(__dirname);
+const input = getInput(__dirname);
 
 const parseInput = rawInput => {
     return rawInput.split('\n').map(row => {
@@ -57,9 +57,9 @@ const countBlackNeighbors = (r, c, grid) => {
     const neighborDirections = ['e', 'w', 'ne', 'nw', 'se', 'sw'];
 
     return neighborDirections.reduce((acc, direction) => {
-        const [nR, nC] = getNeighborIndex[direction](r, c);
+        const neighborCoords = getNeighborIndex[direction](r, c);
 
-        const neighbor = getTileColor(grid, nR, nC);
+        const neighbor = getTileColor(grid, ...neighborCoords);
 
         return isBlack(neighbor) ? acc + 1 : acc;
     }, 0);
@@ -73,37 +73,31 @@ const populateGrid = rawInput => {
 
     const result = Grid.fromProportions(STARTING_SIZE, STARTING_SIZE, 0);
 
-    let [r, c] = [midpoint, midpoint];
-
     for (const row of input) {
-        let coords = [r, c];
+        let coords = [midpoint, midpoint];
 
         for (const direction of row) {
             coords = getNeighborIndex[direction](...coords);
         }
 
-        const [newR, newC] = coords;
-
-        flip(result, newR, newC);
+        flip(result, ...coords);
     }
 
     return result;
 };
 
 exports.partOne = () => {
-    const grid = populateGrid(realInput);
+    const grid = populateGrid(input);
 
     return grid.countElements(1);
 };
 
 const getEmptyGrid = grid => {
-    const empty = Grid.fromProportions(grid.rows, grid.cols, 0);
-
-    return empty;
+    return Grid.fromProportions(grid.rows, grid.cols, 0);
 };
 
 exports.partTwo = () => {
-    let grid = populateGrid(realInput);
+    let grid = populateGrid(input);
 
     let clone = getEmptyGrid(grid);
 
