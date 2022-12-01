@@ -1,9 +1,9 @@
-const fs = require('fs');
-const path = require('path');
-const commander = require('commander');
-const { validateArgs, Validators } = require('../utils/validators');
-const { range } = require('../utils/utils');
-const { __basedir } = require('../utils/fs');
+import fs from 'fs';
+import path from 'path';
+import commander from 'commander';
+import { validateArgs, Validators } from '../utils/validators';
+import { range } from '../utils/utils';
+import { __basedir } from '../utils/fs';
 
 commander
     .version('1.0.0', '-v, --version')
@@ -19,7 +19,7 @@ validateArgs(commander, {
     part: [Validators.oneOf(['both', Validators.inRange(1, 2)])],
 });
 
-const getChallengePath = (year, day) => {
+const getChallengePath = (year: number, day: number) => {
     return path.join(__basedir, year.toString(), `day${day}`, 'index.js');
 };
 
@@ -28,10 +28,10 @@ const getLatestYear = () =>
         fs.existsSync(path.join(__basedir, year.toString()))
     );
 
-const getLatestDay = year =>
+const getLatestDay = (year: number) =>
     range(25, 1).find(i => fs.existsSync(getChallengePath(year, i)));
 
-const getYearToRun = specifiedYear => {
+const getYearToRun = (specifiedYear: string | number) => {
     if (!specifiedYear || specifiedYear === 'latest') {
         return getLatestYear();
     }
@@ -45,7 +45,7 @@ const getYearToRun = specifiedYear => {
     return parsedYear;
 };
 
-const getDayToRun = (specifiedYear, specifiedDay) => {
+const getDayToRun = (specifiedYear: number, specifiedDay: number | string) => {
     const year = getYearToRun(specifiedYear);
 
     if (!specifiedDay || specifiedDay === 'latest') {

@@ -1,20 +1,20 @@
-const fetch = require('node-fetch');
-const commander = require('commander');
-const { range } = require('../utils');
-const fs = require('fs');
-const path = require('path');
+import fetch from 'node-fetch';
+import commander from 'commander';
+import { range } from '../utils';
+import fs from 'fs';
+import path from 'path';
 
 commander
     .version('1.0.0', '-v, --version')
     .usage('[OPTIONS]...')
-    .option('--year <name>', 'Year to fetch', '2020')
+    .option('--year <name>', 'Year to fetch', '2022')
     .option('--session <name>', 'Session token', '')
     .parse(process.argv);
 
-console.log('');
-
-const getFolderPath = day =>
+const getFolderPath = (day: number) =>
     path.join(__dirname, '../', commander.year, `day${day}`);
+
+console.log(commander);
 
 if (!commander.session) {
     throw new Error('Please include a valid session token.');

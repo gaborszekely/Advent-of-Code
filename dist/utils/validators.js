@@ -1,6 +1,8 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Validators = exports.validateArgs = void 0;
 const utils = require('./utils');
-
-const equals = expected => val => {
+const equals = (expected) => (val) => {
     if (val !== expected) {
         return {
             error: true,
@@ -8,29 +10,21 @@ const equals = expected => val => {
         };
     }
 };
-
-const transformValidators = validators =>
-    validators.map(validator =>
-        typeof validator === 'function' ? validator : equals(validator)
-    );
-
-const oneOf = validators => val => {
+const transformValidators = (validators) => validators.map(validator => typeof validator === 'function' ? validator : equals(validator));
+const oneOf = (validators) => (val) => {
     const transformedValidators = transformValidators(validators);
     const errors = transformedValidators
         .map(validator => validator(val))
         .filter(Boolean);
-
     if (errors.length === validators.length) {
         return {
             error: true,
-            message:
-                ' - One of the following must be true: \n' +
+            message: ' - One of the following must be true: \n' +
                 errors.map(error => `   ${error.message}`).join('\n'),
         };
     }
 };
-
-const inRange = (min, max) => val => {
+const inRange = (min, max) => (val) => {
     if (isNaN(Number(val)) || !utils.inRange(min, max)(val)) {
         return {
             error: true,
@@ -38,8 +32,7 @@ const inRange = (min, max) => val => {
         };
     }
 };
-
-const regex = rx => val => {
+const regex = (rx) => (val) => {
     if (!rx.test(val)) {
         return {
             error: true,
@@ -47,24 +40,20 @@ const regex = rx => val => {
         };
     }
 };
-
-exports.validateArgs = (commander, validationRules) => {
+const validateArgs = (commander, validationRules) => {
     for (const [arg, validators] of Object.entries(validationRules)) {
         const transformedValidators = transformValidators(validators);
         const val = commander[arg];
-
         const errors = transformedValidators
             .map(validator => validator(val))
             .filter(Boolean);
-
         if (errors.length) {
-            throw new Error(
-                `ERROR - Could not validate command-line arg '${arg}'.\n\n` +
-                    errors.map(error => `${error.message}\n`) +
-                    '\n'
-            );
+            throw new Error(`ERROR - Could not validate command-line arg '${arg}'.\n\n` +
+                errors.map(error => `${error.message}\n`) +
+                '\n');
         }
     }
 };
-
+exports.validateArgs = validateArgs;
 exports.Validators = { equals, inRange, oneOf, regex };
+//# sourceMappingURL=validators.js.map

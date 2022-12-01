@@ -1,16 +1,13 @@
 /**
  * Linked List node.
  */
-class ListNode {
-    constructor(value) {
-        this.value = value;
-        this.next = this.prev = null;
-    }
+export class ListNode<T> {
+    next: ListNode<T> | null = null;
+    prev: ListNode<T> | null = null;
+    constructor(readonly value: T) {}
 }
 
-exports.ListNode = ListNode;
-
-exports.linkedListHas = (list, target) => {
+export const linkedListHas = <T>(list: ListNode<T> | null, target: T) => {
     let node = list;
 
     while (node) {
@@ -24,7 +21,7 @@ exports.linkedListHas = (list, target) => {
     return false;
 };
 
-exports.convertToCircularLinkedList = input => {
+export const convertToCircularLinkedList = <T>(input: T[]) => {
     const head = new ListNode(input[0]);
 
     let node = head;
@@ -39,7 +36,7 @@ exports.convertToCircularLinkedList = input => {
     return head;
 };
 
-exports.convertToLinkedList = input => {
+export const convertToLinkedList = <T>(input: T[]) => {
     const head = new ListNode(input[0]);
 
     let node = head;

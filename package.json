@@ -1,35 +1,36 @@
 {
-  "name": "Advent-of-Code",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start": "nodemon runner/runner.js",
-    "latest": "npm start -- --day latest",
-    "loadInput": "node helpers/loadInput.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/gaborszekely/Advent-of-Code.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/gaborszekely/Advent-of-Code/issues"
-  },
-  "homepage": "https://github.com/gaborszekely/Advent-of-Code#readme",
-  "devDependencies": {
-    "nodemon": "^2.0.6",
-    "prettier": "^2.2.1"
-  },
-  "dependencies": {
-    "bignum": "^0.13.1",
-    "commander": "^6.2.0",
-    "heap": "^0.2.6",
-    "install": "^0.13.0",
-    "node-fetch": "^2.6.1",
-    "nodejs-chinese-remainder": "^0.0.6",
-    "npm": "^6.14.9"
-  }
+    "name": "Advent-of-Code",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "tsc && nodemon dist/runner/runner.js",
+        "latest": "npm start -- --day latest",
+        "loadInput": "tsc && node dist/helpers/loadInput.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/gaborszekely/Advent-of-Code.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/gaborszekely/Advent-of-Code/issues"
+    },
+    "homepage": "https://github.com/gaborszekely/Advent-of-Code#readme",
+    "devDependencies": {
+        "@types/node": "^18.11.10",
+        "@types/node-fetch": "^2.6.2",
+        "nodemon": "^2.0.6",
+        "prettier": "^2.2.1"
+    },
+    "dependencies": {
+        "@datastructures-js/priority-queue": "^6.1.4",
+        "commander": "^6.2.0",
+        "heap": "^0.2.6",
+        "install": "^0.13.0",
+        "node-fetch": "^2.6.1",
+        "npm": "^6.14.9"
+    }
 }
