@@ -4,3 +4,4 @@ test.txt
 .history/**/*
 .gitignore_*
 node_modules
+dist

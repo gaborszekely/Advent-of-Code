@@ -12,7 +12,7 @@ commander
     .parse(process.argv);
 
 const getFolderPath = (day: number) =>
-    path.join(__dirname, '../', commander.year, `day${day}`);
+    path.join(__dirname, '../../src', commander.year, `day${day}`);
 
 console.log(commander);
 
