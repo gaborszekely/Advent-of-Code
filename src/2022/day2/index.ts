@@ -12,18 +12,14 @@ const entries = input
 const WIN_SCORE = 6;
 const TIE_SCORE = 3;
 
-const ROCK_SHAPES = ['A', 'X'];
-const PAPER_SHAPES = ['B', 'Y'];
-const SCISSORS_SHAPES = ['C', 'Z'];
-
-const isRock = (shape: string) => ROCK_SHAPES.includes(shape);
-const isPaper = (shape: string) => PAPER_SHAPES.includes(shape);
-const isScissors = (shape: string) => SCISSORS_SHAPES.includes(shape);
+const isRock = (shape: string) => ['A', 'X'].includes(shape);
+const isPaper = (shape: string) => ['B', 'Y'].includes(shape);
+const isScissors = (shape: string) => ['C', 'Z'].includes(shape);
 
 type Shape = 'ROCK' | 'PAPER' | 'SCISSORS';
 type Outcome = 'WIN' | 'LOSE' | 'TIE';
 
-const simpleScoreUpdates: { readonly [key in Shape]: number } = {
+const shapeScore: { readonly [key in Shape]: number } = {
     ROCK: 1,
     PAPER: 2,
     SCISSORS: 3,
@@ -51,18 +47,9 @@ const inputToOutcome: { readonly [key: string]: Outcome } = {
 };
 
 const getShape = (input: string): Shape => {
-    if (isRock(input)) {
-        return 'ROCK';
-    }
-
-    if (isPaper(input)) {
-        return 'PAPER';
-    }
-
-    if (isScissors(input)) {
-        return 'SCISSORS';
-    }
-
+    if (isRock(input)) return 'ROCK';
+    if (isPaper(input)) return 'PAPER';
+    if (isScissors(input)) return 'SCISSORS';
     throw new Error(`Unexpected input ${input}`);
 };
 
@@ -70,53 +57,43 @@ const getOutcome = (input: string): Outcome => {
     if (input in inputToOutcome) {
         return inputToOutcome[input];
     }
-
     throw new Error(`Unexpected input ${input}`);
 };
 
 export function partOne() {
-    const input = entries.map(entry => entry.map(getShape));
+    return entries
+        .map(entry => entry.map(getShape))
+        .reduce((acc, [opponent, player]) => {
+            if (opponent === player) {
+                acc += TIE_SCORE;
+            } else if (opponent === shapeThatLosesTo[player]) {
+                acc += WIN_SCORE;
+            }
 
-    let score = 0;
-    for (const [opponent, player] of input) {
-        if (player === opponent) {
-            score += TIE_SCORE;
-        } else if (shapeThatLosesTo[player] === opponent) {
-            score += WIN_SCORE;
-        }
-        score += simpleScoreUpdates[player];
-    }
-
-    return score;
+            return acc + shapeScore[player];
+        }, 0);
 }
 
 export function partTwo() {
-    const input = entries.map(
-        ([opponent, outcome]) =>
-            [getShape(opponent), getOutcome(outcome)] as const
-    );
+    return entries
+        .map(
+            ([opponent, outcome]) =>
+                [getShape(opponent), getOutcome(outcome)] as const
+        )
+        .reduce((acc, [opponent, outcome]) => {
+            let player: Shape;
+            if (outcome === 'LOSE') {
+                player = shapeThatLosesTo[opponent];
+            }
+            if (outcome === 'TIE') {
+                player = opponent;
+                acc += TIE_SCORE;
+            }
+            if (outcome === 'WIN') {
+                player = shapeThatBeats[opponent];
+                acc += WIN_SCORE;
+            }
 
-    let score = 0;
-
-    for (const [opponent, outcome] of input) {
-        let player: Shape;
-
-        if (outcome === 'LOSE') {
-            player = shapeThatLosesTo[opponent];
-        }
-
-        if (outcome === 'TIE') {
-            player = opponent;
-            score += TIE_SCORE;
-        }
-
-        if (outcome === 'WIN') {
-            player = shapeThatBeats[opponent];
-            score += WIN_SCORE;
-        }
-
-        score += simpleScoreUpdates[player];
-    }
-
-    return score;
+            return acc + shapeScore[player];
+        }, 0);
 }
