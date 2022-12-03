@@ -9,7 +9,7 @@ import {
 
 const input = getInput(__dirname);
 
-const entries = input
+const rucksacks = input
     .trim()
     .split('\n')
     .map(row => row.split(''));
@@ -19,27 +19,28 @@ function getPriority(char: string) {
 }
 
 export function partOne() {
-    return sumArray(
-        entries.map(row => {
-            const midpoint = row.length / 2;
-            const firstCompartment = row.slice(0, midpoint);
-            const secondCompartment = row.slice(midpoint);
-            const intersection = findIntersection(
-                firstCompartment,
-                secondCompartment
-            )[0];
+    const priorities = rucksacks.map(rucksack => {
+        const midpoint = rucksack.length / 2;
+        const firstCompartment = rucksack.slice(0, midpoint);
+        const secondCompartment = rucksack.slice(midpoint);
+        const misplacedItem = findIntersection(
+            firstCompartment,
+            secondCompartment
+        )[0];
 
-            return getPriority(intersection);
-        })
-    );
+        return getPriority(misplacedItem);
+    });
+
+    return sumArray(priorities);
 }
 
 export function partTwo() {
-    return sumArray(
-        batchArray(entries, 3).map(batch => {
-            const intersection = findIntersection(...batch)[0];
+    const groups = batchArray(rucksacks, 3);
+    const priorities = groups.map(group => {
+        const badge = findIntersection(...group)[0];
 
-            return getPriority(intersection);
-        })
-    );
+        return getPriority(badge);
+    });
+
+    return sumArray(priorities);
 }
