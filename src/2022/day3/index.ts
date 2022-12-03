@@ -1,11 +1,8 @@
 // https://adventofcode.com/2022/day/3
 
-import {
-    batchArray,
-    findIntersection,
-    getInput,
-    sumArray,
-} from '../../utils/index';
+import { getInput } from '../../utils/index';
+
+import { sum, intersection, chunk } from 'lodash';
 
 const input = getInput(__dirname);
 
@@ -23,7 +20,7 @@ export function partOne() {
         const midpoint = rucksack.length / 2;
         const firstCompartment = rucksack.slice(0, midpoint);
         const secondCompartment = rucksack.slice(midpoint);
-        const misplacedItem = findIntersection(
+        const misplacedItem = intersection(
             firstCompartment,
             secondCompartment
         )[0];
@@ -31,16 +28,16 @@ export function partOne() {
         return getPriority(misplacedItem);
     });
 
-    return sumArray(priorities);
+    return sum(priorities);
 }
 
 export function partTwo() {
-    const groups = batchArray(rucksacks, 3);
+    const groups = chunk(rucksacks, 3);
     const priorities = groups.map(group => {
-        const badge = findIntersection(...group)[0];
+        const badge = intersection(...group)[0];
 
         return getPriority(badge);
     });
 
-    return sumArray(priorities);
+    return sum(priorities);
 }

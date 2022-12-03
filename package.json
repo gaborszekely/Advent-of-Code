@@ -20,6 +20,7 @@
     },
     "homepage": "https://github.com/gaborszekely/Advent-of-Code#readme",
     "devDependencies": {
+        "@types/lodash": "^4.14.191",
         "@types/node": "^18.11.10",
         "@types/node-fetch": "^2.6.2",
         "nodemon": "^2.0.6",
@@ -30,6 +31,7 @@
         "commander": "^6.2.0",
         "heap": "^0.2.6",
         "install": "^0.13.0",
+        "lodash": "^4.17.21",
         "node-fetch": "^2.6.1",
         "npm": "^6.14.9"
     }
