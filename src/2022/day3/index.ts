@@ -10,9 +10,7 @@ const entries = input
     .map(row => row.split(''));
 
 function getPriority(char: string) {
-    const charCode = char.charCodeAt(0);
-
-    return charCode - (char === char.toUpperCase() ? 38 : 96);
+    return char.charCodeAt(0) - (char === char.toUpperCase() ? 38 : 96);
 }
 
 export function partOne() {
