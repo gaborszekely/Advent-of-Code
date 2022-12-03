@@ -1,6 +1,11 @@
 // https://adventofcode.com/2022/day/3
 
-import { findIntersection, getInput, sumArray } from '../../utils/index';
+import {
+    batchArray,
+    findIntersection,
+    getInput,
+    sumArray,
+} from '../../utils/index';
 
 const input = getInput(__dirname);
 
@@ -30,11 +35,11 @@ export function partOne() {
 }
 
 export function partTwo() {
-    let total = 0;
-    for (let i = 0; i < entries.length; i += 3) {
-        const intersection = findIntersection(...entries.slice(i, i + 3))[0];
-        total += getPriority(intersection);
-    }
+    return sumArray(
+        batchArray(entries, 3).map(batch => {
+            const intersection = findIntersection(...batch)[0];
 
-    return total;
+            return getPriority(intersection);
+        })
+    );
 }

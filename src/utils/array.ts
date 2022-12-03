@@ -117,3 +117,14 @@ export const findMinMax = (ary: number[], start = 0, end = ary.length - 1) => {
 export const first = <T>(ary: T[]) => ary[0];
 
 export const last = <T>(ary: T[]) => ary[ary.length - 1];
+
+export function batchArray<T>(array: T[], n: number) {
+    return array.reduce((acc, val, i) => {
+        if (i % n === 0) {
+            acc.push([val]);
+        } else {
+            acc.at(-1).push(val);
+        }
+        return acc;
+    }, [] as T[][]);
+}
