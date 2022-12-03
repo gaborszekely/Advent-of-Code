@@ -24,7 +24,6 @@ export function partOne() {
             firstCompartment,
             secondCompartment
         )[0];
-
         return getPriority(misplacedItem);
     });
 
@@ -35,7 +34,6 @@ export function partTwo() {
     const groups = chunk(rucksacks, 3);
     const priorities = groups.map(group => {
         const badge = intersection(...group)[0];
-
         return getPriority(badge);
     });
 
