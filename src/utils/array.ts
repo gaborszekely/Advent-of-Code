@@ -8,7 +8,7 @@ export const numMatches = <T>(list: T[], predicate: (val: T) => boolean) =>
 export const sumArray = (ary: number[]) => {
     assert(Array.isArray(ary), 'Please pass a valid array to sumArray()');
 
-    return ary.reduce((acc, val) => acc + val, 0);
+    return ary.reduce((acc, val) => acc + val);
 };
 
 /**
