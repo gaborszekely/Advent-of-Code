@@ -15,26 +15,27 @@ function getPriority(char: string) {
 }
 
 export function partOne() {
-    const priorities = rucksacks.map(rucksack => {
-        const midpoint = rucksack.length / 2;
-        const firstCompartment = rucksack.slice(0, midpoint);
-        const secondCompartment = rucksack.slice(midpoint);
-        const misplacedItem = intersection(
-            firstCompartment,
-            secondCompartment
-        )[0];
-        return getPriority(misplacedItem);
-    });
-
-    return sum(priorities);
+    return sum(
+        rucksacks.map(rucksack => {
+            const midpoint = rucksack.length / 2;
+            const firstCompartment = rucksack.slice(0, midpoint);
+            const secondCompartment = rucksack.slice(midpoint);
+            const misplacedItem = intersection(
+                firstCompartment,
+                secondCompartment
+            )[0];
+            return getPriority(misplacedItem);
+        })
+    );
 }
 
 export function partTwo() {
     const groups = chunk(rucksacks, 3);
-    const priorities = groups.map(group => {
-        const badge = intersection(...group)[0];
-        return getPriority(badge);
-    });
 
-    return sum(priorities);
+    return sum(
+        groups.map(group => {
+            const badge = intersection(...group)[0];
+            return getPriority(badge);
+        })
+    );
 }
