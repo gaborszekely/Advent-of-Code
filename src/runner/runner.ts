@@ -1,9 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import commander from 'commander';
-import { validateArgs, Validators } from '../utils/validators';
-import { range } from '../utils/utils';
-import { __basedir } from '../utils/fs';
+import { __basedir, range, validateArgs, Validators } from '@utils';
 
 commander
     .version('1.0.0', '-v, --version')
@@ -20,7 +18,7 @@ validateArgs(commander, {
 });
 
 const getChallengePath = (year: number, day: number) => {
-    return path.join(__basedir, year.toString(), `day${day}`, 'index.js');
+    return path.join(__basedir, year.toString(), `day${day}`, 'index.ts');
 };
 
 const getLatestYear = () =>

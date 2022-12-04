@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "tsc && nodemon dist/runner/runner.js",
+        "start": "ts-node-dev -r tsconfig-paths/register src/runner/runner.ts",
         "latest": "npm start -- --day latest",
         "loadInput": "tsc && node dist/helpers/loadInput.js"
     },
@@ -24,7 +24,9 @@
         "@types/node": "^18.11.10",
         "@types/node-fetch": "^2.6.2",
         "nodemon": "^2.0.6",
-        "prettier": "^2.2.1"
+        "prettier": "^2.2.1",
+        "ts-node-dev": "^2.0.0",
+        "tsconfig-paths": "^4.1.1"
     },
     "dependencies": {
         "@datastructures-js/priority-queue": "^6.1.4",
