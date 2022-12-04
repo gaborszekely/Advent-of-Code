@@ -1,6 +1,6 @@
 // https://adventofcode.com/2022/day/1
 
-import { getInput } from '../../utils/index';
+import { getInput } from '@utils';
 
 const input = getInput(__dirname);
 

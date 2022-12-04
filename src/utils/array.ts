@@ -1,33 +1,6 @@
-import { assert } from 'console';
-
 /** Finds the number of array elements matching a predicate function. */
 export const numMatches = <T>(list: T[], predicate: (val: T) => boolean) =>
     list.filter(predicate).length;
-
-/** Sums the values of an array. */
-export const sumArray = (ary: number[]) => {
-    assert(Array.isArray(ary), 'Please pass a valid array to sumArray()');
-
-    return ary.reduce((acc, val) => acc + val);
-};
-
-/**
- * Finds the overlapping values between two or more arrays.
- *
- * i.e., for [1,2,3] and [2,3,4,5], the values [2,3] are present in both arrays.
- */
-export const findIntersection = <T>(...arys: T[][]) => {
-    return arys.reduce((acc, ary) => {
-        const aryVals = new Set(ary);
-
-        return acc.filter(val => aryVals.has(val));
-    });
-};
-
-/** Finds all unique values in a list of arrays. */
-export const findUniqueValues = <T>(...arys: T[][]) => [
-    ...new Set(arys.flat()),
-];
 
 /** Finds two numbers that add up to a target. */
 export const twoSum = (
@@ -80,14 +53,7 @@ export class PrefixSum {
     private prefixes: number[];
 
     constructor(private readonly input: number[]) {
-        this.prefixes = [input[0]];
         this.generatePrefixes();
-    }
-
-    private generatePrefixes() {
-        for (let i = 1; i < this.input.length; ++i) {
-            this.prefixes[i] = this.prefixes[i - 1] + this.input[i];
-        }
     }
 
     getSum(i: number, j: number) {
@@ -98,6 +64,13 @@ export class PrefixSum {
         }
 
         return this.prefixes[j] - (this.prefixes[i - 1] || 0);
+    }
+
+    private generatePrefixes() {
+        this.prefixes = [this.input[0]];
+        for (let i = 1; i < this.input.length; ++i) {
+            this.prefixes[i] = this.prefixes[i - 1] + this.input[i];
+        }
     }
 }
 
@@ -113,18 +86,3 @@ export const findMinMax = (ary: number[], start = 0, end = ary.length - 1) => {
 
     return [min, max];
 };
-
-export const first = <T>(ary: T[]) => ary[0];
-
-export const last = <T>(ary: T[]) => ary[ary.length - 1];
-
-export function batchArray<T>(array: T[], n: number) {
-    return array.reduce((acc, val, i) => {
-        if (i % n === 0) {
-            acc.push([val]);
-        } else {
-            acc.at(-1).push(val);
-        }
-        return acc;
-    }, [] as T[][]);
-}
