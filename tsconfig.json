@@ -15,5 +15,5 @@
             "*": ["node_modules/*", "src/types/*"]
         }
     },
-    "include": ["src/**/*", "src/utils", "src/2020"]
+    "include": ["src/**/*"]
 }

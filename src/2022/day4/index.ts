@@ -1,7 +1,7 @@
 // https://adventofcode.com/2022/day/4
 
-import { getInput } from '@utils';
-import { overlaps, fullyOverlaps } from '@utils/ranges';
+import { getInput } from '../../utils';
+import { overlaps, fullyOverlaps } from '../../utils/ranges';
 
 const input = getInput(__dirname);
 
