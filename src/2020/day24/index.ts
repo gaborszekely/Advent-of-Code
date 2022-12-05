@@ -1,10 +1,11 @@
 // https://adventofcode.com/2020/day/24
 
-const { getInput, Grid } = require('../../utils');
+import { getInput } from '@utils/fs';
+import { Grid } from '@utils/grid';
 
 const input = getInput(__dirname);
 
-const parseInput = rawInput => {
+const parseInput = (rawInput: string) => {
     return rawInput.split('\n').map(row => {
         const result = [];
 
@@ -31,41 +32,45 @@ const parseInput = rawInput => {
 };
 
 const getNeighborIndex = {
-    n: (i, j) => [i - 2, j - 1],
-    s: (i, j) => [i + 2, j + 1],
-    e: (i, j) => [i, j + 1],
-    w: (i, j) => [i, j - 1],
-    ne: (i, j) => [i - 1, j],
-    nw: (i, j) => [i - 1, j - 1],
-    se: (i, j) => [i + 1, j + 1],
-    sw: (i, j) => [i + 1, j],
+    n: (i: number, j: number) => [i - 2, j - 1],
+    s: (i: number, j: number) => [i + 2, j + 1],
+    e: (i: number, j: number) => [i, j + 1],
+    w: (i: number, j: number) => [i, j - 1],
+    ne: (i: number, j: number) => [i - 1, j],
+    nw: (i: number, j: number) => [i - 1, j - 1],
+    se: (i: number, j: number) => [i + 1, j + 1],
+    sw: (i: number, j: number) => [i + 1, j],
 };
 
-const getTileColor = (grid, i, j) => {
+const getTileColor = (grid: Grid<number>, i: number, j: number) => {
     return grid.inRange(i, j) ? grid.get(i, j) : 0;
 };
 
-const flip = (result, r, c) => {
+const flip = (result: Grid<number>, r: number, c: number) => {
     const current = result.get(r, c);
     result.set(r, c, current === 0 ? 1 : 0);
 };
 
-const isWhite = val => val === 0;
-const isBlack = val => val === 1;
+const isWhite = (val: number) => val === 0;
+const isBlack = (val: number) => val === 1;
 
-const countBlackNeighbors = (r, c, grid) => {
-    const neighborDirections = ['e', 'w', 'ne', 'nw', 'se', 'sw'];
+const countBlackNeighbors = (r: number, c: number, grid: Grid<number>) => {
+    const neighborDirections = ['e', 'w', 'ne', 'nw', 'se', 'sw'] as const;
 
     return neighborDirections.reduce((acc, direction) => {
         const neighborCoords = getNeighborIndex[direction](r, c);
 
-        const neighbor = getTileColor(grid, ...neighborCoords);
+        const neighbor = getTileColor(
+            grid,
+            neighborCoords[0],
+            neighborCoords[1]
+        );
 
         return isBlack(neighbor) ? acc + 1 : acc;
     }, 0);
 };
 
-const populateGrid = rawInput => {
+const populateGrid = (rawInput: string) => {
     const input = parseInput(rawInput);
 
     const STARTING_SIZE = 101;
@@ -77,10 +82,12 @@ const populateGrid = rawInput => {
         let coords = [midpoint, midpoint];
 
         for (const direction of row) {
-            coords = getNeighborIndex[direction](...coords);
+            coords = getNeighborIndex[
+                direction as keyof typeof getNeighborIndex
+            ](coords[0], coords[1]);
         }
 
-        flip(result, ...coords);
+        flip(result, coords[0], coords[1]);
     }
 
     return result;
@@ -92,7 +99,7 @@ export function partOne() {
     return grid.countElements(1);
 }
 
-const getEmptyGrid = grid => {
+const getEmptyGrid = (grid: Grid<number>) => {
     return Grid.fromProportions(grid.rows, grid.cols, 0);
 };
 

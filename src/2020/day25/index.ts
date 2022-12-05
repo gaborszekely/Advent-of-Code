@@ -4,19 +4,19 @@ import { getInput } from '@utils/fs';
 
 const input = getInput(__dirname);
 
-const parseInput = rawInput => {
+const parseInput = (rawInput: string) => {
     return rawInput.split('\n').map(Number);
 };
 
 const DIVISOR = 20201227;
 
-const transform = (curr, subjectNumber) => {
+const transform = (curr: number, subjectNumber: number) => {
     const intermediate = curr * subjectNumber;
 
     return intermediate % DIVISOR;
 };
 
-const calculateLoopSize = encryptionKey => {
+const calculateLoopSize = (encryptionKey: number) => {
     let i = 0;
     let curr = 1;
 
@@ -28,7 +28,7 @@ const calculateLoopSize = encryptionKey => {
     return i;
 };
 
-const calculateEncryptionKey = (subjectNumber, loopSize) => {
+const calculateEncryptionKey = (subjectNumber: number, loopSize: number) => {
     let v = 1;
 
     for (let i = 0; i < loopSize; ++i) {

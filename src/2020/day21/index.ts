@@ -1,11 +1,16 @@
 // https://adventofcode.com/2020/day/21
 
-const { getInput, getTestInput } = require('../../utils');
+import { getInput, getTestInput } from '@utils/fs';
 
 const i = getInput(__dirname);
 const _i = getTestInput(__dirname);
 
-const parseInput = input => {
+interface Row {
+    ingredients: Set<string>;
+    allergens: Set<string>;
+}
+
+const parseInput = (input: string) => {
     return input.split('\n').reduce((acc, line) => {
         const ingredients = new Set(line.split('(')[0].trim().split(' '));
         let [, allergens] = line.match(/\(contains ([\w\s\,]+)\)/);
@@ -16,11 +21,11 @@ const parseInput = input => {
         });
 
         return acc;
-    }, []);
+    }, [] as Row[]);
 };
 
-const getAllIngredients = input => {
-    const allIngredients = new Set();
+const getAllIngredients = (input: Row[]) => {
+    const allIngredients = new Set<string>();
 
     input.forEach(line => {
         line.ingredients.forEach(allergen => {
@@ -31,8 +36,8 @@ const getAllIngredients = input => {
     return allIngredients;
 };
 
-const getResults = input => {
-    const possibiliities = {};
+const getResults = (input: Row[]) => {
+    const possibiliities: { [key: string]: string[] } = {};
 
     for (const line of input) {
         const { allergens, ingredients } = line;
@@ -70,7 +75,7 @@ const getResults = input => {
         }
     }
 
-    const results = {};
+    const results: Record<string, string> = {};
 
     for (const allergen in possibiliities) {
         results[possibiliities[allergen][0]] = allergen;

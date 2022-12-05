@@ -1,11 +1,16 @@
 // https://adventofcode.com/2020/day/22
 
-const { getInput, getTestInput } = require('../../utils');
+import { getInput, getTestInput } from '@utils/fs';
 
 const i = getInput(__dirname);
 const _i = getTestInput(__dirname);
 
-const parseInput = input => {
+interface Input {
+    player1: number[];
+    player2: number[];
+}
+
+const parseInput = (input: string): Input => {
     const [player1, player2] = input.split('\n\n');
 
     return {
@@ -14,7 +19,7 @@ const parseInput = input => {
     };
 };
 
-const calculateResult = winner => {
+const calculateResult = (winner: number[]) => {
     let result = 0;
     let counter = 1;
 
@@ -28,7 +33,7 @@ const calculateResult = winner => {
     return result;
 };
 
-const combatRound = input => {
+const combatRound = (input: Input) => {
     while (true) {
         const { player1, player2 } = input;
 
@@ -51,7 +56,10 @@ export function partOne() {
     return calculateResult(winner);
 }
 
-const recursiveCombatRound = (input, rounds = new Set()) => {
+const recursiveCombatRound = (
+    input: Input,
+    rounds = new Set()
+): [number, number[]] => {
     while (true) {
         const { player1, player2 } = input;
 

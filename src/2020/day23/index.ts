@@ -1,22 +1,27 @@
 // https://adventofcode.com/2020/day/23
 
-const {
-    getInput,
+import { getInput } from '@utils/fs';
+import {
     linkedListHas,
     convertToCircularLinkedList,
-} = require('../../utils');
+    ListNode,
+} from '@utils/linkedlist';
 
 const i = getInput(__dirname);
 
-const parseInput = input => {
+const parseInput = (input: string) => {
     return input.split('').map(Number);
 };
 
-const getNextDown = (currentVal, maxVal) => {
+const getNextDown = (currentVal: number, maxVal: number) => {
     return currentVal - 1 === 0 ? maxVal : currentVal - 1;
 };
 
-const getDestinationCup = (currentVal, list, maxVal) => {
+const getDestinationCup = (
+    currentVal: number,
+    list: ListNode<number>,
+    maxVal: number
+) => {
     let target = getNextDown(currentVal, maxVal);
 
     while (linkedListHas(list, target)) {
@@ -26,8 +31,8 @@ const getDestinationCup = (currentVal, list, maxVal) => {
     return target;
 };
 
-const saveListReferences = (head, size) => {
-    const vals = new Array(size + 1);
+const saveListReferences = (head: ListNode<number>, size: number) => {
+    const vals: ListNode<number>[] = Array(size + 1);
 
     vals[head.value] = head;
 
@@ -41,7 +46,12 @@ const saveListReferences = (head, size) => {
     return vals;
 };
 
-const playGame = (head, vals, iterations, maxVal) => {
+const playGame = (
+    head: ListNode<number>,
+    vals: ListNode<number>[],
+    iterations: number,
+    maxVal: number
+) => {
     let currentNode = head;
 
     for (let i = 0; i < iterations; ++i) {

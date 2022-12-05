@@ -1,19 +1,15 @@
 // https://adventofcode.com/2020/day/20
 
-const {
-    getInput,
-    getTestInput,
-    Grid,
-    range,
-    last,
-    first,
-    reverse,
-} = require('../../utils');
+import { getInput, getTestInput } from '@utils/fs';
+import { Grid } from '@utils/grid';
+import { first, last, reverse, range } from 'lodash';
 
 const i = getInput(__dirname);
 const _i = getTestInput(__dirname);
 
-const parseTiles = input => {
+type Tiles = { [key: string]: string[] };
+
+const parseTiles = (input: string) => {
     const rawTiles = input.split('\n\n');
 
     return rawTiles.reduce((acc, rawTile) => {
@@ -34,11 +30,11 @@ const parseTiles = input => {
         acc[tileId] = sides;
 
         return acc;
-    }, {});
+    }, {} as { [key: string]: string[] });
 };
 
-const getPieceTypes = tiles => {
-    const unmatched = {};
+const getPieceTypes = (tiles: Tiles) => {
+    const unmatched: { [key: string]: number } = {};
 
     for (const id in tiles) {
         const sides = tiles[id];
@@ -99,7 +95,7 @@ export function partOne() {
     return corners.reduce((acc, corner) => acc * Number(corner), 1);
 }
 
-const parseGrids = input => {
+const parseGrids = (input: string) => {
     const rawTiles = input.split('\n\n');
 
     return rawTiles.reduce((acc, rawTile) => {
@@ -110,15 +106,16 @@ const parseGrids = input => {
 
         let grid = rawTile.split('\n').slice(1);
 
-        acc[tileId] = new Grid(grid.join('\n').trim());
+        acc[tileId] = Grid.fromSerialized(grid.join('\n').trim());
 
         return acc;
-    }, {});
+    }, {} as { [key: string]: Grid<string> });
 };
 
-const checkMatch = (row1, row2) => row1.join('') === row2.join('');
+const checkMatch = (row1: string[], row2: string[]) =>
+    row1.join('') === row2.join('');
 
-const isFull = (currArrangement, gridSize) => {
+const isFull = (currArrangement: string[][], gridSize: number) => {
     return (
         currArrangement.length === gridSize &&
         currArrangement.every(row => row.length === gridSize)
@@ -164,7 +161,7 @@ const canAddRow = (arrangement, row, col, addition) => {
     );
 };
 
-const findNextPlacement = (currArrangement, gridSize) => {
+const findNextPlacement = (currArrangement: string[][], gridSize: number) => {
     for (let i = 0; i < currArrangement.length; ++i) {
         const currRow = currArrangement[i];
 
@@ -174,11 +171,15 @@ const findNextPlacement = (currArrangement, gridSize) => {
     }
 };
 
-const getCurrArrangement = gridSize => {
+const getCurrArrangement = (gridSize: number) => {
     return range(0, gridSize - 1).map(() => []);
 };
 
-const isCornerPlacement = (nextRow, nextCol, gridSize) => {
+const isCornerPlacement = (
+    nextRow: number,
+    nextCol: number,
+    gridSize: number
+) => {
     return (
         (nextRow === 0 && nextCol === 0) ||
         (nextRow === 0 && nextCol === gridSize - 1) ||
@@ -187,7 +188,11 @@ const isCornerPlacement = (nextRow, nextCol, gridSize) => {
     );
 };
 
-const isBorderPlacement = (nextRow, nextCol, gridSize) => {
+const isBorderPlacement = (
+    nextRow: number,
+    nextCol: number,
+    gridSize: number
+) => {
     return (
         nextRow === 0 ||
         nextRow === gridSize - 1 ||
@@ -196,14 +201,18 @@ const isBorderPlacement = (nextRow, nextCol, gridSize) => {
     );
 };
 
-const isCenterPlacement = (nextRow, nextCol, gridSize) => {
+const isCenterPlacement = (
+    nextRow: number,
+    nextCol: number,
+    gridSize: number
+) => {
     return (
         !isCornerPlacement(nextRow, nextCol, gridSize) &&
         !isBorderPlacement(nextRow, nextCol, gridSize)
     );
 };
 
-const getAllOrientations = grid => {
+const getAllOrientations = (grid: Grid<string>) => {
     const results = [];
     // Try all four arrangements - Regular grid, flipped horizontal,
     // flipped vertical, and flipped both horizontal and vertical.
@@ -236,11 +245,11 @@ const getAllOrientations = grid => {
 };
 
 const buildArrangements = (
-    input,
-    gridSize,
-    corners,
-    borders,
-    centers,
+    input: string[],
+    gridSize: number,
+    corners: string[],
+    borders: string[],
+    centers: string[],
     usedIndexes = new Set(),
     currArrangement = getCurrArrangement(gridSize)
 ) => {
@@ -333,7 +342,7 @@ const hashCoords = [
     [2, 16],
 ];
 
-const hasSeaMonster = (grid, i, j) => {
+const hasSeaMonster = (grid: Grid<string>, i: number, j: number) => {
     if (i > grid.rows - 3 || j > grid.cols - 20) {
         return false;
     }
@@ -347,7 +356,7 @@ const hasSeaMonster = (grid, i, j) => {
     return true;
 };
 
-const findSeaMonsters = grid => {
+const findSeaMonsters = (grid: Grid<string>) => {
     let totalMonsters = 0;
 
     grid.forEach((_, row, col) => {
@@ -357,7 +366,7 @@ const findSeaMonsters = grid => {
     return totalMonsters;
 };
 
-const buildMonsterGrid = (result, gridSize) => {
+const buildMonsterGrid = (result, gridSize: number) => {
     const size = 8 * gridSize;
     const monsterGrid = Grid.fromMatrix(Grid.generateMatrix(size, size, '.'));
 
