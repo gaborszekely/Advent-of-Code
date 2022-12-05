@@ -86,3 +86,16 @@ export const findMinMax = (ary: number[], start = 0, end = ary.length - 1) => {
 
     return [min, max];
 };
+
+/** Generates an array from the given range. */
+export const fromRange = (i: number, j: number, inclusive = true) =>
+    i <= j
+        ? Array.from({ length: j - i + +inclusive }, (_, idx) => i + idx)
+        : Array.from({ length: i - j + +inclusive }, (_, idx) => i - idx);
+
+console.assert(fromRange(1, 3).join('') === '123', 'fromRange(1, 3) incorrect');
+console.assert(fromRange(3, 1).join('') === '321', 'range(3, 1) incorrect');
+
+/** Checks whether a value is included in a range (inclusive). */
+export const inRange = (min: number, max: number) => (v: number) =>
+    v >= min && v <= max;
