@@ -1,6 +1,6 @@
 // https://adventofcode.com/2020/day/10
 
-const { getInput, getTestInput } = require('../../utils');
+import { getInput, getTestInput } from '@utils/fs';
 
 const input = getInput(__dirname);
 const _input = getTestInput(__dirname);
@@ -15,8 +15,8 @@ myAdapters.unshift(0);
 // Add built-in adapter
 myAdapters.push(myAdapters[myAdapters.length - 1] + 3);
 
-exports.partOne = () => {
-    const findDiffProducts = adapters => {
+export function partOne() {
+    const findDiffProducts = (adapters: number[]) => {
         let [oneDiff, threeDiff, previousAdapter] = [0, 0, 0];
 
         for (let i = 1; i < adapters.length; ++i) {
@@ -38,10 +38,10 @@ exports.partOne = () => {
     };
 
     return findDiffProducts(myAdapters);
-};
+}
 
-exports.partTwo = () => {
-    const findTotalConnections = adapters => {
+export function partTwo() {
+    const findTotalConnections = (adapters: number[]) => {
         const memo = Array.from({ length: adapters.length }, () => 1);
 
         for (let i = adapters.length - 2; i >= 0; --i) {
@@ -67,4 +67,4 @@ exports.partTwo = () => {
     };
 
     return findTotalConnections(myAdapters);
-};
+}

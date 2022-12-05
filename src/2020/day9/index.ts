@@ -1,19 +1,15 @@
 // https://adventofcode.com/2020/day/9
 
-const {
-    getInput,
-    twoSum,
-    getTestInput,
-    sumArray,
-    findMinMax,
-} = require('../../utils');
+import { findMinMax, twoSum } from '@utils/array';
+import { getInput, getTestInput } from '@utils/fs';
+import _ from 'lodash';
 
 const input = getInput(__dirname);
 const testInput = getTestInput(__dirname);
 
 const nums = input.split('\n').map(Number);
 
-const findInvalidNumber = (numbers, preamble) => {
+const findInvalidNumber = (numbers: number[], preamble: number) => {
     for (let i = preamble; i < numbers.length; ++i) {
         const current = numbers[i];
 
@@ -23,13 +19,13 @@ const findInvalidNumber = (numbers, preamble) => {
     }
 };
 
-exports.partOne = () => {
+export function partOne() {
     return findInvalidNumber(nums, 25);
-};
+}
 
-exports.partTwo = () => {
+export function partTwo() {
     // Finds the minimum and maximum values of the subarray, and sums them.
-    const sumMinMax = (i, j) => sumArray(findMinMax(nums, i, j));
+    const sumMinMax = (i: number, j: number) => _.sum(findMinMax(nums, i, j));
 
     const target = exports.partOne();
 
@@ -63,4 +59,4 @@ exports.partTwo = () => {
             }
         }
     }
-};
+}

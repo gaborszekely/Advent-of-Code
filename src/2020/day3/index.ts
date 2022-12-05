@@ -1,12 +1,12 @@
 // https://adventofcode.com/2020/day/3
 
-const { getInput } = require('../../utils');
+import { getInput } from '@utils/fs';
 
 const input = getInput(__dirname);
 
 const grid = input.split('\n').map(row => [...row]);
 
-const traversePath = (right, down) => {
+const traversePath = (right: number, down: number) => {
     let [i, j, totalTrees] = [0, 0, 0];
 
     while (i < grid.length) {
@@ -25,7 +25,7 @@ const traversePath = (right, down) => {
     return totalTrees;
 };
 
-const traversePaths = paths =>
+const traversePaths = (paths: number[][]) =>
     paths.reduce((acc, [right, down]) => acc * traversePath(right, down), 1);
 
 exports.partOne = () => traversePath(/*right=*/ 3, /*down=*/ 1);

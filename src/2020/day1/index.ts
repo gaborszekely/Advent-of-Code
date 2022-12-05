@@ -1,6 +1,6 @@
 // https://adventofcode.com/2020/day/1
 
-const { getInput } = require('../../utils');
+import { getInput } from '@utils/fs';
 
 const input = getInput(__dirname);
 
@@ -12,7 +12,12 @@ const TARGET = 2020;
 
 // PART 1
 
-const twoSum = (nums, target = TARGET, i = 0, j = nums.length - 1) => {
+const twoSum = (
+    nums: number[],
+    target = TARGET,
+    i = 0,
+    j = nums.length - 1
+) => {
     while (i < j) {
         let [left, right] = [nums[i], nums[j]];
         const sum = left + right;
@@ -33,7 +38,7 @@ exports.partOne = () => twoSum(entries);
 
 // PART 2
 
-const threeSum = nums => {
+const threeSum = (nums: number[]) => {
     for (let i = 0; i < nums.length - 3; ++i) {
         const current = nums[i];
         const localTarget = TARGET - current;

@@ -30,14 +30,14 @@ const playGame = (nums, iterations) => {
     return currNum;
 };
 
-exports.partOne = () => {
+export function partOne() {
     const input = parseInput(i);
 
     return playGame(input, 2020);
-};
+}
 
-exports.partTwo = () => {
+export function partTwo() {
     const input = parseInput(i);
 
     return playGame(input, 30000000);
-};
+}

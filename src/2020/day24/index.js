@@ -86,17 +86,17 @@ const populateGrid = rawInput => {
     return result;
 };
 
-exports.partOne = () => {
+export function partOne() {
     const grid = populateGrid(input);
 
     return grid.countElements(1);
-};
+}
 
 const getEmptyGrid = grid => {
     return Grid.fromProportions(grid.rows, grid.cols, 0);
 };
 
-exports.partTwo = () => {
+export function partTwo() {
     let grid = populateGrid(input);
 
     let clone = getEmptyGrid(grid);
@@ -118,4 +118,4 @@ exports.partTwo = () => {
     }
 
     return grid.countElements(1);
-};
+}

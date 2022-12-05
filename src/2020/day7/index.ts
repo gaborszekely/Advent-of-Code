@@ -1,10 +1,15 @@
 // https://adventofcode.com/2020/day/7
 
-const { getInput } = require('../../utils');
+import { getInput } from '@utils/fs';
 
 const input = getInput(__dirname);
 
 const TARGET_BAG = 'shiny gold';
+
+interface Bag {
+    color: string;
+    children: { [key: string]: number };
+}
 
 const bags = input
     .split('\n')
@@ -22,16 +27,16 @@ const bags = input
                               acc[bag] = Number(count);
 
                               return acc;
-                          }, {}),
+                          }, {} as Bag['children']),
         };
 
         return acc;
-    }, {});
+    }, {} as { [key: string]: Bag });
 
-exports.partOne = () => {
+export function partOne() {
     const visited = new Set();
 
-    const canReachTargetBag = ({ color, children }) => {
+    const canReachTargetBag = ({ color, children }: Bag) => {
         if (color === TARGET_BAG || visited.has(color)) {
             return true;
         }
@@ -58,10 +63,10 @@ exports.partOne = () => {
     }
 
     return count;
-};
+}
 
-exports.partTwo = () => {
-    const countBagContents = node => {
+export function partTwo() {
+    const countBagContents = (node: Bag) => {
         let total = 1;
 
         for (const child in node.children) {
@@ -73,4 +78,4 @@ exports.partTwo = () => {
     };
 
     return countBagContents(bags[TARGET_BAG]) - 1;
-};
+}

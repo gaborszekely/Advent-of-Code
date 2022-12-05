@@ -1,10 +1,19 @@
 // https://adventofcode.com/2020/day/11
 
-const { getInput, Grid } = require('../../utils');
+import { getInput } from '@utils/fs';
+import { Grid } from '@utils/grid';
 
 const input = getInput(__dirname);
 
-const moveSeats = (grid, countNeighbors, occupiedLimit) => {
+interface CountNeighbors {
+    (grid: Grid<string>, row: number, col: number): number;
+}
+
+const moveSeats = (
+    grid: Grid<string>,
+    occupiedLimit: number,
+    countNeighbors: CountNeighbors
+) => {
     const clone = grid.clone();
 
     grid.forEach((seat, row, col) => {
@@ -23,9 +32,9 @@ const moveSeats = (grid, countNeighbors, occupiedLimit) => {
 };
 
 const getOccupiedSeatsAfterSeatChanges = (
-    grid,
-    occupiedLimit,
-    countNeighbors
+    grid: Grid<string>,
+    occupiedLimit: number,
+    countNeighbors: CountNeighbors
 ) => {
     let previous = grid;
 
@@ -40,8 +49,12 @@ const getOccupiedSeatsAfterSeatChanges = (
     }
 };
 
-exports.partOne = () => {
-    const calculateNeighbors = (grid, startRow, startCol) => {
+export function partOne() {
+    const calculateNeighbors = (
+        grid: Grid<string>,
+        startRow: number,
+        startCol: number
+    ) => {
         return grid
             .getAllNeighbors(startRow, startCol)
             .reduce(
@@ -52,9 +65,9 @@ exports.partOne = () => {
     };
 
     return getOccupiedSeatsAfterSeatChanges(input, 4, calculateNeighbors);
-};
+}
 
-exports.partTwo = () => {
+export function partTwo() {
     const calculateNeighbors = (grid, startRow, startCol) => {
         const change = delta => i => i + delta;
 
@@ -83,4 +96,4 @@ exports.partTwo = () => {
     };
 
     return getOccupiedSeatsAfterSeatChanges(input, 5, calculateNeighbors);
-};
+}

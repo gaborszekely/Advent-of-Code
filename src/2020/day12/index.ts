@@ -1,32 +1,40 @@
 // https://adventofcode.com/2020/day/12
 
-const { getInput, getTestInput, Grid } = require('../../utils');
+import { getInput, getTestInput } from '@utils/fs';
+import { Grid } from '@utils/grid';
 
 const i = getInput(__dirname);
 const _i = getTestInput(__dirname);
 
-const parseInput = ipt =>
-    ipt.split('\n').map(row => [row[0], Number(row.slice(1))]);
+const parseInput = (ipt: string) =>
+    ipt
+        .split('\n')
+        .map(row => [row[0], Number(row.slice(1))] as [string, number]);
 
-const move = (coords, direction, amount) => {
+const directions = ['N', 'E', 'S', 'W'] as const;
+
+type Direction = typeof directions[number];
+
+const isDirection = (direction: string): direction is Direction =>
+    directions.includes(direction as Direction);
+
+const move = (coords: number[], direction: Direction, amount: number) => {
     if (direction === 'S') return [coords[0], coords[1] - amount];
     if (direction === 'N') return [coords[0], coords[1] + amount];
     if (direction === 'E') return [coords[0] + amount, coords[1]];
     if (direction === 'W') return [coords[0] - amount, coords[1]];
 };
 
-const rotate = dirI => (dirI === -1 ? 3 : dirI === 4 ? 0 : dirI);
+const rotate = (dirI: number) => (dirI === -1 ? 3 : dirI === 4 ? 0 : dirI);
 
-const directions = ['N', 'E', 'S', 'W'];
-
-exports.partOne = () => {
+export function partOne() {
     const input = parseInput(i);
     let dirI = 1;
 
     let coords = [0, 0];
 
     for (const [direction, amount] of input) {
-        if (['N', 'S', 'E', 'W'].includes(direction)) {
+        if (isDirection(direction)) {
             coords = move(coords, direction, amount);
         }
 
@@ -45,19 +53,22 @@ exports.partOne = () => {
     }
 
     return Grid.getManhattanDistance(coords);
-};
+}
 
-exports.partTwo = () => {
+export function partTwo() {
     const input = parseInput(i);
 
     let waypoint = [10, 1];
     let coords = [0, 0];
 
-    const rotateClockwise = coords => [coords[1], -coords[0]];
-    const rotateCounterClockwise = coords => [-coords[1], coords[0]];
+    const rotateClockwise = (coords: number[]) => [coords[1], -coords[0]];
+    const rotateCounterClockwise = (coords: number[]) => [
+        -coords[1],
+        coords[0],
+    ];
 
     for (const [direction, amount] of input) {
-        if (['N', 'S', 'E', 'W'].includes(direction)) {
+        if (isDirection(direction)) {
             waypoint = move(waypoint, direction, amount);
         }
 
@@ -80,4 +91,4 @@ exports.partTwo = () => {
     }
 
     return Grid.getManhattanDistance(coords);
-};
+}

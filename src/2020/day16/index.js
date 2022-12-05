@@ -1,11 +1,6 @@
 // https://adventofcode.com/2020/day/16
 
-const {
-    getInput,
-    getTestInput,
-    sumArray,
-    inRange,
-} = require('../../utils');
+const { getInput, getTestInput, sumArray, inRange } = require('../../utils');
 
 const i = getInput(__dirname);
 const _i = getTestInput(__dirname);
@@ -60,7 +55,7 @@ const validNumber = (number, rules) =>
 const invalidTicket = (ticket, rules) =>
     ticket.some(number => !validNumber(number, rules));
 
-exports.partOne = () => {
+export function partOne() {
     const { nearbyTickets, rules } = parseInput(i);
 
     const invalidTickets = nearbyTickets.filter(ticket =>
@@ -72,9 +67,9 @@ exports.partOne = () => {
             ticket.filter(number => !validNumber(number, rules))
         )
     );
-};
+}
 
-exports.partTwo = () => {
+export function partTwo() {
     /**
      * Calculates the only possible mapping of rules to ticket indexes that
      * match each rule's ranges.
@@ -137,4 +132,4 @@ exports.partTwo = () => {
     return myTicket
         .filter((_, i) => ruleIndexes.has(i))
         .reduce((acc, value) => acc * value, 1);
-};
+}

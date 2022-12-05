@@ -79,7 +79,7 @@ const getResults = input => {
     return results;
 };
 
-exports.partOne = () => {
+export function partOne() {
     const input = parseInput(i);
 
     const allIngredients = getAllIngredients(input);
@@ -104,9 +104,9 @@ exports.partOne = () => {
     }
 
     return totalOccurences;
-};
+}
 
-exports.partTwo = () => {
+export function partTwo() {
     const input = parseInput(i);
 
     const results = getResults(input);
@@ -115,4 +115,4 @@ exports.partTwo = () => {
         .sort((a, b) => a[1][0].localeCompare(b[1][0]))
         .map(entry => entry[0])
         .join(',');
-};
+}

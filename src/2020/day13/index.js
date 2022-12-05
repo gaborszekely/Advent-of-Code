@@ -22,7 +22,7 @@ const parseInput = input => {
     };
 };
 
-exports.partOne = () => {
+export function partOne() {
     const { departure, busIds } = parseInput(i);
 
     let closest = Infinity;
@@ -42,9 +42,9 @@ exports.partOne = () => {
     }
 
     return (closest - departure) * cId;
-};
+}
 
-exports.partTwo = () => {
+export function partTwo() {
     const { busIds } = parseInput(_i);
 
     let incr = 1;
@@ -62,7 +62,7 @@ exports.partTwo = () => {
     }
 
     return timestamp;
-};
+}
 
 exports.partTwoSimplified = () => {
     const { busIds } = parseInput(_i);

@@ -1,6 +1,6 @@
 // https://adventofcode.com/2020/day/N
 
-const { getInput } = require('../../utils');
+import { getInput } from '@utils/fs';
 
 const input = getInput(__dirname);
 
@@ -38,14 +38,14 @@ const calculateEncryptionKey = (subjectNumber, loopSize) => {
     return v;
 };
 
-exports.partOne = () => {
+export function partOne() {
     const [roomKey, doorKey] = parseInput(input);
 
     const roomLoopsize = calculateLoopSize(roomKey);
 
     return calculateEncryptionKey(doorKey, roomLoopsize);
-};
+}
 
-exports.partTwo = () => {
+export function partTwo() {
     return 'CHALLENGE COMPLETE! WOO HOO';
-};
+}

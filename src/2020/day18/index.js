@@ -37,7 +37,7 @@ const evaluate = (expression, evaluatorFn) => {
 const sumEvaluations = (input, evaluator) =>
     input.reduce((acc, expression) => acc + evaluate(expression, evaluator), 0);
 
-exports.partOne = () => {
+export function partOne() {
     const evaluator = expression => {
         let total = 0;
         let operator = '+';
@@ -58,9 +58,9 @@ exports.partOne = () => {
     const input = parseInput(i);
 
     return sumEvaluations(input, evaluator);
-};
+}
 
-exports.partTwo = () => {
+export function partTwo() {
     const advancedEvaluator = expression => {
         let expressionStr = expression.join('');
 
@@ -80,4 +80,4 @@ exports.partTwo = () => {
     const input = parseInput(i);
 
     return sumEvaluations(input, advancedEvaluator);
-};
+}

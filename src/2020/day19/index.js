@@ -84,13 +84,13 @@ const findMatchingPhrases = input => {
     }, 0);
 };
 
-exports.partOne = () => {
+export function partOne() {
     const input = parseInput(i);
 
     return findMatchingPhrases(input);
-};
+}
 
-exports.partTwo = () => {
+export function partTwo() {
     const input = parseInput(i);
 
     input.rules[8].rules = [[42], [42, 8]];
@@ -101,4 +101,4 @@ exports.partTwo = () => {
     ];
 
     return findMatchingPhrases(input);
-};
+}

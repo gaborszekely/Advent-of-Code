@@ -73,7 +73,7 @@ const playGame = (head, vals, iterations, maxVal) => {
     return currentNode;
 };
 
-exports.partOne = () => {
+export function partOne() {
     const input = parseInput(i);
 
     const maxVal = 9;
@@ -94,9 +94,9 @@ exports.partOne = () => {
     }
 
     return result;
-};
+}
 
-exports.partTwo = () => {
+export function partTwo() {
     const input = parseInput(i);
 
     const maxVal = 1000000;
@@ -114,4 +114,4 @@ exports.partTwo = () => {
     const node = vals[1];
 
     return node.next.value * node.next.next.value;
-};
+}

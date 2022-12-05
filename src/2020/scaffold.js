@@ -9,16 +9,16 @@ const parseInput = input => {
     return input.split('\n');
 };
 
-exports.partOne = () => {
+export function partOne() {
     const input = parseInput(_i);
 
     console.log(input);
 
     return null;
-};
+}
 
-exports.partTwo = () => {
+export function partTwo() {
     const input = parseInput(_i);
 
     return null;
-};
+}

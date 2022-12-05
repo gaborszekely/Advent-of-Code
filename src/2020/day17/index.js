@@ -28,7 +28,7 @@ const getNewCellState = (state, activeNeighbors) => {
 
 const countActiveNeighbors = slice => slice.filter(val => val === '#').length;
 
-exports.partOne = () => {
+export function partOne() {
     const parseInput = input => [new Grid(input)];
 
     const getActiveNeighbors = (grid, layerI, row, col) => {
@@ -108,9 +108,9 @@ exports.partOne = () => {
     }
 
     return sumActiveCells(currentGrid);
-};
+}
 
-exports.partTwo = () => {
+export function partTwo() {
     const parse4dInput = input => [[new Grid(input)]];
 
     const getActive4dNeighbors = (grid, dimensionI, layerI, row, col) => {
@@ -256,4 +256,4 @@ exports.partTwo = () => {
     }
 
     return sumActive4dCells(currentGrid);
-};
+}

@@ -61,7 +61,7 @@ const sumMemoryValues = (input, buildMemory) => {
     return sumArray(Object.values(memory));
 };
 
-exports.partOne = () => {
+export function partOne() {
     const populateMemoryFn = operations => {
         const memory = {};
 
@@ -79,9 +79,9 @@ exports.partOne = () => {
     };
 
     return sumMemoryValues(i, populateMemoryFn);
-};
+}
 
-exports.partTwo = () => {
+export function partTwo() {
     const populateMemoryFn = operations => {
         const memory = {};
 
@@ -103,4 +103,4 @@ exports.partTwo = () => {
     };
 
     return sumMemoryValues(i, populateMemoryFn);
-};
+}

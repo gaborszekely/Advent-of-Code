@@ -44,12 +44,12 @@ const combatRound = input => {
     }
 };
 
-exports.partOne = () => {
+export function partOne() {
     const input = parseInput(i);
     const winner = combatRound(input);
 
     return calculateResult(winner);
-};
+}
 
 const recursiveCombatRound = (input, rounds = new Set()) => {
     while (true) {
@@ -100,10 +100,9 @@ const recursiveCombatRound = (input, rounds = new Set()) => {
     }
 };
 
-exports.partTwo = () => {
+export function partTwo() {
     const input = parseInput(i);
     const [, scores] = recursiveCombatRound(input);
 
     return calculateResult(scores);
-};
-
+}

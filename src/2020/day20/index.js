@@ -92,12 +92,12 @@ const getPieceTypes = tiles => {
     return [corners, borders, centers];
 };
 
-exports.partOne = () => {
+export function partOne() {
     const tiles = parseTiles(_i);
     const [corners] = getPieceTypes(tiles);
 
     return corners.reduce((acc, corner) => acc * Number(corner), 1);
-};
+}
 
 const parseGrids = input => {
     const rawTiles = input.split('\n\n');
@@ -387,7 +387,7 @@ const countRemainingHashes = orientation => {
     return orientation.countElements('#');
 };
 
-exports.partTwo = () => {
+export function partTwo() {
     const input = parseGrids(_i);
     const tiles = parseTiles(_i);
 
@@ -433,4 +433,4 @@ exports.partTwo = () => {
     }
 
     return countRemainingHashes(maxOrientation);
-};
+}

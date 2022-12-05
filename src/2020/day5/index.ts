@@ -1,6 +1,7 @@
 // https://adventofcode.com/2020/day/5
 
-const { getInput, serializeCoords } = require('../../utils');
+import { getInput } from '@utils/fs';
+import { Grid } from '@utils/grid';
 
 const input = getInput(__dirname);
 
@@ -13,9 +14,14 @@ const COLS = 8;
 
 // PART ONE
 
-const getSeatId = ([row, col]) => row * 8 + col;
+const getSeatId = ([row, col]: [number, number]) => row * 8 + col;
 
-const binarySearch = (instructions, i, j, firstIdentifier) => {
+const binarySearch = (
+    instructions: string,
+    i: number,
+    j: number,
+    firstIdentifier: string
+) => {
     for (let instruction of instructions) {
         const midpoint = Math.floor((i + j) / 2);
 
@@ -39,7 +45,7 @@ const seatCoords = seatInstructions.map(
 );
 
 const seatCoordsSet = new Set(
-    seatCoords.map(([row, col]) => serializeCoords(row, col))
+    seatCoords.map(([row, col]) => Grid.serializeCoords(row, col))
 );
 
 const descendingSeatIds = seatCoords.map(getSeatId).sort((a, b) => b - a);
@@ -53,7 +59,7 @@ const findMySeatId = () => {
         for (let j = 0; j < COLS; ++j) {
             const seatId = getSeatId([i, j]);
 
-            const seatIsOpen = !seatCoordsSet.has(serializeCoords(i, j));
+            const seatIsOpen = !seatCoordsSet.has(Grid.serializeCoords(i, j));
 
             const neighborsAreOccupied = [
                 seatId + 1,

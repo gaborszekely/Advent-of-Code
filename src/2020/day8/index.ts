@@ -1,13 +1,16 @@
 // https://adventofcode.com/2020/day/8
 
-const { getInput } = require('../../utils');
+import { getInput } from '@utils/fs';
 
 const input = getInput(__dirname);
 
 const instructions = input
     .split('\n')
     .map(row => row.split(' '))
-    .map(([instruction, change]) => [instruction, Number(change)]);
+    .map(
+        ([instruction, change]) =>
+            [instruction, Number(change)] as [string, number]
+    );
 
 const runProgram = () => {
     const visitedRows = new Set();
@@ -36,11 +39,11 @@ const runProgram = () => {
     return [row, accumulator];
 };
 
-exports.partOne = () => {
+export function partOne() {
     return runProgram()[1];
-};
+}
 
-exports.partTwo = () => {
+export function partTwo() {
     for (let i = 0; i < instructions.length; ++i) {
         const [instruction] = instructions[i];
         if (instruction === 'jmp' || instruction === 'nop') {
@@ -55,4 +58,4 @@ exports.partTwo = () => {
             instructions[i][0] = instruction;
         }
     }
-};
+}
