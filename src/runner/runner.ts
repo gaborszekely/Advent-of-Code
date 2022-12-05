@@ -1,7 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 import commander from 'commander';
-import { __basedir, range, validateArgs, Validators } from '@utils';
+import { __basedir } from '@utils/fs';
+import { validateArgs, Validators } from '@utils/validators';
+import { fromRange } from '@utils/array';
 
 commander
     .version('1.0.0', '-v, --version')
@@ -22,12 +24,12 @@ const getChallengePath = (year: number, day: number) => {
 };
 
 const getLatestYear = () =>
-    range(2030, 2019).find(year =>
+    fromRange(2030, 2019).find(year =>
         fs.existsSync(path.join(__basedir, year.toString()))
     );
 
 const getLatestDay = (year: number) =>
-    range(25, 1).find(i => fs.existsSync(getChallengePath(year, i)));
+    fromRange(25, 1).find(i => fs.existsSync(getChallengePath(year, i)));
 
 const getYearToRun = (specifiedYear: string | number) => {
     if (!specifiedYear || specifiedYear === 'latest') {

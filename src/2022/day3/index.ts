@@ -1,6 +1,6 @@
 // https://adventofcode.com/2022/day/3
 
-import { getInput } from '@utils';
+import { getInput } from '@utils/fs';
 import { sum, intersection, chunk } from 'lodash';
 
 const input = getInput(__dirname);

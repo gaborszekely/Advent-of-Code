@@ -5,7 +5,7 @@
  *      ---
  *     ------
  */
-export function fullyOverlaps([[start1, end1], [start2, end2]]: number[][]) {
+export function contains([start1, end1]: number[], [start2, end2]: number[]) {
     return (
         (start1 <= start2 && end1 >= end2) || (start2 <= start1 && end2 >= end1)
     );
@@ -18,6 +18,6 @@ export function fullyOverlaps([[start1, end1], [start2, end2]]: number[][]) {
  *    ----
  *   ---
  */
-export function overlaps([[start1, end1], [start2, end2]]: number[][]) {
+export function overlaps([start1, end1]: number[], [start2, end2]: number[]) {
     return Math.max(start1, start2) <= Math.min(end1, end2);
 }
