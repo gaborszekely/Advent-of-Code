@@ -10,10 +10,10 @@ export function findStartOfMarkerForSize(size: number) {
         const current = input[i];
 
         if (i >= size) {
-            const toRemove = input[i - size];
-            map.set(toRemove, map.get(toRemove) - 1);
-            if (map.get(toRemove) === 0) {
-                map.delete(toRemove);
+            const leftBound = input[i - size];
+            map.set(leftBound, map.get(leftBound) - 1);
+            if (map.get(leftBound) === 0) {
+                map.delete(leftBound);
             }
         }
 
