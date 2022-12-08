@@ -55,11 +55,11 @@ function buildFileSystem() {
                 size,
             };
 
-            // Update total sizes of all parent directories.
-            let current = directory;
-            while (current) {
-                current.totalSize += size;
-                current = current.parent;
+            // Update total sizes of all ancestor directories.
+            let ancestor = directory;
+            while (ancestor) {
+                ancestor.totalSize += size;
+                ancestor = ancestor.parent;
             }
         }
 
