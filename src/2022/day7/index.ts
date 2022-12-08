@@ -34,76 +34,75 @@ function parseDirectory(row: string) {
     return { name };
 }
 
-function buildFileSystem(directory: Directory, index = 0) {
-    if (index >= entries.length) {
-        return;
-    }
+function buildFileSystem() {
+    const root: Directory = {
+        name: '/',
+        subdirectories: {},
+        files: {},
+        totalSize: 0,
+    };
 
-    if (!directory) {
-        throw new Error(`Invalid directory on line ${index}`);
-    }
+    let directory = root;
 
-    const instruction = entries[index];
+    for (let i = 0; i < entries.length; ++i) {
+        if (!directory) {
+            throw new Error(`Invalid directory on line ${i}`);
+        }
 
-    if (instruction === '$ ls') {
-        let i = index + 1;
+        const instruction = entries[i];
 
-        while (isFileOrDirectory(entries[i])) {
-            if (isFile(entries[i])) {
-                const { size, name } = parseFile(entries[i]);
-                directory.files[name] = {
-                    name,
-                    size,
-                };
-
-                let current = directory;
-                while (current) {
-                    current.totalSize += size;
-                    current = current.parent;
-                }
-            } else {
-                const { name } = parseDirectory(entries[i]);
-                directory.subdirectories[name] ||= {
-                    name,
-                    files: {},
-                    subdirectories: {},
-                    parent: directory,
-                    totalSize: 0,
-                };
-            }
+        if (instruction === '$ ls') {
             i++;
+
+            while (isFileOrDirectory(entries[i])) {
+                if (isFile(entries[i])) {
+                    const { size, name } = parseFile(entries[i]);
+                    directory.files[name] = {
+                        name,
+                        size,
+                    };
+
+                    let current = directory;
+                    while (current) {
+                        current.totalSize += size;
+                        current = current.parent;
+                    }
+                } else {
+                    const { name } = parseDirectory(entries[i]);
+                    directory.subdirectories[name] ||= {
+                        name,
+                        files: {},
+                        subdirectories: {},
+                        parent: directory,
+                        totalSize: 0,
+                    };
+                }
+                i++;
+            }
+
+            i--;
         }
 
-        buildFileSystem(directory, i);
-    }
+        if (instruction.startsWith('$ cd')) {
+            const [, destination] = instruction.match(/^\$ cd (.+)$/) || [];
 
-    if (instruction.startsWith('$ cd')) {
-        const [, destination] = instruction.match(/^\$ cd (.+)$/) || [];
-
-        switch (destination) {
-            case '/':
-                buildFileSystem(root, index + 1);
-                break;
-            case '..':
-                buildFileSystem(directory.parent, index + 1);
-                break;
-            default:
-                buildFileSystem(
-                    directory.subdirectories[destination],
-                    index + 1
-                );
+            switch (destination) {
+                case '/':
+                    directory = root;
+                    break;
+                case '..':
+                    directory = directory.parent;
+                    break;
+                default:
+                    directory = directory.subdirectories[destination];
+            }
         }
     }
+
+    return root;
 }
 
-const root: Directory = {
-    name: '/',
-    subdirectories: {},
-    files: {},
-    totalSize: 0,
-};
-
-buildFileSystem(root);
+const root = buildFileSystem();
 
 export function partOne() {
     let total = 0;
