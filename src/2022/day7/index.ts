@@ -55,6 +55,7 @@ function buildFileSystem() {
                 size,
             };
 
+            // Update total sizes of all parent directories.
             let current = directory;
             while (current) {
                 current.totalSize += size;
