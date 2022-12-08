@@ -20,7 +20,6 @@ interface Directory {
 
 const isFile = (row: string) => /^\d+/.test(row);
 const isDirectory = (row: string) => /^dir/.test(row);
-const isFileOrDirectory = (row: string) => isFile(row) || isDirectory(row);
 
 function parseFile(row: string) {
     const [, size, name] = row.match(/^(\d+) (.+)$/) || [];
@@ -44,40 +43,38 @@ function buildFileSystem() {
 
     let directory = root;
 
-    for (let i = 0; i < entries.length; ++i) {
+    entries.forEach((entry, i) => {
         if (!directory) {
             throw new Error(`Invalid directory on line ${i}`);
         }
 
-        const instruction = entries[i];
+        if (isFile(entry)) {
+            const { size, name } = parseFile(entry);
+            directory.files[name] = {
+                name,
+                size,
+            };
 
-        if (isFileOrDirectory(instruction)) {
-            if (isFile(instruction)) {
-                const { size, name } = parseFile(instruction);
-                directory.files[name] = {
-                    name,
-                    size,
-                };
-
-                let current = directory;
-                while (current) {
-                    current.totalSize += size;
-                    current = current.parent;
-                }
-            } else {
-                const { name } = parseDirectory(instruction);
-                directory.subdirectories[name] ||= {
-                    name,
-                    files: {},
-                    subdirectories: {},
-                    parent: directory,
-                    totalSize: 0,
-                };
+            let current = directory;
+            while (current) {
+                current.totalSize += size;
+                current = current.parent;
             }
         }
 
-        if (instruction.startsWith('$ cd')) {
-            const [, destination] = instruction.match(/^\$ cd (.+)$/) || [];
+        if (isDirectory(entry)) {
+            const { name } = parseDirectory(entry);
+            directory.subdirectories[name] ||= {
+                name,
+                files: {},
+                subdirectories: {},
+                parent: directory,
+                totalSize: 0,
+            };
+        }
+
+        if (entry.startsWith('$ cd')) {
+            const [, destination] = entry.match(/^\$ cd (.+)$/) || [];
 
             switch (destination) {
                 case '/':
@@ -90,7 +87,7 @@ function buildFileSystem() {
                     directory = directory.subdirectories[destination];
             }
         }
-    }
+    });
 
     return root;
 }
