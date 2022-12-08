@@ -51,36 +51,29 @@ function buildFileSystem() {
 
         const instruction = entries[i];
 
-        if (instruction === '$ ls') {
-            i++;
+        if (isFileOrDirectory(entries[i])) {
+            if (isFile(entries[i])) {
+                const { size, name } = parseFile(entries[i]);
+                directory.files[name] = {
+                    name,
+                    size,
+                };
 
-            while (isFileOrDirectory(entries[i])) {
-                if (isFile(entries[i])) {
-                    const { size, name } = parseFile(entries[i]);
-                    directory.files[name] = {
-                        name,
-                        size,
-                    };
-
-                    let current = directory;
-                    while (current) {
-                        current.totalSize += size;
-                        current = current.parent;
-                    }
-                } else {
-                    const { name } = parseDirectory(entries[i]);
-                    directory.subdirectories[name] ||= {
-                        name,
-                        files: {},
-                        subdirectories: {},
-                        parent: directory,
-                        totalSize: 0,
-                    };
+                let current = directory;
+                while (current) {
+                    current.totalSize += size;
+                    current = current.parent;
                 }
-                i++;
+            } else {
+                const { name } = parseDirectory(entries[i]);
+                directory.subdirectories[name] ||= {
+                    name,
+                    files: {},
+                    subdirectories: {},
+                    parent: directory,
+                    totalSize: 0,
+                };
             }
-
-            i--;
         }
 
         if (instruction.startsWith('$ cd')) {
