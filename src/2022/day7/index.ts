@@ -41,22 +41,22 @@ function buildFileSystem() {
         totalSize: 0,
     };
 
-    let directory = root;
+    let currentDirectory = root;
 
     entries.forEach((entry, i) => {
-        if (!directory) {
-            throw new Error(`Invalid directory on line ${i}`);
+        if (!currentDirectory) {
+            throw new Error(`Invalid directory found on line ${i}`);
         }
 
         if (isFile(entry)) {
             const { size, name } = parseFile(entry);
-            directory.files[name] = {
+            currentDirectory.files[name] = {
                 name,
                 size,
             };
 
             // Update total sizes of all ancestor directories.
-            let ancestor = directory;
+            let ancestor = currentDirectory;
             while (ancestor) {
                 ancestor.totalSize += size;
                 ancestor = ancestor.parent;
@@ -65,11 +65,11 @@ function buildFileSystem() {
 
         if (isDirectory(entry)) {
             const { name } = parseDirectory(entry);
-            directory.subdirectories[name] ||= {
+            currentDirectory.subdirectories[name] ||= {
                 name,
                 files: {},
                 subdirectories: {},
-                parent: directory,
+                parent: currentDirectory,
                 totalSize: 0,
             };
         }
@@ -79,13 +79,13 @@ function buildFileSystem() {
 
             switch (destination) {
                 case '/':
-                    directory = root;
+                    currentDirectory = root;
                     break;
                 case '..':
-                    directory = directory.parent;
+                    currentDirectory = currentDirectory.parent;
                     break;
                 default:
-                    directory = directory.subdirectories[destination];
+                    currentDirectory = currentDirectory.subdirectories[destination];
             }
         }
     });
