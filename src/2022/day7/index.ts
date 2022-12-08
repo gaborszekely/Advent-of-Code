@@ -51,9 +51,9 @@ function buildFileSystem() {
 
         const instruction = entries[i];
 
-        if (isFileOrDirectory(entries[i])) {
-            if (isFile(entries[i])) {
-                const { size, name } = parseFile(entries[i]);
+        if (isFileOrDirectory(instruction)) {
+            if (isFile(instruction)) {
+                const { size, name } = parseFile(instruction);
                 directory.files[name] = {
                     name,
                     size,
@@ -65,7 +65,7 @@ function buildFileSystem() {
                     current = current.parent;
                 }
             } else {
-                const { name } = parseDirectory(entries[i]);
+                const { name } = parseDirectory(instruction);
                 directory.subdirectories[name] ||= {
                     name,
                     files: {},
