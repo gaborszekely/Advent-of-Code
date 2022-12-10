@@ -44,7 +44,7 @@ export class Grid<T> {
      */
     static fromProportions<T>(rows: number, cols: number, defaultVal: T) {
         const matrix = Grid.generateMatrix(rows, cols, 0);
-        const grid = new Grid(matrix);
+        const grid = new Grid<T>(matrix);
         const val =
             typeof defaultVal === 'function' ? defaultVal() : defaultVal;
 
