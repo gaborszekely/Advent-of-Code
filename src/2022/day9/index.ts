@@ -77,9 +77,9 @@ const traverse = (numTails: number) => {
 };
 
 export function partOne() {
-    return traverse(1);
+    return traverse(/*numTails =*/ 1);
 }
 
 export function partTwo() {
-    return traverse(9);
+    return traverse(/*numTails =*/ 9);
 }
