@@ -65,11 +65,7 @@ const traverse = (numTails: number) => {
                 );
             }
 
-            const serialized = serialize(positions.at(-1));
-
-            if (!visited.has(serialized)) {
-                visited.add(serialized);
-            }
+            visited.add(serialize(positions.at(-1)));
         }
     }
 
