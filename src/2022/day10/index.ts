@@ -13,12 +13,11 @@ const entries = input.split('\n').map(row => {
 
 export function partOne() {
     let total = 1;
-    let cycles = 0;
     let result = 0;
+    let cycles = 0;
     let prevCycles = 0;
 
-    for (let i = 0; i < entries.length; ++i) {
-        const [instruction, amount] = entries[i];
+    for (const [instruction, amount] of entries) {
         let newTotal = total;
         prevCycles = cycles;
 
@@ -64,8 +63,7 @@ export function partTwo() {
         return diff == 0 || diff === 1;
     };
 
-    for (let i = 0; i < entries.length; ++i) {
-        const [instruction, amount] = entries[i];
+    for (const [instruction, amount] of entries) {
         const cycles = instruction === 'addx' ? 2 : 1;
 
         for (let j = 0; j < cycles; ++j) {
