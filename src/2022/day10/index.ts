@@ -56,10 +56,10 @@ export function partOne() {
 export function partTwo() {
     let result = '';
     let spriteMidpoint = 1;
-    let pixelDrawn = -1;
+    let currentPixelDrawn = -1;
 
     const pixelsOverlap = () => {
-        const diff = Math.abs((pixelDrawn % 40) - spriteMidpoint);
+        const diff = Math.abs((currentPixelDrawn % 40) - spriteMidpoint);
         return diff == 0 || diff === 1;
     };
 
@@ -67,7 +67,7 @@ export function partTwo() {
         const cycles = instruction === 'addx' ? 2 : 1;
 
         for (let j = 0; j < cycles; ++j) {
-            pixelDrawn++;
+            currentPixelDrawn++;
             result += pixelsOverlap() ? '#' : '.';
         }
 
