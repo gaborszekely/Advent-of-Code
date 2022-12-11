@@ -5,6 +5,7 @@
     "main": "index.js",
     "scripts": {
         "start": "ts-node-dev -r tsconfig-paths/register src/runner/runner.ts",
+        "init": "ts-node-dev -r tsconfig-paths/register src/runner/init.ts",
         "latest": "npm start -- --day latest",
         "loadInput": "tsc && node dist/helpers/loadInput.js"
     },
