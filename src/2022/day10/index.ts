@@ -15,33 +15,33 @@ export function partOne() {
     let total = 1;
     let result = 0;
     let cycles = 0;
-    let prevCycles = 0;
 
     for (const [instruction, amount] of entries) {
+        let newCycles = cycles;
         let newTotal = total;
-        prevCycles = cycles;
 
         if (instruction === 'addx') {
             newTotal += amount;
-            cycles += 2;
+            newCycles += 2;
         }
 
         if (instruction === 'noop') {
-            cycles += 1;
+            newCycles += 1;
         }
 
-        const remaining = (cycles - 20) % 40;
-        const prevRemaining = (prevCycles - 20) % 40;
+        const remaining = (newCycles - 20) % 40;
+        const prevRemaining = (cycles - 20) % 40;
 
         if (remaining === 0) {
-            result += total * cycles;
+            result += total * newCycles;
         }
 
         if (remaining === 1 && prevRemaining !== 0) {
-            result += total * (cycles - 1);
+            result += total * (newCycles - 1);
         }
 
         total = newTotal;
+        cycles = newCycles;
     }
 
     return result;
