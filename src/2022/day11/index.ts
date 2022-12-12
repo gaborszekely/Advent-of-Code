@@ -58,7 +58,7 @@ function getMonkeyBusinessLevel(
         rounds: number;
     }
 ) {
-    const processCounts: {
+    const counts: {
         [key: string]: number;
     } = {};
 
@@ -70,13 +70,13 @@ function getMonkeyBusinessLevel(
                 const worryLevel = getManagedWorryLevel(monkey, current);
                 const destinationMonkey = getDestinationMonkey(worryLevel);
                 monkeys[destinationMonkey].items.push(worryLevel);
-                processCounts[i] ||= 0;
-                processCounts[i]++;
+                counts[i] ||= 0;
+                counts[i]++;
             }
         });
     }
 
-    const sorted = Object.values(processCounts).sort((a, b) => b - a);
+    const sorted = Object.values(counts).sort((a, b) => b - a);
 
     return sorted[0] * sorted[1];
 }
