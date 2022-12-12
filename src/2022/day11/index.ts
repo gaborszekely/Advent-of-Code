@@ -2,45 +2,36 @@
 
 import { getInput } from '@utils/fs';
 import { lcm } from '@utils/math';
+import { extractNumber, extractNumbers } from '@utils/string';
 
 const input = getInput(__dirname);
 
-const getMonkeys = () =>
-    input.split('\n\n').map(row => {
-        const lines = row.split('\n').map(line => line.trim());
-        const items = [...lines[1].matchAll(/\d+/g)].map(match =>
-            Number(match[0])
-        );
+function getMonkeys() {
+    return input.split('\n\n').map(row => {
+        const lines = row.split('\n');
+        const items = extractNumbers(lines[1]);
         const [, operator, amount] = lines[2].match(/new = old (.) (.+)/) || [];
 
-        const getWorryLevel = (old: number) => {
-            const factor = amount === 'old' ? old : Number(amount);
+        function getWorryLevel(old: number) {
+            const operand = amount === 'old' ? old : Number(amount);
 
             switch (operator) {
                 case '+':
-                    return old + factor;
+                    return old + operand;
                 case '*':
-                    return old * factor;
+                    return old * operand;
                 default:
                     throw new Error(`Unexpected operator ${operator}`);
             }
-        };
+        }
 
-        const [, divisor] = (lines[3].match(/divisible by (\d+)/) || []).map(
-            Number
-        );
-        const [, trueMonkey] = (lines[4].match(/monkey (\d+)/) || []).map(
-            Number
-        );
-        const [, falseMonkey] = (lines[5].match(/monkey (\d+)/) || []).map(
-            Number
-        );
+        const divisor = extractNumber(lines[3]);
+        const trueMonkey = extractNumber(lines[4]);
+        const falseMonkey = extractNumber(lines[5]);
 
-        const getDestinationMonkey = (worryLevel: number) => {
-            const isTrue = worryLevel % divisor === 0;
-
-            return isTrue ? trueMonkey : falseMonkey;
-        };
+        function getDestinationMonkey(worryLevel: number) {
+            return worryLevel % divisor === 0 ? trueMonkey : falseMonkey;
+        }
 
         return {
             items,
@@ -49,15 +40,17 @@ const getMonkeys = () =>
             getDestinationMonkey,
         };
     });
+}
 
-type Monkey = ReturnType<typeof getMonkeys>[number];
+type Monkeys = ReturnType<typeof getMonkeys>;
+type Monkey = Monkeys[number];
 
 interface GetWorryLevelFn {
     (monkey: Monkey, worryLevel: number): number;
 }
 
 function getMonkeyBusinessLevel(
-    monkeys: ReturnType<typeof getMonkeys>,
+    monkeys: Monkeys,
     {
         getManagedWorryLevel,
         rounds,
