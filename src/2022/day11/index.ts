@@ -11,6 +11,9 @@ function getMonkeys() {
         const lines = row.split('\n');
         const items = extractNumbers(lines[1]);
         const [, operator, amount] = lines[2].match(/new = old (.) (.+)/) || [];
+        const divisor = extractNumber(lines[3]);
+        const trueMonkey = extractNumber(lines[4]);
+        const falseMonkey = extractNumber(lines[5]);
 
         function getWorryLevel(old: number) {
             const operand = amount === 'old' ? old : Number(amount);
@@ -24,10 +27,6 @@ function getMonkeys() {
                     throw new Error(`Unexpected operator ${operator}`);
             }
         }
-
-        const divisor = extractNumber(lines[3]);
-        const trueMonkey = extractNumber(lines[4]);
-        const falseMonkey = extractNumber(lines[5]);
 
         function getDestinationMonkey(worryLevel: number) {
             return worryLevel % divisor === 0 ? trueMonkey : falseMonkey;
