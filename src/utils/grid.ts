@@ -253,7 +253,7 @@ export class Grid<T> {
     }
 
     /** Gets all the in-bounds neighbor coordinates of a current cell. */
-    getValidNeighborCoords(i: number, j: number) {
+    getNeighborCoords(i: number, j: number) {
         return Grid.getNeighborCoords(i, j).filter(([nI, nJ]) =>
             this.inRange(nI, nJ)
         );

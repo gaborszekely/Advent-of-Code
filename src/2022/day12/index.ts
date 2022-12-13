@@ -21,10 +21,10 @@ export function partOne() {
             return steps;
         }
 
-        const neighbors = grid.getValidNeighborCoords(i, j);
+        const neighbors = grid.getNeighborCoords(i, j);
 
         for (const [nI, nJ] of neighbors) {
-            const neighbor = grid.get(nI, nJ) === 'E' ? 'z' : grid.get(nI, nJ);
+            const neighbor = grid.get(nI, nJ).replace('E', 'z');
             const diff = neighbor.charCodeAt(0) - current.charCodeAt(0);
             const canVisit =
                 !visited.has(serializeCoords(nI, nJ)) &&
@@ -51,10 +51,10 @@ export function partTwo() {
             return steps;
         }
 
-        const neighbors = grid.getValidNeighborCoords(i, j);
+        const neighbors = grid.getNeighborCoords(i, j);
 
         for (const [nI, nJ] of neighbors) {
-            const neighbor = grid.get(nI, nJ) === 'S' ? 'a' : grid.get(nI, nJ);
+            const neighbor = grid.get(nI, nJ).replace('S', 'a');
             const diff = neighbor.charCodeAt(0) - current.charCodeAt(0);
             const canVisit =
                 !visited.has(serializeCoords(nI, nJ)) &&
