@@ -11,6 +11,9 @@ function getMonkeys() {
         const lines = row.split('\n');
         const items = extractNumbers(lines[1]);
         const [, operator, amount] = lines[2].match(/new = old (.) (.+)/) || [];
+        const divisor = extractNumber(lines[3]);
+        const trueMonkey = extractNumber(lines[4]);
+        const falseMonkey = extractNumber(lines[5]);
 
         function getWorryLevel(old: number) {
             const operand = amount === 'old' ? old : Number(amount);
@@ -24,10 +27,6 @@ function getMonkeys() {
                     throw new Error(`Unexpected operator ${operator}`);
             }
         }
-
-        const divisor = extractNumber(lines[3]);
-        const trueMonkey = extractNumber(lines[4]);
-        const falseMonkey = extractNumber(lines[5]);
 
         function getDestinationMonkey(worryLevel: number) {
             return worryLevel % divisor === 0 ? trueMonkey : falseMonkey;
@@ -59,7 +58,7 @@ function getMonkeyBusinessLevel(
         rounds: number;
     }
 ) {
-    const processCounts: {
+    const counts: {
         [key: string]: number;
     } = {};
 
@@ -71,13 +70,13 @@ function getMonkeyBusinessLevel(
                 const worryLevel = getManagedWorryLevel(monkey, current);
                 const destinationMonkey = getDestinationMonkey(worryLevel);
                 monkeys[destinationMonkey].items.push(worryLevel);
-                processCounts[i] ||= 0;
-                processCounts[i]++;
+                counts[i] ||= 0;
+                counts[i]++;
             }
         });
     }
 
-    const sorted = Object.values(processCounts).sort((a, b) => b - a);
+    const sorted = Object.values(counts).sort((a, b) => b - a);
 
     return sorted[0] * sorted[1];
 }
