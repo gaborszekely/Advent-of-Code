@@ -206,6 +206,18 @@ export class Grid<T> {
         return total;
     }
 
+    findIndex(target: T) {
+        let result: [number, number];
+
+        this.forEach((el, i, j) => {
+            if (el === target) {
+                result = [i, j];
+            }
+        });
+
+        return result;
+    }
+
     flipHorizontal() {
         const newGrid = this.grid.map(row => row.slice().reverse());
 
@@ -238,6 +250,13 @@ export class Grid<T> {
     /** Gets all the neighbors of a current cell, including diagonal ones. */
     getAllNeighbors(i: number, j: number) {
         return this._mapCoordsToNeighbors(Grid.getAllNeighborCoords(i, j));
+    }
+
+    /** Gets all the in-bounds neighbor coordinates of a current cell. */
+    getValidNeighborCoords(i: number, j: number) {
+        return Grid.getNeighborCoords(i, j).filter(([nI, nJ]) =>
+            this.inRange(nI, nJ)
+        );
     }
 
     /** Gets the neighbors of a current cell. */
