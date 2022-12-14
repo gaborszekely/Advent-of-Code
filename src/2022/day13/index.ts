@@ -7,13 +7,9 @@ const input = getInput(__dirname);
 
 type Packet = Array<number | Packet>;
 
-const pairs = input.split('\n\n').map(pair => {
-    const [packet1, packet2] = pair.split(/\]\n?\[/);
-    return [
-        JSON.parse(`${packet1}]`) as Packet,
-        JSON.parse(`[${packet2}`) as Packet,
-    ];
-});
+const pairs = input
+    .split('\n\n')
+    .map(pair => pair.split('\n').map(packet => JSON.parse(packet) as Packet));
 
 function inOrder(packet1: Packet, packet2: Packet): number {
     for (let i = 0; i < packet1.length; ++i) {
@@ -56,9 +52,9 @@ export function partOne() {
 export function partTwo() {
     const divider1 = [[2]];
     const divider2 = [[6]];
-    const packets = [...pairs.flat(1), divider1, divider2].sort((a, b) =>
-        inOrder(b, a)
-    );
+    const packets = [...pairs.flat(1), divider1, divider2]
+        .sort(inOrder)
+        .reverse();
     const divider1Index = packets.findIndex(p => p === divider1) + 1;
     const divider2Index = packets.findIndex(p => p === divider2) + 1;
 
