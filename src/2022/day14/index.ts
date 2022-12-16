@@ -43,7 +43,6 @@ function inBounds(x: number) {
 }
 
 function move(x: number, y: number, blocked: Set<string>) {
-    // check below
     const neighborsBelow = [
         [x, y + 1],
         [x - 1, y + 1],
@@ -73,11 +72,13 @@ export function partOne() {
         while (true) {
             const prevY = y;
             [x, y] = move(x, y, blocked);
+
             if (y === prevY) {
                 blocked.add(serializeCoords(x, y));
                 total++;
                 break;
             }
+
             if (!inBounds(x)) {
                 return total;
             }
