@@ -9,6 +9,7 @@ const day = date.getDate();
 const challengeDir = path.join(__basedir, year.toString(), `day${day}`);
 const challengePath = `${challengeDir}/index.ts`;
 const inputPath = `${challengeDir}/input.txt`;
+const testInputPath = `${challengeDir}/test_input.txt`;
 
 const template = `// https://adventofcode.com/${year}/day/${day}
 
@@ -29,4 +30,5 @@ if (!fs.existsSync(challengePath)) {
     fs.mkdirSync(challengeDir);
     fs.writeFileSync(challengePath, template);
     fs.writeFileSync(inputPath, '');
+    fs.writeFileSync(testInputPath, '');
 }

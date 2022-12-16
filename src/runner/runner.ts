@@ -11,6 +11,7 @@ commander
     .option('--day <name>', 'Day(s) to run', 'latest')
     .option('--year <name>', 'Year(s) to run', 'latest')
     .option('--part <name>', 'Part to run', 'both')
+    .option('-t, --test', 'Run test or real input', false)
     .parse(process.argv);
 
 validateArgs(commander, {
