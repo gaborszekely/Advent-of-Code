@@ -4,3 +4,4 @@ test.txt
 .gitignore_*
 node_modules
 dist
+test_input.txt
