@@ -15,29 +15,29 @@ const getNeighbors = (
 ) => {
     const [x, y, z] = Array.isArray(coord) ? coord : deserialize(coord);
 
-    const neighbors = [
-        serialize(x, y, z + 1),
-        serialize(x, y, z - 1),
-        serialize(x, y + 1, z),
-        serialize(x, y - 1, z),
-        serialize(x + 1, y, z),
-        serialize(x - 1, y, z),
+    const neighbors: Coord[] = [
+        [x, y, z + 1],
+        [x, y, z - 1],
+        [x, y + 1, z],
+        [x, y - 1, z],
+        [x + 1, y, z],
+        [x - 1, y, z],
     ];
 
     if (diagonal) {
         neighbors.push(
-            serialize(x + 1, y, z + 1),
-            serialize(x + 1, y, z - 1),
-            serialize(x - 1, y, z + 1),
-            serialize(x - 1, y, z - 1),
-            serialize(x - 1, y - 1, z),
-            serialize(x - 1, y + 1, z),
-            serialize(x - 1, y - 1, z - 1),
-            serialize(x - 1, y - 1, z + 1)
+            [x + 1, y, z + 1],
+            [x + 1, y, z - 1],
+            [x - 1, y, z + 1],
+            [x - 1, y, z - 1],
+            [x - 1, y - 1, z],
+            [x - 1, y + 1, z],
+            [x - 1, y - 1, z - 1],
+            [x - 1, y - 1, z + 1]
         );
     }
 
-    return neighbors;
+    return neighbors.map(neighbor => serialize(...neighbor));
 };
 
 const entries = input.split('\n');
@@ -58,7 +58,7 @@ export function partOne() {
     }, 0);
 }
 
-function buildDisjointSet() {
+const buildDisjointSet = () => {
     const boundaries = new Set<string>();
 
     for (const coord of coords) {
@@ -83,7 +83,7 @@ function buildDisjointSet() {
     }
 
     return ds;
-}
+};
 
 export function partTwo() {
     const ds = buildDisjointSet();
