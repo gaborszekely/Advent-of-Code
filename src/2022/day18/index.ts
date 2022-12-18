@@ -1,6 +1,6 @@
 // https://adventofcode.com/2022/day/18
 
-import { DisjointSet } from '@utils/disjointset';
+import { DisjointSet } from '@utils/graph';
 import { getInput } from '@utils/fs';
 
 const input = getInput(__dirname);
