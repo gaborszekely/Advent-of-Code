@@ -181,6 +181,12 @@ export class Grid<T> {
         this.grid.unshift(Array.from({ length: this.cols }, () => val));
     }
 
+    unshiftRows(amount: number, val: T) {
+        for (let i = 0; i < amount; ++i) {
+            this.unshiftRow(val);
+        }
+    }
+
     expandBoundaries(val: T) {
         this.pushCol(val);
         this.unshiftCol(val);
@@ -308,14 +314,14 @@ export class Grid<T> {
         this.grid[row][col] = val;
     }
 
-    spliceCol(col: number) {
+    spliceCols(startCol: number, count = 1) {
         this.grid.forEach(row => {
-            row.splice(col, 1);
+            row.splice(startCol, count);
         });
     }
 
-    spliceRow(row: number) {
-        this.grid.splice(row, 1);
+    spliceRows(startRow: number, count = 1) {
+        this.grid.splice(startRow, count);
     }
 
     _mapCoordsToNeighbors(coords: number[][]) {
