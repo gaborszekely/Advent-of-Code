@@ -40,22 +40,36 @@ const getNeighbors = (
     return neighbors;
 };
 
-const entries = input.split('\n').map(row => deserialize(row));
-const cubePositions = new Set(entries.map(entry => serialize(...entry)));
+const entries = input.split('\n');
+const cubePositions = new Set(input.split('\n'));
+const coords = entries.map(row => deserialize(row));
 
 export function partOne() {
-    return entries.reduce((acc, entry) => {
-        const neighbors = getNeighbors(entry);
+    return coords.reduce((acc, coords) => {
+        const neighbors = getNeighbors(coords);
 
         for (const neighbor of neighbors) {
-            if (!cubePositions.has(neighbor)) acc++;
+            if (!cubePositions.has(neighbor)) {
+                acc++;
+            }
         }
 
         return acc;
     }, 0);
 }
 
-function buildDisjointSet(boundaries: Set<string>) {
+function buildDisjointSet() {
+    const boundaries = new Set<string>();
+
+    for (const coord of coords) {
+        const neighbors = getNeighbors(coord, { diagonal: true });
+
+        for (const neighbor of neighbors) {
+            if (!cubePositions.has(neighbor)) {
+                boundaries.add(neighbor);
+            }
+        }
+    }
     const ds = new DisjointSet(boundaries);
 
     for (const boundary of boundaries) {
@@ -72,27 +86,15 @@ function buildDisjointSet(boundaries: Set<string>) {
 }
 
 export function partTwo() {
-    const boundaries = new Set<string>();
-
-    for (const entry of entries) {
-        const neighbors = getNeighbors(entry, { diagonal: true });
-
-        for (const neighbor of neighbors) {
-            if (!cubePositions.has(neighbor)) {
-                boundaries.add(neighbor);
-            }
-        }
-    }
-
-    const ds = buildDisjointSet(boundaries);
+    const ds = buildDisjointSet();
     const outerBoundaryParent = Object.entries(ds.rank).sort(
         (a, b) => b[1] - a[1]
     )[0][0];
 
     let total = 0;
 
-    for (const entry of entries) {
-        const neighbors = getNeighbors(entry);
+    for (const coord of coords) {
+        const neighbors = getNeighbors(coord);
 
         for (const neighbor of neighbors) {
             if (ds.find(neighbor) === outerBoundaryParent) {
