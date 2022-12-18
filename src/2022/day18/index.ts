@@ -41,7 +41,7 @@ const getNeighbors = (
 };
 
 const entries = input.split('\n');
-const cubePositions = new Set(input.split('\n'));
+const cubePositions = new Set(entries);
 const coords = entries.map(row => deserialize(row));
 
 export function partOne() {
