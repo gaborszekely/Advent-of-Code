@@ -6,7 +6,6 @@ import {
     ListNode,
     swapBackward,
     swapForward,
-    toArray,
 } from '@utils/linkedlist';
 
 const input = getInput(__dirname);
