@@ -39,7 +39,7 @@ function mixFile({ indexes }: NodeList) {
     }
 }
 
-const getCoordinatesSum = ({ zeroNode }: NodeList) => {
+const getResult = ({ zeroNode }: NodeList) => {
     let result = 0;
     let node = zeroNode;
 
@@ -58,7 +58,7 @@ export function partOne() {
     const list = buildList();
     mixFile(list);
 
-    return getCoordinatesSum(list);
+    return getResult(list);
 }
 
 export function partTwo() {
@@ -69,5 +69,5 @@ export function partTwo() {
         mixFile(list);
     }
 
-    return getCoordinatesSum(list);
+    return getResult(list);
 }
