@@ -12,11 +12,13 @@ import {
 const input = getInput(__dirname);
 const entries = input.split('\n').map(Number);
 
+/**
+ * The encrypted file represented as a linked list of file coordinates.
+ */
 class CoordinateList extends LinkedList<number> {
     /** Reference to the node with the zero value. */
     private readonly zeroNode: ListNode<number>;
-
-    /** An array of nodes in their original indexes. */
+    /** The array of nodes in their original indexes. */
     private readonly nodeOrder: ListNode<number>[] = [];
 
     constructor(input: number[]) {
@@ -35,7 +37,7 @@ class CoordinateList extends LinkedList<number> {
         }
     }
 
-    /** Mixes the coordinates according to their values. */
+    /** Mixes the coordinates according to their numeric values. */
     mix() {
         for (const node of this.nodeOrder) {
             for (
