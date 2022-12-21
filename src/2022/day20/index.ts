@@ -41,9 +41,9 @@ class CoordinateList extends LinkedList<number> {
     mix() {
         for (const node of this.nodeOrder) {
             for (
-                let j = 0;
-                j < Math.abs(node.value) % (entries.length - 1);
-                ++j
+                let i = 0;
+                i < Math.abs(node.value) % (entries.length - 1);
+                ++i
             ) {
                 node.value > 0 ? swapForward(node) : swapBackward(node);
             }
