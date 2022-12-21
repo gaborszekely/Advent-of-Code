@@ -1,73 +1,85 @@
 // https://adventofcode.com/2022/day/20
 
 import { getInput } from '@utils/fs';
-import { ListNode, swapBackward, swapForward } from '@utils/linkedlist';
+import {
+    LinkedList,
+    ListNode,
+    swapBackward,
+    swapForward,
+    toArray,
+} from '@utils/linkedlist';
 
 const input = getInput(__dirname);
 const entries = input.split('\n').map(Number);
 
-const buildList = (mapFn: (val: number) => number = val => val) => {
-    const head = new ListNode(mapFn(entries[0]));
-    const indexes: ListNode<number>[] = [head];
-    let zeroNode: ListNode<number>;
-    let prev = head;
+class CoordinateList extends LinkedList<number> {
+    /** Reference to the node with the zero value. */
+    private readonly zeroNode: ListNode<number>;
 
-    for (let i = 1; i < entries.length; ++i) {
-        const node = new ListNode(mapFn(entries[i]));
-        indexes.push(node);
-        if (node.value === 0) {
-            zeroNode = node;
+    /** An array of nodes in their original indexes. */
+    private readonly nodeOrder: ListNode<number>[] = [];
+
+    constructor(input: number[]) {
+        super(input);
+
+        const seen = new Set<ListNode<number>>();
+        let node = this.head;
+
+        while (!seen.has(node)) {
+            this.nodeOrder.push(node);
+            seen.add(node);
+            if (node.value === 0) {
+                this.zeroNode = node;
+            }
+            node = node.next;
         }
-        prev.next = node;
-        node.prev = prev;
-        prev = node;
     }
 
-    prev.next = head;
-    head.prev = prev;
-
-    return { zeroNode, indexes };
-};
-
-type NodeList = ReturnType<typeof buildList>;
-
-function mixFile({ indexes }: NodeList) {
-    for (const node of indexes) {
-        for (let j = 0; j < Math.abs(node.value) % (entries.length - 1); ++j) {
-            node.value > 0 ? swapForward(node) : swapBackward(node);
+    /** Mixes the coordinates according to their values. */
+    mix() {
+        for (const node of this.nodeOrder) {
+            for (
+                let j = 0;
+                j < Math.abs(node.value) % (entries.length - 1);
+                ++j
+            ) {
+                node.value > 0 ? swapForward(node) : swapBackward(node);
+            }
         }
+    }
+
+    /** Sums the Grove coordinates at index 1000, 2000, and 3000. */
+    sumGroveCoordinates() {
+        let result = 0;
+        let node = this.zeroNode;
+
+        for (let i = 1; i <= 3000; ++i) {
+            node = node.next;
+
+            if (i === 1000 || i === 2000 || i === 3000) {
+                result += node.value;
+            }
+        }
+
+        return result;
     }
 }
 
-const getCoordinatesSum = ({ zeroNode }: NodeList) => {
-    let result = 0;
-    let node = zeroNode;
-
-    for (let i = 1; i <= 3000; ++i) {
-        node = node.next;
-
-        if (i === 1000 || i === 2000 || i === 3000) {
-            result += node.value;
-        }
-    }
-
-    return result;
-};
-
 export function partOne() {
-    const list = buildList();
-    mixFile(list);
+    const coordinateList = new CoordinateList(entries);
+    coordinateList.mix();
 
-    return getCoordinatesSum(list);
+    return coordinateList.sumGroveCoordinates();
 }
 
 export function partTwo() {
     const DECRYPTION_KEY = 811589153;
-    const list = buildList(val => val * DECRYPTION_KEY);
+    const coordinateList = new CoordinateList(entries);
+    coordinateList.mapValues(value => value * DECRYPTION_KEY);
 
     for (let i = 0; i < 10; ++i) {
-        mixFile(list);
+        coordinateList.mix();
     }
 
-    return getCoordinatesSum(list);
+    return coordinateList.sumGroveCoordinates();
 }

@@ -4,7 +4,7 @@
 export class ListNode<T> {
     next: ListNode<T> | null = null;
     prev: ListNode<T> | null = null;
-    constructor(readonly value: T) {}
+    constructor(public value: T) {}
 }
 
 export const toArray = <T>(head: ListNode<T>) => {
@@ -87,3 +87,36 @@ export const swapBackward = (node: ListNode<number>) => {
     oldPrev.next = oldNext;
     oldNext.prev = oldPrev;
 };
+
+/** Default linked list class. */
+export class LinkedList<T> {
+    head: ListNode<number>;
+
+    constructor(input: number[] = []) {
+        if (!input.length) return;
+
+        const head = new ListNode(input[0]);
+        let prev = head;
+
+        for (let i = 1; i < input.length; ++i) {
+            const node = new ListNode(input[i]);
+            prev.next = node;
+            node.prev = prev;
+            prev = node;
+        }
+
+        prev.next = head;
+        head.prev = prev;
+        this.head = head;
+    }
+
+    mapValues(mapperFn: (val: number) => number) {
+        const seen = new Set<ListNode<number>>();
+        let node = this.head;
+        while (!seen.has(node)) {
+            node.value = mapperFn(node.value);
+            seen.add(node);
+            node = node.next;
+        }
+    }
+}
