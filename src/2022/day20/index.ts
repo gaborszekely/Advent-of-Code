@@ -40,11 +40,7 @@ class CoordinateList extends LinkedList<number> {
     /** Mixes the coordinates according to their numeric values. */
     mix() {
         for (const node of this.nodeOrder) {
-            for (
-                let i = 0;
-                i < Math.abs(node.value) % (entries.length - 1);
-                ++i
-            ) {
+            for (let i = 0; i < Math.abs(node.value) % (this.size - 1); ++i) {
                 node.value > 0 ? swapForward(node) : swapBackward(node);
             }
         }

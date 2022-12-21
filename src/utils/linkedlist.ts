@@ -91,6 +91,7 @@ export const swapBackward = (node: ListNode<number>) => {
 /** Default linked list class. */
 export class LinkedList<T> {
     head: ListNode<number>;
+    size: number;
 
     constructor(input: number[] = []) {
         if (!input.length) return;
@@ -108,6 +109,7 @@ export class LinkedList<T> {
         prev.next = head;
         head.prev = prev;
         this.head = head;
+        this.size = input.length;
     }
 
     mapValues(mapperFn: (val: number) => number) {
