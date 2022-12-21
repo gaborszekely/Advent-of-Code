@@ -44,17 +44,15 @@ const operate = (operator: string, val1: number, val2: number) => {
 };
 
 const resolveEquation = (monkey: Monkey, monkies: Monkies): number => {
-    if (monkey.value) {
-        return monkey.value;
+    if (monkey.value === undefined) {
+        const [dep1, dep2] = monkey.dependencies!.map(dep => monkies[dep]);
+
+        monkey.value = operate(
+            monkey.operator,
+            resolveEquation(dep1, monkies),
+            resolveEquation(dep2, monkies)
+        );
     }
-
-    const [dep1, dep2] = monkey.dependencies!.map(dep => monkies[dep]);
-
-    monkey.value = operate(
-        monkey.operator,
-        resolveEquation(dep1, monkies),
-        resolveEquation(dep2, monkies)
-    );
 
     return monkey.value;
 };
@@ -65,87 +63,86 @@ export function partOne() {
     return resolveEquation(monkies.root, monkies);
 }
 
-const HUMAN = 'humn';
+export function partTwo() {
+    const HUMAN_ID = 'humn';
+    const monkies = getMonkies();
+    monkies.root.operator = '==';
 
-const markHumanAncestors = (node: Monkey, monkies: Monkies): boolean => {
-    if (node.id === HUMAN) {
-        node.humanAncestor = true;
-    } else if (!node.dependencies) {
-        node.humanAncestor = false;
-    } else {
-        node.humanAncestor = node.dependencies.some(dependency =>
-            markHumanAncestors(monkies[dependency], monkies)
-        );
-    }
+    const markHumanAncestors = (node: Monkey): boolean => {
+        if (node.id === HUMAN_ID) {
+            node.humanAncestor = true;
+        } else if (!node.dependencies) {
+            node.humanAncestor = false;
+        } else {
+            node.humanAncestor = node.dependencies.some(dependency =>
+                markHumanAncestors(monkies[dependency])
+            );
+        }
 
-    return node.humanAncestor;
-};
+        return node.humanAncestor;
+    };
 
-const findMissingNumber = (
-    monkey: Monkey,
-    monkies: Monkies,
-    currentTarget?: number
-): number => {
-    const [dep1, dep2] = monkey.dependencies.map(dep => monkies[dep]);
+    markHumanAncestors(monkies.root);
 
-    if (dep1.humanAncestor) {
-        const dep2Total = resolveEquation(dep2, monkies);
+    const findMissingNumber = (
+        monkey: Monkey,
+        currentTarget?: number
+    ): number => {
+        const [dep1, dep2] = monkey.dependencies.map(dep => monkies[dep]);
+
+        if (dep1.humanAncestor) {
+            const dep2Total = resolveEquation(dep2, monkies);
+
+            let newTarget: number;
+
+            switch (monkey.operator) {
+                case '+':
+                    newTarget = currentTarget - dep2Total;
+                    break;
+                case '-':
+                    newTarget = currentTarget + dep2Total;
+                    break;
+                case '*':
+                    newTarget = currentTarget / dep2Total;
+                    break;
+                case '/':
+                    newTarget = currentTarget * dep2Total;
+                    break;
+                case '==':
+                    newTarget = dep2Total;
+            }
+
+            return dep1.id === HUMAN_ID
+                ? newTarget
+                : findMissingNumber(dep1, newTarget);
+        }
+
+        // Dep 2 is the human ancestor.
+        const dep1Total = resolveEquation(dep1, monkies);
 
         let newTarget: number;
 
         switch (monkey.operator) {
             case '+':
-                newTarget = currentTarget - dep2Total;
+                newTarget = currentTarget - dep1Total;
                 break;
             case '-':
-                newTarget = currentTarget + dep2Total;
+                newTarget = dep1Total - currentTarget;
                 break;
             case '*':
-                newTarget = currentTarget / dep2Total;
+                newTarget = currentTarget / dep1Total;
                 break;
             case '/':
-                newTarget = currentTarget * dep2Total;
+                newTarget = dep1Total / currentTarget;
                 break;
             case '==':
-                newTarget = dep2Total;
+                newTarget = dep1Total;
         }
 
-        return dep1.id === HUMAN
+        return dep2.id === HUMAN_ID
             ? newTarget
-            : findMissingNumber(dep1, monkies, newTarget);
-    }
+            : findMissingNumber(dep2, newTarget);
+    };
 
-    // Dep 2 is the human ancestor.
-    const dep1Total = resolveEquation(dep1, monkies);
-
-    let newTarget: number;
-
-    switch (monkey.operator) {
-        case '+':
-            newTarget = currentTarget - dep1Total;
-            break;
-        case '-':
-            newTarget = dep1Total - currentTarget;
-            break;
-        case '*':
-            newTarget = currentTarget / dep1Total;
-            break;
-        case '/':
-            newTarget = dep1Total / currentTarget;
-            break;
-        case '==':
-            newTarget = dep1Total;
-    }
-
-    return dep2.id === HUMAN
-        ? newTarget
-        : findMissingNumber(dep2, monkies, newTarget);
-};
-
-export function partTwo() {
-    const monkies = getMonkies();
-    monkies.root.operator = '==';
-    markHumanAncestors(monkies.root, monkies);
-
-    return findMissingNumber(monkies.root, monkies);
+    return findMissingNumber(monkies.root);
 }
