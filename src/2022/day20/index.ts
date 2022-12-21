@@ -18,7 +18,7 @@ const entries = input.split('\n').map(Number);
 class CoordinateList extends LinkedList<number> {
     /** Reference to the node with the zero value. */
     private readonly zeroNode: ListNode<number>;
-    /** The array of nodes in their original indexes. */
+    /** The array of nodes in their original order. */
     private readonly nodeOrder: ListNode<number>[] = [];
 
     constructor(input: number[]) {
