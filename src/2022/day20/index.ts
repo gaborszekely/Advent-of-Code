@@ -29,9 +29,9 @@ const buildList = (mapFn: (val: number) => number = val => val) => {
     return { zeroNode, indexes };
 };
 
-type NodeList = ReturnType<typeof buildList>;
+type List = ReturnType<typeof buildList>;
 
-function mixList({ indexes }: NodeList) {
+function mixList({ indexes }: List) {
     for (const node of indexes) {
         for (let j = 0; j < Math.abs(node.value) % (entries.length - 1); ++j) {
             node.value > 0 ? swapForward(node) : swapBackward(node);
@@ -39,7 +39,7 @@ function mixList({ indexes }: NodeList) {
     }
 }
 
-const getResult = ({ zeroNode }: NodeList) => {
+const getResult = ({ zeroNode }: List) => {
     let result = 0;
     let node = zeroNode;
 
