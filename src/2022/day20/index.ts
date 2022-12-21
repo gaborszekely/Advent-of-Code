@@ -31,7 +31,7 @@ const buildList = (mapFn: (val: number) => number = val => val) => {
 
 type NodeList = ReturnType<typeof buildList>;
 
-function mixFile({ indexes }: NodeList) {
+function mixList({ indexes }: NodeList) {
     for (const node of indexes) {
         for (let j = 0; j < Math.abs(node.value) % (entries.length - 1); ++j) {
             node.value > 0 ? swapForward(node) : swapBackward(node);
@@ -56,7 +56,7 @@ const getResult = ({ zeroNode }: NodeList) => {
 
 export function partOne() {
     const list = buildList();
-    mixFile(list);
+    mixList(list);
 
     return getResult(list);
 }
@@ -66,7 +66,7 @@ export function partTwo() {
     const list = buildList(val => val * DECRYPTION_KEY);
 
     for (let i = 0; i < 10; ++i) {
-        mixFile(list);
+        mixList(list);
     }
 
     return getResult(list);
