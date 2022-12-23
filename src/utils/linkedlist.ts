@@ -42,10 +42,12 @@ export const convertToCircularLinkedList = <T>(input: T[]) => {
 
     for (let i = 1; i < input.length; ++i) {
         node.next = new ListNode(input[i]);
+        node.next.prev = node;
         node = node.next;
     }
 
     node.next = head;
+    head.prev = node;
 
     return head;
 };
