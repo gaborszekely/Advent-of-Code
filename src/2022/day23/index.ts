@@ -40,8 +40,8 @@ const DIRECTION_OFFSETS: { [key in Direction]: [number, number][] } = {
 };
 
 const move = (elfCoords: Set<string>, i: number) => {
-    let conflictingIndexes = new Set<string>();
-    let proposedNewIndexes = new Map<string, string>();
+    const conflictingIndexes = new Set<string>();
+    const proposedNewIndexes = new Map<string, string>();
 
     for (const coord of elfCoords) {
         const [x, y] = deserializeCoords(coord);
