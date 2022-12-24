@@ -138,6 +138,11 @@ export class Grid<T> {
         return `${row}:${col}`;
     }
 
+    /** Serializes grid coordinates as a 'row:col' string. */
+    static deserializeCoords(serialized: string) {
+        return serialized.split(':').map(Number) as [number, number];
+    }
+
     /** Serializes a matrix into a string representation. */
     static serializeMatrix<T>(matrix: T[][]) {
         const rows = matrix.length;
@@ -214,10 +219,25 @@ export class Grid<T> {
 
     findIndex(target: T) {
         let result: [number, number];
+        let found = false;
+
+        this.forEach((el, i, j) => {
+            if (found) return;
+            if (el === target) {
+                result = [i, j];
+                found = true;
+            }
+        });
+
+        return result;
+    }
+
+    findAllIndexes(target: T) {
+        const result: [number, number][] = [];
 
         this.forEach((el, i, j) => {
             if (el === target) {
-                result = [i, j];
+                result.push([i, j]);
             }
         });
 
