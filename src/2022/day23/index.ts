@@ -10,7 +10,7 @@ const grid = Grid.fromSerialized(input);
 
 const getElfCoords = () =>
     new Set(
-        grid.findAllIndexes('#').map(indexes => serializeCoords(...indexes))
+        grid.findAllIndexes('#').map(coord => serializeCoords(...coord))
     );
 
 const DIRECTIONS = ['N', 'S', 'W', 'E'] as const;
