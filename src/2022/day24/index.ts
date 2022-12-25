@@ -2,6 +2,7 @@
 
 import { getInput } from '@utils/fs';
 import { Coord, Grid } from '@utils/grid';
+import { flow, curry } from 'lodash';
 
 const input = getInput(__dirname);
 const grid = input.split('\n').map(row => row.split(''));
@@ -61,7 +62,8 @@ const getNewBlizzardPosition = (position: string) => {
     }
 };
 
-const moveBlizzards = (blizzardPositions: Set<string>) => {
+/** Move each blizzard according to it's direction of movement. */
+const move = (blizzardPositions: Set<string>) => {
     const newBlizzardPositions = new Set<string>();
 
     for (const position of blizzardPositions) {
@@ -73,9 +75,13 @@ const moveBlizzards = (blizzardPositions: Set<string>) => {
 
 // Blizzard positions at a given minute.
 let blizzardPositions: Set<string>[] = [initialBlizzardPositions];
-
 // Coordinates that have already been visited for a given minute.
 let visited: Set<string>;
+
+const initializeVars = () => {
+    blizzardPositions = [initialBlizzardPositions];
+    visited = new Set<string>('0:1:0');
+};
 
 const serializeQueueItem = (i: number, j: number, minutes: number) =>
     `${i}:${j}:${minutes}`;
@@ -90,7 +96,7 @@ const canVisit = (i: number, j: number, minutes: number) =>
     !isBlizzardNeighbor(i, j, minutes) &&
     !visited.has(serializeQueueItem(i, j, minutes));
 
-const traverse = (startCoords: Coord, endCoords: Coord, minutes = 0) => {
+const traverse = (startCoords: Coord, endCoords: Coord, minutes: number) => {
     const queue: [...Coord, number][] = [[...startCoords, minutes]];
 
     const enqueue = (i: number, j: number, minutes: number) => {
@@ -100,12 +106,8 @@ const traverse = (startCoords: Coord, endCoords: Coord, minutes = 0) => {
 
     while (queue.length) {
         const [i, j, minutes] = queue.pop();
-        blizzardPositions[minutes] ||= moveBlizzards(
-            blizzardPositions[minutes - 1]
-        );
-        blizzardPositions[minutes + 1] ||= moveBlizzards(
-            blizzardPositions[minutes]
-        );
+        blizzardPositions[minutes] ||= move(blizzardPositions[minutes - 1]);
+        blizzardPositions[minutes + 1] ||= move(blizzardPositions[minutes]);
 
         if (i === endCoords[0] && j === endCoords[1]) {
             return minutes;
@@ -127,18 +129,17 @@ const START_COORDS: Coord = [0, 1];
 const END_COORDS: Coord = [grid.length - 1, grid.at(-1).length - 2];
 
 export function partOne() {
-    blizzardPositions = [initialBlizzardPositions];
-    visited = new Set<string>('0:1:0');
+    initializeVars();
 
-    return traverse(START_COORDS, END_COORDS);
+    return traverse(START_COORDS, END_COORDS, 0);
 }
 
 export function partTwo() {
-    blizzardPositions = [initialBlizzardPositions];
-    visited = new Set<string>('0:1:0');
+    const forward = curry(traverse)(START_COORDS)(END_COORDS);
+    const backward = curry(traverse)(END_COORDS)(START_COORDS);
+    const increment = (res: number) => res + 1;
 
-    const first = traverse(START_COORDS, END_COORDS, 0);
-    const second = traverse(END_COORDS, START_COORDS, first + 1);
+    initializeVars();
 
-    return traverse(START_COORDS, END_COORDS, second + 1);
+    return flow(forward, increment, backward, increment, forward)(0);
 }
