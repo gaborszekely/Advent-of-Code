@@ -1,3 +1,6 @@
+/** Coordinate representing [x, y] position on a grid. */
+export type Coord = [number, number];
+
 /** Grid data structure, with common grid functionality. */
 export class Grid<T> {
     constructor(private readonly grid: T[][] = []) {}
@@ -140,7 +143,7 @@ export class Grid<T> {
 
     /** Serializes grid coordinates as a 'row:col' string. */
     static deserializeCoords(serialized: string) {
-        return serialized.split(':').map(Number) as [number, number];
+        return serialized.split(':').map(Number) as Coord;
     }
 
     /** Serializes a matrix into a string representation. */
@@ -218,7 +221,7 @@ export class Grid<T> {
     }
 
     findIndex(target: T) {
-        let result: [number, number];
+        let result: Coord;
         let found = false;
 
         this.forEach((el, i, j) => {
@@ -233,7 +236,7 @@ export class Grid<T> {
     }
 
     findAllIndexes(target: T) {
-        const result: [number, number][] = [];
+        const result: Coord[] = [];
 
         this.forEach((el, i, j) => {
             if (el === target) {
