@@ -1,141 +1,105 @@
-121=10120=1022=2=0
-10==--=-=2
-2=11
-120221-1-
-2002011
-1-00-11=0
-1==2=-200101===
-2122=-10
-1=1=2=-1
-11--=-10-0-0
-2=-210=
-2-==1221011=021==-
-2
-1-2==212
-1-2=0=12--0111010=0
-1220-20=1=1
-1211=1
-10-22=-212--00
-1=---021
-1-010-21-2-
-10-==00122-=0--
-10=-
-1=20=-=---1=1
-1-0-0
-2===11=12200=2
-1===1
-1002
-10=-==-02
-12---2-==-020122
-11=-=2
-1-==2-=--2
-1-1112
-210-212-=20220-1
-1=-0111=0==
-100=20==-
-200==22-2=
-2-
-21-=1012=2=01=
-1=-=0=0-01=0
-1-2
-1121==0=
-2--21
-212111=00=-1-=1=
-10-021-
-2=
-2=0=12-
-1-0--
-2-0=21012==112=-1=
-1222==01=100121=0-=
-1011=01
-12102-
-10012=0-11021
-1-=01-
-12=010=12-0=02=11
-1-22=2--1-
-100=010-1
-210
-1-
-22--011--1212101
-11201
-1=2=-122=---1
-1===2122=-01=0=2
-1011--0--=20
-202-2-1=2
-2=000=10=-0
-110-=00-1211
-2==0=--00-2===
-110
-2=-02-1220012-
-1=21----=-=
-1=1
-12=--2=012-21
-1=0020-1--=0-=
-1==
-11-01101221=-02
-1=0201-2==0--01
-1=120120-=1
-1-121=====2-0=-
-201=1=1101-=02==
-1-00--0-
-10-202
-22-
-1==1=-2==-0-110
-1==21=1=20-1210=12
-20112-1=0--0=
-1=-=2021--0===21
-1-==-2
-1==120-0-
-1=0111=21-00-0=2
-1-110-=11-1021
-22
-1=1212=20=
-212=1=-12---122
-2=2
-2220-1=2==022=--0=
-2-02222
-1--0=0-22=-1
-120==2100
-10==201121==2-1221-0
-12210--==2--01022
-211120-21202
-22021011
-21---0=2-10=22
-1-22=-0
-12201=-2121-=-1
-11122-=202-
-1-2---=
-1-22=01=10-10
-1-0=0=21211011-0-
-2---
-1==12100
-112=1121
-120--1
-1-11=-2=-0
-1--=02-02
-2000-22==0221=2=
-1=1-10-1-==100=1
-202-011011
-20=10=-0002=00=
-2=1-2
-220
-11==-0=120--0-10=
-1=112-22202=2
-10=-0
-1=1=2=0
-2222--11---011-1
-1=-1=2=1-2122--10-1
-11021
-101
-11=2101222==
-100112-2011
-1=1=
-2-021--
-12211-1122=2-
-2--2=-1=-
-21012=2---2=2120=1
-1-010-==--2
-12=-22000-
-2-===1-1
-22=-=122=--1=
-2-2=-0-021
+# Day 25: Full of Hot Air
+
+## Part One
+
+As the expedition finally reaches the extraction point, several large hot air balloons drift down to meet you. Crews quickly start unloading the equipment the balloons brought: many hot air balloon kits, some fuel tanks, and a fuel heating machine.
+
+The **fuel heating machine** is a new addition to the process. When this mountain was a volcano, the ambient temperature was more reasonable; now, it's so cold that the fuel won't work at all without being warmed up first.
+
+The Elves, seemingly in an attempt to make the new machine feel welcome, have already attached a pair of googly eyes and started calling it "Bob".
+
+To heat the fuel, Bob needs to know the total amount of fuel that will be processed ahead of time so it can correctly calibrate heat output and flow rate. This amount is simply the **sum** of the fuel requirements of all of the hot air balloons, and those fuel requirements are even listed clearly on the side of each hot air balloon's burner.
+
+You assume the Elves will have no trouble adding up some numbers and are about to go back to figuring out which balloon is yours when you get a tap on the shoulder. Apparently, the fuel requirements use numbers written in a format the Elves don't recognize; predictably, they'd like your help deciphering them.
+
+You make a list of all of the fuel requirements (your puzzle input), but you don't recognize the number format either. For example:
+
+```
+1=-0-2
+12111
+2=0=
+21
+2=01
+111
+20012
+112
+1=-1=
+1-12
+12
+1=
+122
+```
+
+Fortunately, Bob is labeled with a support phone number. Not to be deterred, you call and ask for help.
+
+"That's right, just supply the fuel amount to the-- oh, for more than one burner? No problem, you just need to add together our Special Numeral-Analogue Fuel Units. Patent pending! They're way better than normal numbers for--"
+
+You mention that it's quite cold up here and ask if they can skip ahead.
+
+"Okay, our Special Numeral-Analogue Fuel Units - SNAFU for short - are sort of like normal numbers. You know how starting on the right, normal numbers have a ones place, a tens place, a hundreds place, and so on, where the digit in each place tells you how many of that value you have?"
+
+"SNAFU works the same way, except it uses powers of five instead of ten. Starting from the right, you have a ones place, a fives place, a twenty-fives place, a one-hundred-and-twenty-fives place, and so on. It's that easy!"
+
+You ask why some of the digits look like `-` or `=` instead of "digits".
+
+"You know, I never did ask the engineers why they did that. Instead of using digits four through zero, the digits are **2**, **1**, **0**, **minus** (written `-`), and **double-minus** (written `=`). Minus is worth -1, and double-minus is worth -2."
+
+"So, because ten (in normal numbers) is two fives and no ones, in SNAFU it is written `20`. Since eight (in normal numbers) is two fives minus two ones, it is written `2=`."
+
+"You can do it the other direction, too. Say you have the SNAFU number `2=-01`. That's `2` in the 625s place, `=` (double-minus) in the 125s place, `-` (minus) in the 25s place, `0` in the 5s place, and `1` in the 1s place. (2 times 625) plus (-2 times 125) plus (-1 times 25) plus (0 times 5) plus (1 times 1). That's 1250 plus -250 plus -25 plus 0 plus 1. **`976`**!"
+
+"I see here that you're connected via our premium uplink service, so I'll transmit our handy SNAFU brochure to you now. Did you need anything else?"
+
+You ask if the fuel will even work in these temperatures.
+
+"Wait, it's **how** cold? There's no **way** the fuel - or **any** fuel - would work in those conditions! There are only a few places in the-- where did you say you are again?"
+
+Just then, you notice one of the Elves pour a few drops from a snowflake-shaped container into one of the fuel tanks, thank the support representative for their time, and disconnect the call.
+
+The SNAFU brochure contains a few more examples of decimal ("normal") numbers and their SNAFU counterparts:
+
+```
+  Decimal          SNAFU
+        1              1
+        2              2
+        3             1=
+        4             1-
+        5             10
+        6             11
+        7             12
+        8             2=
+        9             2-
+       10             20
+       15            1=0
+       20            1-0
+     2022         1=11-2
+    12345        1-0---0
+314159265  1121-1110-1=0
+```
+
+Based on this process, the SNAFU numbers in the example above can be converted to decimal numbers as follows:
+
+```
+ SNAFU  Decimal
+1=-0-2     1747
+ 12111      906
+  2=0=      198
+    21       11
+  2=01      201
+   111       31
+ 20012     1257
+   112       32
+ 1=-1=      353
+  1-12      107
+    12        7
+    1=        3
+   122       37
+```
+
+In decimal, the sum of these numbers is `4890`.
+
+As you go to input this number on Bob's console, you discover that some buttons you expected are missing. Instead, you are met with buttons labeled `=`, `-`, `0`, `1`, and `2`. Bob needs the input value expressed as a SNAFU number, not in decimal.
+
+Reversing the process, you can determine that for the decimal number `4890`, the SNAFU number you need to supply to Bob's console is **`2=-1=0`**.
+
+The Elves are starting to get cold. **What SNAFU number do you supply to Bob's console?**
