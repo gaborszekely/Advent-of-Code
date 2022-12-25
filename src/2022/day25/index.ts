@@ -1,4 +1,4 @@
-// https://adventofcode.com/2022/day/24
+// https://adventofcode.com/2022/day/25
 
 import { getInput } from '@utils/fs';
 import { sum } from 'lodash';
