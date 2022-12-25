@@ -10,18 +10,15 @@ const fromSnafu = (snafuNum: string): number => {
         .split('')
         .reverse()
         .reduce((acc, digit, i) => {
-            switch (digit) {
-                case '1':
-                    return acc + 5 ** i;
-                case '2':
-                    return acc + 5 ** i * 2;
-                case '0':
-                    return acc;
-                case '-':
-                    return acc + 5 ** i * -1;
-                case '=':
-                    return acc + 5 ** i * -2;
+            if (/[0-2]/.test(digit)) {
+                return acc + 5 ** i * Number(digit);
             }
+
+            if (digit === '-') {
+                return acc + 5 ** i * -1;
+            }
+
+            return acc + 5 ** i * -2;
         }, 0);
 };
 
