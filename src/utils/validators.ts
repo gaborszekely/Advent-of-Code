@@ -1,6 +1,7 @@
 import { CommanderStatic } from 'commander';
+import * as array from './array';
 
-const utils = require('./utils');
+// import utils from './utils';
 
 const equals = (expected: unknown) => (val: unknown) => {
     if (val !== expected) {
@@ -33,7 +34,10 @@ const oneOf = (validators: unknown[]) => (val: unknown) => {
 };
 
 const inRange = (min: number, max: number) => (val: unknown) => {
-    if (isNaN(Number(val)) || !utils.inRange(min, max)(val)) {
+    if (
+        isNaN(Number(val)) ||
+        (typeof val === 'number' && !array.inRange(min, max)(val))
+    ) {
         return {
             error: true,
             message: ` - Must be in the range ${min}-${max}`,

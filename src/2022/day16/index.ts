@@ -98,4 +98,79 @@ export function partOne() {
     return result;
 }
 
-export function partTwo() {}
+export function partTwo() {
+    const valveReleases: ValveReleases = {};
+    const cache: { [key: string]: number } = {};
+    let result = 0;
+
+    function visit(current: string, valve: string, minutes = 0) {
+        if (valvesWithFlowRates.has(valve) && !valveReleases[valve]) {
+            const newMinutes = minutes + shortestPaths[current][valve];
+            if (newMinutes < 26) {
+                dfs(valve, newMinutes);
+            }
+        }
+    }
+
+    function visitElephant(current: string, valve: string, minutes = 0) {
+        if (valvesWithFlowRates.has(valve) && !valveReleases[valve]) {
+            const newMinutes = minutes + shortestPaths[current][valve];
+
+            return newMinutes < 26 ? dfsElephant(valve, newMinutes) : 0;
+        }
+
+        return 0;
+    }
+
+    function dfs(current: string, minutes = 0) {
+        minutes++;
+        valveReleases[current] = (26 - minutes) * valves[current].flowRate;
+        const released = findTotalPressureReleased(valveReleases);
+        const visitedNodes = Object.keys(valveReleases).sort().join(':');
+
+        if (typeof cache[visitedNodes] === 'undefined') {
+            cache[visitedNodes] = 0;
+            for (const valve in shortestPaths[startValve]) {
+                cache[visitedNodes] = Math.max(
+                    cache[visitedNodes],
+                    visitElephant(startValve, valve)
+                );
+            }
+        } else {
+            result = Math.max(result, released + cache[visitedNodes]);
+        }
+
+        for (const valve in shortestPaths[current]) {
+            visit(current, valve, minutes);
+        }
+
+        delete valveReleases[current];
+    }
+
+    function dfsElephant(current: string, minutes = 0) {
+        minutes++;
+        valveReleases[current] = (26 - minutes) * valves[current].flowRate;
+        result = Math.max(result, findTotalPressureReleased(valveReleases));
+
+        let res = 0;
+
+        for (const valve in shortestPaths[current]) {
+            res = Math.max(
+                res,
+                valveReleases[current] + visitElephant(current, valve, minutes)
+            );
+        }
+
+        delete valveReleases[current];
+
+        return res;
+    }
+
+    const startValve = 'AA';
+
+    for (const valve in shortestPaths[startValve]) {
+        visit(startValve, valve);
+    }
+
+    return result;
+}
