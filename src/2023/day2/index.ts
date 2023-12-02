@@ -14,17 +14,14 @@ export function partOne() {
     return input.split('\n').reduce((acc, row) => {
         const [, id] = row.match(/Game (\d+):/) || [];
 
-        const regex = /(\d+) (\w+)/g;
-        let matches: RegExpExecArray | null;
-
-        while ((matches = regex.exec(row))) {
-            const [, num, color] = matches;
-            if (Number(num) > totalCubes[color]) {
-                return acc;
+        let validGame = true;
+        forEachCube(row, (num, color) => {
+            if (num > totalCubes[color]) {
+                validGame = false;
             }
-        }
+        });
 
-        return acc + Number(id);
+        return validGame ? acc + Number(id) : acc;
     }, 0);
 }
 
@@ -38,20 +35,26 @@ export function partTwo() {
                 blue: 0,
             };
 
-            const regex = /(\d+) (\w+)/g;
-            let matches: RegExpExecArray | null;
-
-            while ((matches = regex.exec(row))) {
-                const [, num, color] = matches;
+            forEachCube(row, (num, color) => {
                 minRequiredCubes[color] = Math.max(
                     minRequiredCubes[color],
-                    Number(num)
+                    num
                 );
-            }
+            });
 
             return Object.values(minRequiredCubes).reduce(
                 (acc, val) => acc * val
             );
         })
         .reduce((acc, val) => acc + val);
+}
+
+function forEachCube(row: string, cb: (num: number, color: string) => void) {
+    const regex = /(\d+) (\w+)/g;
+    let matches: RegExpExecArray | null;
+
+    while ((matches = regex.exec(row))) {
+        const [, num, color] = matches;
+        cb(Number(num), color);
+    }
 }
