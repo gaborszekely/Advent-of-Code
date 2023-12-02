@@ -56,9 +56,9 @@ export function partTwo() {
                 minFirstValue = num;
             }
 
-            const firstNumberIndex = row.indexOf(numsMap[num]);
-            if (firstNumberIndex >= 0 && firstNumberIndex < minFirstIndex) {
-                minFirstIndex = firstNumberIndex;
+            const firstWordIndex = row.indexOf(numsMap[num]);
+            if (firstWordIndex >= 0 && firstWordIndex < minFirstIndex) {
+                minFirstIndex = firstWordIndex;
                 minFirstValue = num;
             }
 
@@ -68,9 +68,9 @@ export function partTwo() {
                 maxLastValue = num;
             }
 
-            const lastNumberIndex = row.lastIndexOf(numsMap[num]);
+            const lastWordIndex = row.lastIndexOf(numsMap[num]);
             if (lastIndex >= 0 && lastIndex > maxLastIndex) {
-                maxLastIndex = lastNumberIndex;
+                maxLastIndex = lastWordIndex;
                 maxLastValue = num;
             }
         }
