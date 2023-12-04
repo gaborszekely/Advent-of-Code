@@ -46,9 +46,9 @@ const getResults = (input: Row[]) => {
             if (!possibiliities[allergen]) {
                 possibiliities[allergen] = [...ingredients];
             } else {
-                possibiliities[allergen] = possibiliities[
-                    allergen
-                ].filter(ingredient => ingredients.has(ingredient));
+                possibiliities[allergen] = possibiliities[allergen].filter(
+                    ingredient => ingredients.has(ingredient)
+                );
             }
         }
     }

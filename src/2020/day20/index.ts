@@ -12,25 +12,28 @@ type Tiles = { [key: string]: string[] };
 const parseTiles = (input: string) => {
     const rawTiles = input.split('\n\n');
 
-    return rawTiles.reduce((acc, rawTile) => {
-        const tileId = rawTile
-            .split('\n')[0]
-            .replace('Tile ', '')
-            .replace(':', '');
+    return rawTiles.reduce(
+        (acc, rawTile) => {
+            const tileId = rawTile
+                .split('\n')[0]
+                .replace('Tile ', '')
+                .replace(':', '');
 
-        const grid = rawTile.split('\n').slice(1);
+            const grid = rawTile.split('\n').slice(1);
 
-        const sides = [];
+            const sides = [];
 
-        sides.push(first(grid));
-        sides.push(last(grid));
-        sides.push(grid.map(first).join(''));
-        sides.push(grid.map(last).join(''));
+            sides.push(first(grid));
+            sides.push(last(grid));
+            sides.push(grid.map(first).join(''));
+            sides.push(grid.map(last).join(''));
 
-        acc[tileId] = sides;
+            acc[tileId] = sides;
 
-        return acc;
-    }, {} as { [key: string]: string[] });
+            return acc;
+        },
+        {} as { [key: string]: string[] }
+    );
 };
 
 const getPieceTypes = (tiles: Tiles) => {
@@ -98,18 +101,21 @@ export function partOne() {
 const parseGrids = (input: string) => {
     const rawTiles = input.split('\n\n');
 
-    return rawTiles.reduce((acc, rawTile) => {
-        const tileId = rawTile
-            .split('\n')[0]
-            .replace('Tile ', '')
-            .replace(':', '');
+    return rawTiles.reduce(
+        (acc, rawTile) => {
+            const tileId = rawTile
+                .split('\n')[0]
+                .replace('Tile ', '')
+                .replace(':', '');
 
-        let grid = rawTile.split('\n').slice(1);
+            let grid = rawTile.split('\n').slice(1);
 
-        acc[tileId] = Grid.fromString(grid.join('\n').trim());
+            acc[tileId] = Grid.fromString(grid.join('\n').trim());
 
-        return acc;
-    }, {} as { [key: string]: Grid<string> });
+            return acc;
+        },
+        {} as { [key: string]: Grid<string> }
+    );
 };
 
 const checkMatch = (row1: string[], row2: string[]) =>

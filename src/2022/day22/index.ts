@@ -10,7 +10,7 @@ const last = lines.pop();
 lines.pop();
 
 const DIRECTIONS = ['R', 'D', 'L', 'U'] as const;
-type Direction = typeof DIRECTIONS[number];
+type Direction = (typeof DIRECTIONS)[number];
 type RotateDirection = Extract<Direction, 'L' | 'R'>;
 
 const board = lines.map(row => row.split(''));

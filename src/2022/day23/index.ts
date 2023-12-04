@@ -12,7 +12,7 @@ const getElfCoords = () =>
     new Set(grid.findAllIndexes('#').map(coord => serializeCoords(...coord)));
 
 const DIRECTIONS = ['N', 'S', 'W', 'E'] as const;
-type Direction = typeof DIRECTIONS[number];
+type Direction = (typeof DIRECTIONS)[number];
 
 const DIRECTION_OFFSETS: { [key in Direction]: [number, number][] } = {
     N: [
@@ -76,10 +76,10 @@ const move = (elfCoords: Set<string>, i: number) => {
                 newDirection === 'N'
                     ? [x - 1, y]
                     : newDirection === 'S'
-                    ? [x + 1, y]
-                    : newDirection === 'E'
-                    ? [x, y + 1]
-                    : [x, y - 1];
+                      ? [x + 1, y]
+                      : newDirection === 'E'
+                        ? [x, y + 1]
+                        : [x, y - 1];
             const serialized = serializeCoords(...proposedIndex);
 
             if (!conflictingIndexes.has(serialized)) {

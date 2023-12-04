@@ -25,7 +25,7 @@ const toPassword = (row: string) =>
                 ...acc,
                 [k]: v,
             }),
-            {} as Record<typeof requiredFields[number], string>
+            {} as Record<(typeof requiredFields)[number], string>
         );
 
 /** Full list of deserialized passwords. */
@@ -81,9 +81,8 @@ export function partTwo() {
 
             if (!match) return false;
 
-            const [min, max] = heightConstraints[
-                unit as keyof typeof heightConstraints
-            ];
+            const [min, max] =
+                heightConstraints[unit as keyof typeof heightConstraints];
 
             return inRange(min, max)(Number(size));
         },

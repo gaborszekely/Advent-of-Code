@@ -61,10 +61,9 @@ const findMySeatId = () => {
 
             const seatIsOpen = !seatCoordsSet.has(Grid.serializeCoords(i, j));
 
-            const neighborsAreOccupied = [
-                seatId + 1,
-                seatId - 1,
-            ].every(neighbor => descendingSeatIds.includes(neighbor));
+            const neighborsAreOccupied = [seatId + 1, seatId - 1].every(
+                neighbor => descendingSeatIds.includes(neighbor)
+            );
 
             if (seatIsOpen && neighborsAreOccupied) {
                 return seatId;

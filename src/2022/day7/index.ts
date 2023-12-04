@@ -85,7 +85,8 @@ function buildFileSystem() {
                     currentDirectory = currentDirectory.parent;
                     break;
                 default:
-                    currentDirectory = currentDirectory.subdirectories[destination];
+                    currentDirectory =
+                        currentDirectory.subdirectories[destination];
             }
         }
     });

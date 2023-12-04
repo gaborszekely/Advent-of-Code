@@ -14,24 +14,30 @@ interface Bag {
 const bags = input
     .split('\n')
     .map(row => row.split(' bags contain '))
-    .reduce((acc, [color, contents]) => {
-        acc[color] = {
-            color,
-            children:
-                contents === 'no other bags.'
-                    ? {}
-                    : contents
-                          .split(',')
-                          .map(bag => bag.match(/(\d+) (\w+ \w+)/))
-                          .reduce((acc, [, count, bag]) => {
-                              acc[bag] = Number(count);
+    .reduce(
+        (acc, [color, contents]) => {
+            acc[color] = {
+                color,
+                children:
+                    contents === 'no other bags.'
+                        ? {}
+                        : contents
+                              .split(',')
+                              .map(bag => bag.match(/(\d+) (\w+ \w+)/))
+                              .reduce(
+                                  (acc, [, count, bag]) => {
+                                      acc[bag] = Number(count);
 
-                              return acc;
-                          }, {} as Bag['children']),
-        };
+                                      return acc;
+                                  },
+                                  {} as Bag['children']
+                              ),
+            };
 
-        return acc;
-    }, {} as { [key: string]: Bag });
+            return acc;
+        },
+        {} as { [key: string]: Bag }
+    );
 
 export function partOne() {
     const visited = new Set();

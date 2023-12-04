@@ -13,7 +13,7 @@ const parseInput = (ipt: string) =>
 
 const directions = ['N', 'E', 'S', 'W'] as const;
 
-type Direction = typeof directions[number];
+type Direction = (typeof directions)[number];
 
 const isDirection = (direction: string): direction is Direction =>
     directions.includes(direction as Direction);

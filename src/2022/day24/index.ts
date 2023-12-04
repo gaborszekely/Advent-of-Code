@@ -8,7 +8,7 @@ const input = getInput(__dirname);
 const grid = input.split('\n').map(row => row.split(''));
 
 const DIRECTIONS = ['>', 'v', '<', '^'] as const;
-type Direction = typeof DIRECTIONS[number];
+type Direction = (typeof DIRECTIONS)[number];
 
 const isBlizzard = (val: string): val is Direction =>
     val !== '.' && val !== '#';

@@ -38,8 +38,8 @@ const ROCKS = ['ore', 'clay', 'obsidian', 'geode'] as const;
 
 const reversed = [...ROCKS].reverse();
 
-type Blueprint = typeof blueprints[number];
-type Rock = typeof ROCKS[number];
+type Blueprint = (typeof blueprints)[number];
+type Rock = (typeof ROCKS)[number];
 type Robots = Record<Rock, number>;
 type Totals = Record<Rock, number>;
 
