@@ -106,7 +106,7 @@ const parseGrids = (input: string) => {
 
         let grid = rawTile.split('\n').slice(1);
 
-        acc[tileId] = Grid.fromSerialized(grid.join('\n').trim());
+        acc[tileId] = Grid.fromString(grid.join('\n').trim());
 
         return acc;
     }, {} as { [key: string]: Grid<string> });

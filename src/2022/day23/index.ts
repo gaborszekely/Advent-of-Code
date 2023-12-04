@@ -6,12 +6,10 @@ import { Grid } from '@utils/grid';
 const { serializeCoords, deserializeCoords } = Grid;
 
 const input = getInput(__dirname);
-const grid = Grid.fromSerialized(input);
+const grid = Grid.fromString(input);
 
 const getElfCoords = () =>
-    new Set(
-        grid.findAllIndexes('#').map(coord => serializeCoords(...coord))
-    );
+    new Set(grid.findAllIndexes('#').map(coord => serializeCoords(...coord)));
 
 const DIRECTIONS = ['N', 'S', 'W', 'E'] as const;
 type Direction = typeof DIRECTIONS[number];

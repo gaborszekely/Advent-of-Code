@@ -6,7 +6,7 @@ import { Grid } from '@utils/grid';
 const { serializeCoords } = Grid;
 
 const input = getInput(__dirname);
-const grid = Grid.fromSerialized(input);
+const grid = Grid.fromString(input);
 
 export function partOne() {
     let result = 0;

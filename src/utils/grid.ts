@@ -36,7 +36,7 @@ export class Grid<T> {
     }
 
     /** Generates a Grid instance from a string representation. */
-    static fromSerialized(input: string) {
+    static fromString(input: string) {
         const matrix = Grid.deserializeMatrix(input);
         return new Grid(matrix);
     }

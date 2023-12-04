@@ -4,7 +4,7 @@ import { getInput } from '@utils/fs';
 import { Grid } from '@utils/grid';
 
 const input = getInput(__dirname);
-const grid = Grid.fromSerialized(input);
+const grid = Grid.fromString(input);
 
 const { serializeCoords } = Grid;
 
