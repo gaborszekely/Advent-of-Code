@@ -62,23 +62,22 @@ export class Grid<T> {
      * Generates a matrix of a certain size, and populates it's cells with a
      * default value.
      */
-    static generateMatrix<T>(
-        rows: number,
-        cols: number,
-        defaultVal: T | Function
-    ) {
+    static generateMatrix<T>(rows: number, cols: number, defaultVal: T) {
         return Array.from({ length: rows }, () =>
             Array.from({ length: cols }, () =>
-                typeof defaultVal === 'function'
-                    ? (defaultVal as Function)()
-                    : defaultVal
+                typeof defaultVal === 'function' ? defaultVal() : defaultVal
             )
         );
     }
 
-    /** Gets all the neighbors of a coordinate set, including diagonal ones. */
-    static getAllNeighborCoords(i: number, j: number) {
-        return Grid.getAllNeighborOffsets().map(([dI, dJ]) => [i + dI, j + dJ]);
+    /** Get neighbor coordinate offsets. */
+    static getNeighborOffsets() {
+        return [
+            [1, 0],
+            [-1, 0],
+            [0, 1],
+            [0, -1],
+        ];
     }
 
     /** Get all neighbor cooridnate offsets, including diagonal ones. */
@@ -92,24 +91,19 @@ export class Grid<T> {
         ];
     }
 
-    /** Get the manhattan distance between two coordinates. */
-    static getManhattanDistance([cX, cY]: number[], [sX, sY] = [0, 0]) {
-        return Math.abs(cX - sX) + Math.abs(cY - sY);
-    }
-
     /** Gets the coordinates that are up, down, left, and right of the current. */
     static getNeighborCoords(i: number, j: number) {
         return Grid.getNeighborOffsets().map(([dI, dJ]) => [i + dI, j + dJ]);
     }
 
-    /** Get neighbor coordinate offsets. */
-    static getNeighborOffsets() {
-        return [
-            [1, 0],
-            [-1, 0],
-            [0, 1],
-            [0, -1],
-        ];
+    /** Gets all the neighbors of a coordinate set, including diagonal ones. */
+    static getAllNeighborCoords(i: number, j: number) {
+        return Grid.getAllNeighborOffsets().map(([dI, dJ]) => [i + dI, j + dJ]);
+    }
+
+    /** Get the manhattan distance between two coordinates. */
+    static getManhattanDistance([cX, cY]: number[], [sX, sY] = [0, 0]) {
+        return Math.abs(cX - sX) + Math.abs(cY - sY);
     }
 
     /** Checks whether a set of grid coordinates are valid. */
@@ -123,7 +117,7 @@ export class Grid<T> {
     }
 
     /**
-     * Rotate a set of coordinates aronud a central location by a given number
+     * Rotates a set of coordinates around a central location by a given number
      * of degrees.
      */
     static rotate([cx, cy]: number[], [x, y]: number[], angle = 90) {
@@ -276,6 +270,11 @@ export class Grid<T> {
         return this.grid[row][col];
     }
 
+    /** Gets the neighbors of a current cell. */
+    getNeighbors(i: number, j: number) {
+        return this._mapCoordsToNeighbors(Grid.getNeighborCoords(i, j));
+    }
+
     /** Gets all the neighbors of a current cell, including diagonal ones. */
     getAllNeighbors(i: number, j: number) {
         return this._mapCoordsToNeighbors(Grid.getAllNeighborCoords(i, j));
@@ -288,9 +287,11 @@ export class Grid<T> {
         );
     }
 
-    /** Gets the neighbors of a current cell. */
-    getNeighbors(i: number, j: number) {
-        return this._mapCoordsToNeighbors(Grid.getNeighborCoords(i, j));
+    /** Gets all the in-bounds neighbor coordinates of a current cell, including diagonal ones. */
+    getAllNeighborCoords(i: number, j: number) {
+        return Grid.getAllNeighborCoords(i, j).filter(([nI, nJ]) =>
+            this.inRange(nI, nJ)
+        );
     }
 
     /** Gets the grid row. */
@@ -347,7 +348,7 @@ export class Grid<T> {
         this.grid.splice(startRow, count);
     }
 
-    _mapCoordsToNeighbors(coords: number[][]) {
+    private _mapCoordsToNeighbors(coords: number[][]) {
         return coords
             .filter(([nI, nJ]) => this.inRange(nI, nJ))
             .map(([nI, nJ]) => this.get(nI, nJ));
