@@ -8,7 +8,8 @@
         "test": "ts-node-dev -r tsconfig-paths/register src/runner/runner.ts -t",
         "init": "ts-node-dev -r tsconfig-paths/register src/runner/init.ts",
         "latest": "npm start -- --day latest",
-        "loadInput": "tsc && node dist/helpers/loadInput.js"
+        "loadInput": "tsc && node dist/helpers/loadInput.js",
+        "prepare": "husky install"
     },
     "repository": {
         "type": "git",
@@ -20,13 +21,18 @@
     "bugs": {
         "url": "https://github.com/gaborszekely/Advent-of-Code/issues"
     },
+    "lint-staged": {
+        "**/*": "prettier --write --ignore-unknown"
+    },
     "homepage": "https://github.com/gaborszekely/Advent-of-Code#readme",
     "devDependencies": {
         "@types/lodash": "^4.14.191",
         "@types/node": "^18.11.10",
         "@types/node-fetch": "^2.6.2",
+        "husky": "^8.0.3",
+        "lint-staged": "^15.2.0",
         "nodemon": "^2.0.6",
-        "prettier": "^2.2.1",
+        "prettier": "3.1.0",
         "ts-node-dev": "^2.0.0",
         "tsconfig-paths": "^4.1.1"
     },
