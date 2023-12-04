@@ -5,30 +5,32 @@ import { sum } from 'lodash';
 
 const input = getInput(__dirname);
 
-const matchesByRow = input.split('\n').map(row => {
-    const [winningNums, myNums] = (
-        row.match(/Card\s+\d+\:([\d\s]+)\|([\d\s]+)/) || []
+const matchesByCard = input.split('\n').map(card => {
+    const [winningNums, assignedNums] = (
+        card.match(/Card\s+\d+\:([\d\s]+)\|([\d\s]+)/) || []
     )
         .slice(1)
         .map(nums => nums.trim().split(/\s+/).map(Number));
 
-    return myNums.filter(num => winningNums.includes(num)).length;
+    return assignedNums.filter(num => winningNums.includes(num)).length;
 });
 
 export function partOne() {
-    return sum(
-        matchesByRow.map(matches => (matches === 0 ? 0 : 2 ** (matches - 1)))
+    const pointsByCard = matchesByCard.map(matches =>
+        matches === 0 ? 0 : 2 ** (matches - 1)
     );
+
+    return sum(pointsByCard);
 }
 
 export function partTwo() {
-    const copiesByRow = Array(matchesByRow.length).fill(1);
+    const copiesByCard = Array(matchesByCard.length).fill(1);
 
-    for (let i = 0; i < matchesByRow.length; ++i) {
-        for (let j = 1; j <= matchesByRow[i]; ++j) {
-            copiesByRow[i + j] += copiesByRow[i];
+    matchesByCard.forEach((matches, i) => {
+        for (let j = 1; j <= matches; ++j) {
+            copiesByCard[i + j] += copiesByCard[i];
         }
-    }
+    });
 
-    return sum(copiesByRow);
+    return sum(copiesByCard);
 }
