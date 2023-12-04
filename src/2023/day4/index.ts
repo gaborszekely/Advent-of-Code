@@ -10,9 +10,7 @@ const matchesByRow = input.split('\n').map(row => {
         row.match(/Card\s+\d+\:([\d\s]+)\|([\d\s]+)/) || []
     )
         .slice(1)
-        .map(nums =>
-            nums.trim().replaceAll(/\s+/g, ' ').split(' ').map(Number)
-        );
+        .map(nums => nums.trim().split(/\s+/).map(Number));
 
     return myNums.filter(num => winningNums.includes(num)).length;
 });
