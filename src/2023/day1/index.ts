@@ -69,7 +69,7 @@ export function partTwo() {
             }
 
             const lastWordIndex = row.lastIndexOf(numsMap[num]);
-            if (lastIndex >= 0 && lastIndex > maxLastIndex) {
+            if (lastWordIndex >= 0 && lastWordIndex > maxLastIndex) {
                 maxLastIndex = lastWordIndex;
                 maxLastValue = num;
             }
