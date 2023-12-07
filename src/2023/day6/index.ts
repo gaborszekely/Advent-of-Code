@@ -16,7 +16,7 @@ export function partOne() {
 
     for (let i = 0; i < times.length; ++i) {
         const total = findTotalRecordBreaks(times[i], records[i]);
-        matches = total > 0 ? (matches = 1) : matches;
+        matches = total > 0 ? matches + 1 : matches;
         result *= total;
     }
 
