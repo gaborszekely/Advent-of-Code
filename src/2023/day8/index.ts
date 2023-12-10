@@ -5,6 +5,8 @@ import { lcm } from '@utils/math';
 
 const input = getInput(__dirname);
 
+// Foo
+
 const instructions = input.split('\n').shift().split('') as Array<'L' | 'R'>;
 const map = input
     .split('\n')

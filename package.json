@@ -22,7 +22,8 @@
         "url": "https://github.com/gaborszekely/Advent-of-Code/issues"
     },
     "lint-staged": {
-        "**/*": "prettier --write --ignore-unknown"
+        "**/*": "prettier --write --ignore-unknown",
+        "**/*.ts": "bash -c tsc --noEmit --pretty"
     },
     "homepage": "https://github.com/gaborszekely/Advent-of-Code#readme",
     "devDependencies": {
