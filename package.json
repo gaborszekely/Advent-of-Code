@@ -22,8 +22,7 @@
         "url": "https://github.com/gaborszekely/Advent-of-Code/issues"
     },
     "lint-staged": {
-        "**/*": "prettier --write --ignore-unknown",
-        "**/*.ts": "tsc src/2023/**/*.ts --noEmit --pretty"
+        "**/*": "prettier --write --ignore-unknown"
     },
     "homepage": "https://github.com/gaborszekely/Advent-of-Code#readme",
     "devDependencies": {
@@ -45,6 +44,7 @@
         "install": "^0.13.0",
         "lodash": "^4.17.21",
         "node-fetch": "^2.6.1",
-        "npm": "^6.14.9"
+        "npm": "^6.14.9",
+        "typescript": "^5.3.3"
     }
 }
