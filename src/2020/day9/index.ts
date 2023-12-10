@@ -1,11 +1,10 @@
 // https://adventofcode.com/2020/day/9
 
 import { findMinMax, twoSum } from '@utils/array';
-import { getInput, getTestInput } from '@utils/fs';
+import { getInput } from '@utils/fs';
 import _ from 'lodash';
 
 const input = getInput(__dirname);
-const testInput = getTestInput(__dirname);
 
 const nums = input.split('\n').map(Number);
 

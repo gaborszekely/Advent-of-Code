@@ -1,5 +1,7 @@
 // https://adventofcode.com/2020/day/20
 
+// @ts-nocheck
+
 import { getInput, getTestInput } from '@utils/fs';
 import { Grid } from '@utils/grid';
 import { first, last, reverse, range } from 'lodash';

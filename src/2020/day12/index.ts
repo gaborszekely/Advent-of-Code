@@ -1,10 +1,9 @@
 // https://adventofcode.com/2020/day/12
 
-import { getInput, getTestInput } from '@utils/fs';
+import { getInput } from '@utils/fs';
 import { Grid } from '@utils/grid';
 
 const i = getInput(__dirname);
-const _i = getTestInput(__dirname);
 
 const parseInput = (ipt: string) =>
     ipt

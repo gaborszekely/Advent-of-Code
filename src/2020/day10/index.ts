@@ -1,9 +1,8 @@
 // https://adventofcode.com/2020/day/10
 
-import { getInput, getTestInput } from '@utils/fs';
+import { getInput } from '@utils/fs';
 
 const input = getInput(__dirname);
-const _input = getTestInput(__dirname);
 
 const myAdapters = input
     .split('\n')

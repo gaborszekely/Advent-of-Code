@@ -1,9 +1,8 @@
 // https://adventofcode.com/2020/day/21
 
-import { getInput, getTestInput } from '@utils/fs';
+import { getInput } from '@utils/fs';
 
 const i = getInput(__dirname);
-const _i = getTestInput(__dirname);
 
 interface Row {
     ingredients: Set<string>;

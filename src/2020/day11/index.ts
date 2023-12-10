@@ -50,6 +50,8 @@ const getOccupiedSeatsAfterSeatChanges = (
 };
 
 export function partOne() {
+    const grid = Grid.fromString(input);
+
     const calculateNeighbors = (
         grid: Grid<string>,
         startRow: number,
@@ -57,19 +59,21 @@ export function partOne() {
     ) => {
         return grid
             .getAllNeighbors(startRow, startCol)
-            .reduce(
-                (acc, [neighborRow, neighborCol]) =>
-                    grid.get(neighborRow, neighborCol) === '#' ? acc + 1 : acc,
-                0
-            );
+            .reduce((acc, neighbor) => (neighbor === '#' ? acc + 1 : acc), 0);
     };
 
-    return getOccupiedSeatsAfterSeatChanges(input, 4, calculateNeighbors);
+    return getOccupiedSeatsAfterSeatChanges(grid, 4, calculateNeighbors);
 }
 
 export function partTwo() {
-    const calculateNeighbors = (grid, startRow, startCol) => {
-        const change = delta => i => i + delta;
+    const grid = Grid.fromString(input);
+
+    const calculateNeighbors = (
+        grid: Grid<string>,
+        startRow: number,
+        startCol: number
+    ) => {
+        const change = (delta: number) => (i: number) => i + delta;
 
         const getDirectionTotal = ({ row = 0, col = 0 }) => {
             const [iDeltaFn, jDeltaFn] = [change(row), change(col)];
@@ -95,5 +99,5 @@ export function partTwo() {
         );
     };
 
-    return getOccupiedSeatsAfterSeatChanges(input, 5, calculateNeighbors);
+    return getOccupiedSeatsAfterSeatChanges(grid, 5, calculateNeighbors);
 }

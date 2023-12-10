@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 import commander from 'commander';
-import { range } from '../utils';
+import { range } from 'lodash';
 import fs from 'fs';
 import path from 'path';
 
@@ -21,7 +21,7 @@ if (!commander.session) {
 }
 
 (async () => {
-    const latestDay = range(25, 1).find(day =>
+    const latestDay = range(25, 0).find(day =>
         fs.existsSync(getFolderPath(day))
     );
 
