@@ -302,6 +302,14 @@ export class Grid<T> {
         return this.grid[row];
     }
 
+    /** Gets the grid column. */
+    getCol(col: number) {
+        if (!this.inRange(0, col)) {
+            throw new Error('Column is out of bounds.');
+        }
+        return this.grid.map(row => row[col]);
+    }
+
     /** Checks whether a value is a valid grid coordinate. */
     inRange(row: number, col: number) {
         return Grid.inRange(this.grid, row, col);
@@ -342,14 +350,12 @@ export class Grid<T> {
         this.grid[row][col] = val;
     }
 
-    spliceCols(startCol: number, count = 1) {
-        this.grid.forEach(row => {
-            row.splice(startCol, count);
-        });
-    }
-
-    spliceRows(startRow: number, count = 1) {
-        this.grid.splice(startRow, count);
+    spliceRows(startRow: number, deleteCount: number, ...insert: T[][]) {
+        if (deleteCount === 0) {
+            this.grid.splice(startRow, deleteCount, ...insert);
+        } else {
+            this.grid.splice(startRow, deleteCount);
+        }
     }
 
     private _mapCoordsToNeighbors(coords: number[][]) {
