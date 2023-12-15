@@ -307,6 +307,10 @@ export class Grid<T> {
         return Grid.inRange(this.grid, row, col);
     }
 
+    toString() {
+        return this.grid.map(row => row.join('')).join('\n') + '\n';
+    }
+
     /** Prints the grid in the console. */
     print() {
         for (const row of this.grid) {

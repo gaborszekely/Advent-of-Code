@@ -4,7 +4,7 @@ import { __basedir } from '@utils/fs';
 
 const date = new Date();
 const year = date.getFullYear();
-const day = date.getDate();
+const day = date.getDate() + 1;
 
 const challengeDir = path.join(__basedir, year.toString(), `day${day}`);
 const challengePath = `${challengeDir}/index.ts`;
