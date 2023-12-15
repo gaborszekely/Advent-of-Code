@@ -1,0 +1,40 @@
+..........
+.F------7.
+.|F----7|.
+.||....||.
+.||....||.
+.|L-7F-J|.
+.|..||..|.
+.L--JL--J.
+..........
+
+
+..........
+.F------7.
+.|F----7|.
+.||....||.
+.||....||.
+.|L-7F-J|.
+.|..||..|.
+.L--J|..|.
+.....L--J.
+..........
+
+
+..........
+.S------7.
+.|F----7|.
+.||....||.
+.||....||.
+.|L-7F-J|.
+.|..||..|.
+.|..|L--J.
+.L--J.....
+..........
+
+
+If above you see a 'J' above you and the upper right neighbor is part of the loop, enter
+If above you see a 'L' above you and the upper left neighbor is part of the loop, enter
+
+If we see an 'F' above us and we are on the right side of the loop, we will
+turn right and now be at the bottom of the loop. So we need to check if there is a loop cell above us.
