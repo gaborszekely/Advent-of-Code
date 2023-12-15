@@ -54,7 +54,7 @@ function addRockToGrid(rock: number[][], currRow: number, currCol: number) {
     // Clean up empty rows
     while (true) {
         if (grid.getRow(0).every(v => v === '.')) {
-            grid.spliceRows(0);
+            grid.spliceRows(0, 1);
         } else {
             break;
         }
