@@ -7,14 +7,16 @@ import path from 'path';
 commander
     .version('1.0.0', '-v, --version')
     .usage('[OPTIONS]...')
-    .option('--year <name>', 'Year to fetch', '2022')
-    .option('--session <name>', 'Session token', '')
+    .option(
+        '--year <name>',
+        'Year to fetch',
+        new Date().getFullYear().toString()
+    )
+    .option('--session <name>', 'Session token', process.env.SESSION_ID)
     .parse(process.argv);
 
 const getFolderPath = (day: number) =>
     path.join(__dirname, '../../src', commander.year, `day${day}`);
-
-console.log(commander);
 
 if (!commander.session) {
     throw new Error('Please include a valid session token.');
@@ -32,7 +34,7 @@ if (!commander.session) {
     try {
         const response = await (
             await fetch(
-                `https://adventofcode.com/2020/day/${latestDay}/input`,
+                `https://adventofcode.com/${commander.year}/day/${latestDay}/input`,
                 {
                     headers: {
                         cookie: `session=${commander.session}`,

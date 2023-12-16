@@ -4,11 +4,10 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "ts-node-dev -r tsconfig-paths/register src/runner/runner.ts",
-        "test": "ts-node-dev -r tsconfig-paths/register src/runner/runner.ts -t",
-        "init": "ts-node-dev -r tsconfig-paths/register src/runner/init.ts",
+        "start": "bun src/runner/runner.ts",
+        "init": "bun src/runner/init.ts",
         "latest": "npm start -- --day latest",
-        "loadInput": "tsc && node dist/helpers/loadInput.js",
+        "loadInput": "bun src/helpers/loadInput.ts",
         "prepare": "husky install"
     },
     "repository": {

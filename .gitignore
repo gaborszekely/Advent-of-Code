@@ -5,3 +5,4 @@ test.txt
 node_modules
 dist
 notes.txt
+.env
