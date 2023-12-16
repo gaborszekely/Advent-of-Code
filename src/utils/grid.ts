@@ -4,6 +4,17 @@ export type Coord = [number, number];
 /** Direction of travel in a grid.4az */
 export type Direction = 'N' | 'S' | 'E' | 'W';
 
+/** Gets the neighbor coord in a given direction. */
+export const getNeighborCoordInDirection: Record<
+    Direction,
+    (r: number, c: number) => Coord
+> = {
+    N: (r, c) => [r - 1, c],
+    S: (r, c) => [r + 1, c],
+    E: (r, c) => [r, c + 1],
+    W: (r, c) => [r, c - 1],
+};
+
 /** Grid data structure, with common grid functionality. */
 export class Grid<T> {
     constructor(private readonly grid: T[][] = []) {}
@@ -140,7 +151,7 @@ export class Grid<T> {
 
     /** Serializes grid coordinates as a 'row:col' string. */
     static deserializeCoords(serialized: string) {
-        return serialized.split(':').map(Number) as Coord;
+        return serialized.split(':').map(Number) as {} as Coord;
     }
 
     /** Serializes a matrix into a string representation. */
@@ -314,9 +325,24 @@ export class Grid<T> {
     }
 
     /** Checks whether a value is a valid grid coordinate. */
-    inRange(row: number, col: number) {
-        return Grid.inRange(this.grid, row, col);
+    inRange(row: number, col: number): boolean;
+    inRange(coord: Coord): boolean;
+    inRange(...args: unknown[]) {
+        if (args.length === 1 && Array.isArray(args[0])) {
+            return Grid.inRange(this.grid, args[0][0], args[0][1]);
+        } else {
+            return Grid.inRange(
+                this.grid,
+                args[0] as number,
+                args[1] as number
+            );
+        }
     }
+
+    // /** Checks whether a value is a valid grid coordinate. */
+
+    //     return Grid.inRange(this.grid, row, col);
+    // }
 
     toString() {
         return this.grid.map(row => row.join('')).join('\n') + '\n';

@@ -1,29 +1,28 @@
 // https://adventofcode.com/2023/day/16
 
 import { getInput } from '@utils/fs';
-import { Grid, Direction, Coord } from '@utils/grid';
+import {
+    Grid,
+    Direction,
+    Coord,
+    getNeighborCoordInDirection,
+} from '@utils/grid';
 
 const input = getInput(__dirname);
 
+const serialize = ([r, c]: Coord, direction: Direction) =>
+    `${r}-${c}-${direction}`;
+
 const getNextDirections = (
+    grid: Grid<string>,
     r: number,
     c: number,
-    grid: Grid<string>,
     direction: Direction
 ): Direction[] => {
     const current = grid.get(r, c);
 
     if (current === '.') {
-        switch (direction) {
-            case 'N':
-                return ['N'];
-            case 'S':
-                return ['S'];
-            case 'E':
-                return ['E'];
-            case 'W':
-                return ['W'];
-        }
+        return [direction];
     }
 
     if (current === '/') {
@@ -54,25 +53,21 @@ const getNextDirections = (
 
     if (current === '-') {
         switch (direction) {
+            case 'E':
+            case 'W':
+                return [direction];
             case 'N':
-                return ['E', 'W'];
             case 'S':
                 return ['E', 'W'];
-            case 'E':
-                return ['E'];
-            case 'W':
-                return ['W'];
         }
     }
 
     if (current === '|') {
         switch (direction) {
             case 'N':
-                return ['N'];
             case 'S':
-                return ['S'];
+                return [direction];
             case 'E':
-                return ['N', 'S'];
             case 'W':
                 return ['N', 'S'];
         }
@@ -84,39 +79,29 @@ function findEnergizedTiles(
     startingCoord: Coord,
     direction: Direction
 ) {
-    const seen = new Set<string>(
-        `${startingCoord[0]}-${startingCoord[1]}-${direction}`
-    );
+    const seen = new Set<string>(serialize(startingCoord, direction));
     const total = new Set();
 
-    const queue: Array<readonly [number, number, Direction]> = [
-        [...startingCoord, direction],
+    const queue: Array<readonly [Coord, Direction]> = [
+        [startingCoord, direction],
     ];
 
     while (queue.length) {
-        const [r, c, direction] = queue.pop();
-        total.add(Grid.serializeCoords(r, c));
-        const nextDirections = getNextDirections(r, c, grid, direction);
-        const nextCoords = nextDirections.map(direction => {
-            switch (direction) {
-                case 'N':
-                    return [r - 1, c, 'N'] as const;
-                case 'S':
-                    return [r + 1, c, 'S'] as const;
-                case 'E':
-                    return [r, c + 1, 'E'] as const;
-                case 'W':
-                    return [r, c - 1, 'W'] as const;
-            }
-        });
+        const [[r, c], direction] = queue.pop();
 
-        for (const coord of nextCoords) {
-            if (grid.inRange(coord[0], coord[1])) {
-                const serialized = `${coord[0]}-${coord[1]}-${coord[2]}`;
+        total.add(Grid.serializeCoords(r, c));
+
+        const nextDirections = getNextDirections(grid, r, c, direction);
+
+        for (const direction of nextDirections) {
+            const coord = getNeighborCoordInDirection[direction](r, c);
+
+            if (grid.inRange(coord)) {
+                const serialized = serialize(coord, direction);
 
                 if (!seen.has(serialized)) {
                     seen.add(serialized);
-                    queue.unshift(coord);
+                    queue.unshift([coord, direction]);
                 }
             }
         }
@@ -136,27 +121,21 @@ export function partTwo() {
 
     let max = 0;
 
-    // top row
+    // top and bottom rows
     for (let i = 0; i < grid.cols; ++i) {
         max = Math.max(max, findEnergizedTiles(grid, [0, i], 'S'));
+        max = Math.max(max, findEnergizedTiles(grid, [grid.rows - 1, i], 'N'));
+
+        // corners
         if (i === 0) {
             max = Math.max(max, findEnergizedTiles(grid, [0, i], 'E'));
-        }
-        if (i === grid.cols - 1) {
-            max = Math.max(max, findEnergizedTiles(grid, [0, i], 'W'));
-        }
-    }
-
-    // bottom row
-    for (let i = 0; i < grid.cols; ++i) {
-        max = Math.max(max, findEnergizedTiles(grid, [grid.rows - 1, i], 'N'));
-        if (i === 0) {
             max = Math.max(
                 max,
                 findEnergizedTiles(grid, [grid.rows - 1, i], 'E')
             );
         }
         if (i === grid.cols - 1) {
+            max = Math.max(max, findEnergizedTiles(grid, [0, i], 'W'));
             max = Math.max(
                 max,
                 findEnergizedTiles(grid, [grid.rows - 1, i], 'W')
@@ -164,13 +143,9 @@ export function partTwo() {
         }
     }
 
-    // first column
+    // first and last columns
     for (let i = 1; i < grid.rows - 1; ++i) {
         max = Math.max(max, findEnergizedTiles(grid, [i, 0], 'E'));
-    }
-
-    // last column
-    for (let i = 1; i < grid.rows - 1; ++i) {
         max = Math.max(max, findEnergizedTiles(grid, [i, grid.cols - 1], 'W'));
     }
 
