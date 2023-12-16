@@ -1,6 +1,9 @@
 /** Coordinate representing [x, y] position on a grid. */
 export type Coord = [number, number];
 
+/** Direction of travel in a grid.4az */
+export type Direction = 'N' | 'S' | 'E' | 'W';
+
 /** Grid data structure, with common grid functionality. */
 export class Grid<T> {
     constructor(private readonly grid: T[][] = []) {}
